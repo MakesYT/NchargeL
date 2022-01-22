@@ -1,0 +1,16 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
+                    xmlns:settings="clr-namespace:NchargeL.Properties">
+
+    <SolidColorBrush x:Key="BodyColor" x:Name="BodyColor" Color="{Binding Path=BodyColorS, Source={x:Static settings:Settings.Default}}"/>
+    <SolidColorBrush x:Key="BodyColorWith50Opacity" Color="{Binding Path=BodyColorS, Source={x:Static settings:Settings.Default}}"  Opacity="0.5"/>
+    <SolidColorBrush x:Key="BodyColorWith20Opacity" Color="{Binding Path=BodyColorS, Source={x:Static settings:Settings.Default}}"  Opacity="0.2"/>
+
+    <SolidColorBrush x:Key="NotificationSuccess" po:Freeze="True" Color="{Binding Path=NotificationSuccess, Source={x:Static settings:Settings.Default}}" Opacity="0.6"/>
+    <SolidColorBrush x:Key="NotificationError" po:Freeze="True" Color="{Binding Path=NotificationError, Source={x:Static settings:Settings.Default}}" Opacity="0.6"/>
+    <SolidColorBrush x:Key="NotificationWarning" po:Freeze="True" Color="{Binding Path=NotificationWarning, Source={x:Static settings:Settings.Default}}" Opacity="0.6"/>
+    <SolidColorBrush x:Key="TextColor" Color="{Binding Path=TextColor, Source={x:Static settings:Settings.Default}}" po:Freeze="True" />
+    <SolidColorBrush x:Key="ForegroundColor" Color="{Binding Path=ForegroundColor, Source={x:Static settings:Settings.Default}}" po:Freeze="True" />
+    <SolidColorBrush x:Key="BackgroundColor" Color="{Binding Path=BackgroundColor, Source={x:Static settings:Settings.Default}}" po:Freeze="True" />
+</ResourceDictionary>

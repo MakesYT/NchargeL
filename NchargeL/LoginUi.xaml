@@ -1,0 +1,79 @@
+﻿<Page x:Class="NchargeL.LoginUi"
+      
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:NchargeL"
+      mc:Ignorable="d" 
+
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="LoginUi">
+    <Page.Triggers>
+        <EventTrigger RoutedEvent="Page.Loaded">
+            <EventTrigger.Actions>
+                <BeginStoryboard>
+                    <Storyboard>
+
+                        <!--<ThicknessAnimation Duration="0:0:.85" Storyboard.TargetProperty="Margin" From="900,0,-900,0" To="0" DecelerationRatio=".9" />-->
+                        <ThicknessAnimation Duration="0:0:.45" Storyboard.TargetProperty="Margin" From="-50,0,50,0" To="0" DecelerationRatio=".9" />
+                        <DoubleAnimation Duration="0:0:.35" Storyboard.TargetProperty="Opacity" From="0" To="1" />
+                    </Storyboard>
+                </BeginStoryboard>
+            </EventTrigger.Actions>
+        </EventTrigger>
+    </Page.Triggers>
+    <materialDesign:DialogHost Name="host">
+
+        <materialDesign:DialogHost.DialogContent >
+
+            <StackPanel Margin="16">
+
+                <ProgressBar Style="{DynamicResource MaterialDesignCircularProgressBar}" HorizontalAlignment="Center" Margin="16" IsIndeterminate="True" Value="0" Foreground="{DynamicResource BodyColor}"></ProgressBar>
+                <Button FocusVisualStyle="{x:Null}" Name="text"  Style="{StaticResource MaterialDesignFlatButton}" IsCancel="True"
+                        FontFamily="/NchargeL;component/Resources/#HarmonyOS Sans" FontWeight="Bold" FontSize="20"
+                        Command="{x:Static materialDesign:DialogHost.CloseDialogCommand}"
+                        HorizontalAlignment="Center" Foreground="{DynamicResource BodyColor}">登陆中</Button>
+            </StackPanel>
+        </materialDesign:DialogHost.DialogContent>
+
+        <!-- 这里放原本页面的内容，比如我的是<Grid>需要被遮罩层包住的页面</Grid>-->
+
+
+        <Grid>
+            <Label Content="登陆账号" HorizontalAlignment="Center" Margin="0,30,0,0" VerticalAlignment="Top" Width="206" FontSize="50" FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi" Foreground="{DynamicResource TextColor}" HorizontalContentAlignment="Center" Background="{x:Null}"/>
+            <StackPanel HorizontalAlignment="Center" Height="174" Margin="0,101,0,0" VerticalAlignment="Top" Width="413">
+                <StackPanel />
+
+                <TextBox x:Name="email"
+  materialDesign:HintAssist.Hint="邮箱"
+  Style="{StaticResource MaterialDesignOutlinedTextBox}"
+  VerticalAlignment="Center" HorizontalContentAlignment="Left" FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi" FontSize="30" BorderBrush="{DynamicResource BodyColor}" SelectionTextBrush="{x:Null}" CaretBrush="{x:Null}" Foreground="{DynamicResource TextColor}" Cursor="IBeam" SelectionBrush="{DynamicResource BodyColor}" >
+                    <TextBox.Background>
+                        <SolidColorBrush Color="#FFAEC4E2" Opacity="0.15"/>
+                    </TextBox.Background>
+                </TextBox>
+
+
+                <PasswordBox x:Name="pwd" materialDesign:HintAssist.Hint="密码"
+                         Style="{StaticResource MaterialDesignOutlinedPasswordBox}"
+   Foreground="{DynamicResource TextColor}" HorizontalContentAlignment="Left" HorizontalAlignment="Center" VerticalAlignment="Center" Height="64" Width="413" VerticalContentAlignment="Center"  FontSize="30" FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi" BorderBrush="{DynamicResource BodyColor}" Padding="16,0,0,4" Margin="0,15,0,0" SelectionTextBrush="{x:Null}" CaretBrush="{x:Null}" Cursor="IBeam">
+                    <PasswordBox.Background>
+                        <SolidColorBrush Color="#FFAEC4E2" Opacity="0.15"/>
+                    </PasswordBox.Background>
+                </PasswordBox>
+            </StackPanel>
+            <Button FocusVisualStyle="{x:Null}" Style="{StaticResource MaterialDesignFlatLightButton}" Content="没有账号?" HorizontalAlignment="Left" Margin="503,64,0,0" VerticalAlignment="Top" Width="117" Foreground="{DynamicResource ForegroundColor}" FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi" FontSize="20" Click="Button_Click" BorderBrush="{x:Null}" Cursor="Hand" Background="{DynamicResource BodyColorWith50Opacity}"/>
+
+            <Button FocusVisualStyle="{x:Null}"  Style="{StaticResource MaterialDesignOutlinedLightButton}" Content="登录" HorizontalAlignment="Left" Margin="545,267,0,0" VerticalAlignment="Top" Width="85" FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi" FontSize="25" Height="38" Click="LoginButoon" BorderBrush="{x:Null}" Foreground="{DynamicResource ForegroundColor}" Cursor="Hand" KeyUp="Button_KeyUpEnter" IsDefault="True" Background="{DynamicResource BodyColorWith50Opacity}"/>
+
+
+
+            <CheckBox Style="{StaticResource MaterialDesignFilterChipAccentCheckBox}" IsChecked="False" Content="保留密码"  Background="{DynamicResource BodyColor}" Foreground="{DynamicResource ForegroundColor}" BorderBrush="{DynamicResource BodyColor}" Cursor="Hand" Panel.ZIndex="2" FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi" FontSize="25" Canvas.Top="15" Margin="400,270,0,0" VerticalAlignment="Top" />
+
+
+
+        </Grid>
+    </materialDesign:DialogHost>
+</Page>

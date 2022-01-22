@@ -1,0 +1,49 @@
+﻿<Page
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:NchargeL"
+    xmlns:settings="clr-namespace:NchargeL.Properties"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" x:Class="NchargeL.SettingUi"
+      mc:Ignorable="d" 
+      
+      Title="SettingUi" Width="750" Height="400">
+
+    <Grid>
+        <StackPanel Background="{DynamicResource BodyColorWith50Opacity}" Width="750" VerticalAlignment="Top" Orientation="Horizontal" Height="55" HorizontalAlignment="Center">
+            <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Margin="110,4,4,4" IsChecked="True" HorizontalAlignment="Stretch" Foreground="{DynamicResource ForegroundColor}" BorderBrush="{DynamicResource ForegroundColor}" VerticalAlignment="Bottom">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Stretch">
+                    <materialDesign:PackIcon Kind="Launch" Width="20" Height="20" Foreground="{DynamicResource ForegroundColor}" />
+                    <TextBlock Margin="4 0 0 0" Text="游戏" Foreground="{DynamicResource ForegroundColor}" FontFamily="HarmonyOS Sans Medium" FontSize="15" FontWeight="Normal" FontStyle="Normal" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </StackPanel>
+            </RadioButton>
+            <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Margin="4" HorizontalAlignment="Stretch" Foreground="{DynamicResource ForegroundColor}" BorderBrush="{DynamicResource ForegroundColor}" VerticalAlignment="Bottom">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="PaletteSwatchOutline" Width="20" Height="20" Foreground="{DynamicResource ForegroundColor}" />
+                    <TextBlock Margin="4 0 0 0" Text="个性化" Foreground="{DynamicResource ForegroundColor}" FontFamily="HarmonyOS Sans Medium" FontSize="15" FontWeight="Normal" FontStyle="Normal" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </StackPanel>
+            </RadioButton>
+            <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Margin="4" HorizontalAlignment="Stretch" Foreground="{DynamicResource ForegroundColor}" BorderBrush="{DynamicResource ForegroundColor}" VerticalAlignment="Bottom">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="RocketLaunchOutline" Width="20" Height="20" Foreground="{DynamicResource ForegroundColor}" />
+                    <TextBlock Margin="4 0 0 0" Text="启动器" Foreground="{DynamicResource ForegroundColor}" FontFamily="HarmonyOS Sans Medium" FontSize="15" FontWeight="Normal" FontStyle="Normal" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </StackPanel>
+            </RadioButton>
+            <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Margin="4" HorizontalAlignment="Stretch" Foreground="{DynamicResource ForegroundColor}" BorderBrush="{DynamicResource ForegroundColor}" VerticalAlignment="Bottom">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="ArrangeSendBackward" Width="20" Height="20" Foreground="{DynamicResource ForegroundColor}" />
+                    <TextBlock Margin="4 0 0 0" Text="高级" Foreground="{DynamicResource ForegroundColor}" FontFamily="HarmonyOS Sans Medium" FontSize="15" FontWeight="Normal" FontStyle="Normal" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </StackPanel>
+            </RadioButton>
+            <RadioButton Style="{StaticResource MaterialDesignTabRadioButton}" Margin="4" Foreground="{DynamicResource ForegroundColor}" BorderBrush="{DynamicResource ForegroundColor}" VerticalAlignment="Bottom">
+                <StackPanel Orientation="Horizontal">
+                    <materialDesign:PackIcon Kind="CodeJson" Width="20" Height="20" Foreground="{DynamicResource ForegroundColor}" />
+                    <TextBlock Margin="4 0 0 0" Text="开发者选项" Foreground="{DynamicResource ForegroundColor}" FontFamily="HarmonyOS Sans Medium" FontSize="15" FontWeight="Normal" FontStyle="Normal" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </StackPanel>
+            </RadioButton>
+        </StackPanel>
+
+        <Frame NavigationUIVisibility="Hidden" x:Name="FrameWork" Margin="0,55,0,0"></Frame>
+    </Grid>
+</Page>
