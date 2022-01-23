@@ -15,7 +15,7 @@ using System.Windows.Threading;
 
 namespace NchargeL
 {
-    internal class User
+    public class User
     {
 
         private static readonly ILog log = LogManager.GetLogger("User");

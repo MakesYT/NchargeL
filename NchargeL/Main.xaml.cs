@@ -21,16 +21,16 @@ namespace NchargeL
         public static Main main;
 
         private static readonly ILog log = LogManager.GetLogger("Main");
-
+       // public Data data = new Data();
         public Home Home = new Home();
         public Account Account = new Account();
         public LoginUi LoginUi = new LoginUi();
         private SettingUi settingUi = new SettingUi();
-        private Launcher launcher = new Launcher();
+        private Launcher launcher;
         public Main()
         {
             InitializeComponent();
-            NData.init();//初始化列表
+            Data.init();//初始化列表
 
             main = this;
             hello.Text = Environment.UserName;
@@ -102,7 +102,7 @@ namespace NchargeL
 
         private void ViaClick(object sender, RoutedEventArgs e)//头像按钮事件
         {
-            if (NData.users.Count > 0)
+            if (Data.users.Count > 0)
             {//当前有账号登录
                 FrameWork.Content = Account;
             }
@@ -125,6 +125,7 @@ namespace NchargeL
                 NCLcore nCLCore = new NCLcore(DownloadSource.MCBBS, Properties.Settings.Default.GameDir);
                 Data.clients = nCLCore.Clients;
                 notificationManager.Show(NotificationContentSDK.notificationSuccess((string)nCLCore.Clients.Count.ToString(), ""), "WindowArea");
+                launcher=new Launcher();
                 FrameWork.Content = launcher;
             }
             else
@@ -141,6 +142,7 @@ namespace NchargeL
                         NCLcore nCLCore = new NCLcore(DownloadSource.MCBBS, dlg.FileName);
                         Data.clients = nCLCore.Clients;
                         notificationManager.Show(NotificationContentSDK.notificationSuccess((string)nCLCore.Clients.Count.ToString(), ""), "WindowArea");
+                        launcher = new Launcher();
                         FrameWork.Content = launcher;
                         break;
                     }

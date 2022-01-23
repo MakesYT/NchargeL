@@ -18,6 +18,7 @@
         /// Ncharge客户端版本
         /// </summary>
         public string NchargeVer;
+        public int Id { get; set; }
         public Client()
         {
            

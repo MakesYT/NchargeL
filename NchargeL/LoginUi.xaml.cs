@@ -21,6 +21,7 @@ namespace NchargeL
     public partial class LoginUi : Page
     {
         private string tempEmail;
+        //private Data data=Main.data
         private string tempPassword;
         NotificationManager notificationManager = new NotificationManager();
         private static readonly ILog log = LogManager.GetLogger("Login");
@@ -104,7 +105,7 @@ namespace NchargeL
 
                     });
                     User user = new User(jObject, tempEmail, tempPassword);
-                    NData.users.Add(user);
+                    Data.users.Add(user);
                     this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
                     {
 

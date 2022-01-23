@@ -13,6 +13,7 @@ namespace NchargeL
     public partial class Launcher : Page
     {
         public NotificationManager notificationManager = new NotificationManager();
+        
         public Launcher()
         {
 
@@ -23,12 +24,18 @@ namespace NchargeL
 
         private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            notificationManager.Show(NotificationContentSDK.notificationSuccess(Data.clients.Count.ToString(), ""), "WindowArea");
-            Client client =new Client();
-            client.Name = "TEST";
+            Client client = new Client();
+            client.Id = Data.clients.Count + 1;
+            client.Name = "rrrr";
             Data.clients.Add(client);
-            //this.list.ItemsSource = Data.clients;
+            //this.list.ItemsSource = Data.clients;//数据源
+            //this.list.DisplayMemberPath = "Name";//路径
             notificationManager.Show(NotificationContentSDK.notificationSuccess(list.Items.Count.ToString(), ""), "WindowArea");
+        }
+
+        private void list_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }

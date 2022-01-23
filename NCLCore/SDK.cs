@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Text;
 
@@ -35,9 +36,9 @@ namespace NCLCore
                     return null;
             }       
         }
-        public List<Client> GetALLClient(string dir)
+        public ObservableCollection<Client> GetALLClient(string dir)
         {
-            List<Client> clients = new List<Client>();
+            ObservableCollection<Client> clients = new ObservableCollection<Client>();
             try
             {
                 DirectoryInfo root = new DirectoryInfo(dir);
@@ -102,6 +103,7 @@ namespace NCLCore
                             }
                             if (client.isNotNull())
                             {
+                                client.Id = clients.Count + 1;
                                 clients.Add(client);
                             }
                         }
