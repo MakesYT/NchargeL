@@ -1,7 +1,10 @@
 ﻿namespace NCLCore
 {
     public class Client
-    {   
+    {
+        public string assets { get; set; }
+        public bool Forge { get; set; }
+        public string rootdir { get; set; }
         /// <summary>
         /// 我的世界客户端名称
         /// </summary>
@@ -18,14 +21,18 @@
         /// Ncharge客户端版本
         /// </summary>
         public string NchargeVer;
+        /// <summary>
+        /// ID排序
+        /// </summary>
         public int Id { get; set; }
+        public string dir;
         public Client()
         {
            
         }
         public bool isNotNull()
         {
-            if (Name != null && McVer != null)
+            if (Name != null && McVer != null&& dir!=null)
             {
                 return true;
             }else return false;

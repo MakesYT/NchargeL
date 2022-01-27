@@ -24,6 +24,7 @@
             </EventTrigger.Actions>
         </EventTrigger>
     </Page.Triggers>
+    
     <materialDesign:DialogHost Name="host">
 
         <materialDesign:DialogHost.DialogContent >
@@ -47,20 +48,30 @@
                 <StackPanel />
 
                 <TextBox x:Name="email"
+                      materialDesign:ColorZoneAssist.Mode="Custom"
+            materialDesign:ColorZoneAssist.Background="{DynamicResource BodyColor}"
+                         materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource BodyColor}"
+                    materialDesign:ColorZoneAssist.Foreground="{DynamicResource ForegroundColor}"  
+                         materialDesign:HintAssist.Foreground="{DynamicResource BodyColor}"  
   materialDesign:HintAssist.Hint="邮箱"
-  Style="{StaticResource MaterialDesignOutlinedTextBox}"
-  VerticalAlignment="Center" HorizontalContentAlignment="Left" FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi" FontSize="30" BorderBrush="{DynamicResource BodyColor}" SelectionTextBrush="{x:Null}" CaretBrush="{x:Null}" Foreground="{DynamicResource TextColor}" Cursor="IBeam" SelectionBrush="{DynamicResource BodyColor}" >
+  Style="{StaticResource MaterialDesignFilledTextBox}"
+  VerticalAlignment="Center" HorizontalContentAlignment="Left" FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi" FontSize="30" BorderBrush="{DynamicResource BodyColorWith20Opacity}" SelectionTextBrush="{x:Null}" CaretBrush="{x:Null}" Foreground="{DynamicResource TextColor}" Cursor="IBeam" SelectionBrush="{DynamicResource BodyColor}" >
                     <TextBox.Background>
-                        <SolidColorBrush Color="#FFAEC4E2" Opacity="0.15"/>
+                        <SolidColorBrush Color="#FFAEC4E2" Opacity="0.45"/>
                     </TextBox.Background>
                 </TextBox>
 
 
                 <PasswordBox x:Name="pwd" materialDesign:HintAssist.Hint="密码"
-                         Style="{StaticResource MaterialDesignOutlinedPasswordBox}"
-   Foreground="{DynamicResource TextColor}" HorizontalContentAlignment="Left" HorizontalAlignment="Center" VerticalAlignment="Center" Height="64" Width="413" VerticalContentAlignment="Center"  FontSize="30" FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi" BorderBrush="{DynamicResource BodyColor}" Padding="16,0,0,4" Margin="0,15,0,0" SelectionTextBrush="{x:Null}" CaretBrush="{x:Null}" Cursor="IBeam">
+                             materialDesign:ColorZoneAssist.Mode="Custom"
+            materialDesign:ColorZoneAssist.Background="{DynamicResource BodyColor}"
+                         materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource BodyColor}"
+                    materialDesign:ColorZoneAssist.Foreground="{DynamicResource ForegroundColor}"  
+                         materialDesign:HintAssist.Foreground="{DynamicResource BodyColor}"  
+                         Style="{StaticResource MaterialDesignFilledPasswordBox}"
+   Foreground="{DynamicResource TextColor}" HorizontalContentAlignment="Left" HorizontalAlignment="Center" VerticalAlignment="Center" Height="64" Width="413" VerticalContentAlignment="Center"  FontSize="30" FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi" BorderBrush="{DynamicResource BodyColorWith20Opacity}" Padding="16,0,0,4" Margin="0,15,0,0" SelectionTextBrush="{x:Null}" CaretBrush="{x:Null}" Cursor="IBeam">
                     <PasswordBox.Background>
-                        <SolidColorBrush Color="#FFAEC4E2" Opacity="0.15"/>
+                        <SolidColorBrush Color="#FFAEC4E2" Opacity="0.55"/>
                     </PasswordBox.Background>
                 </PasswordBox>
             </StackPanel>

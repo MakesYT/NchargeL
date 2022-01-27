@@ -2,7 +2,12 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:po="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
                     xmlns:settings="clr-namespace:NchargeL.Properties">
-
+    
+    <Style x:Key="NCLFilledTextBox" TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignFilledTextBox}">
+        <Setter Property="CaretBrush" Value="{DynamicResource BodyColor}" />
+        <Setter Property="Foreground" Value="{DynamicResource BodyColor}" />
+        <Setter Property="Foreground" Value="{DynamicResource BodyColor}" />
+    </Style>
     <SolidColorBrush x:Key="BodyColor" x:Name="BodyColor" Color="{Binding Path=BodyColorS, Source={x:Static settings:Settings.Default}}"/>
     <SolidColorBrush x:Key="BodyColorWith50Opacity" Color="{Binding Path=BodyColorS, Source={x:Static settings:Settings.Default}}"  Opacity="0.5"/>
     <SolidColorBrush x:Key="BodyColorWith20Opacity" Color="{Binding Path=BodyColorS, Source={x:Static settings:Settings.Default}}"  Opacity="0.2"/>

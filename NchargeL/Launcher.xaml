@@ -11,11 +11,23 @@
       Title="Launcher">
     <Page.Resources>
         <local:Data x:Key="t"></local:Data>
-        
+        <Style x:Key="color" TargetType="{x:Type ListBoxItem}" >
+            <Setter Property="Foreground" Value="{DynamicResource TextColor}" />
+            <Setter Property="Height" Value="40"></Setter>
+            
+        </Style>
     </Page.Resources>
     <Grid>
-        <ListBox SelectedValuePath="Id" DisplayMemberPath="Name"  x:Name="list" Background="{DynamicResource BodyColorWith50Opacity}" Width="200" VerticalAlignment="Center" Height="380" HorizontalAlignment="Left" 
-                 ItemsSource="{Binding Source={StaticResource t},Path=clients,UpdateSourceTrigger=PropertyChanged}"  SelectionChanged="list_SelectionChanged" UseLayoutRounding="False" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" />
-        <Button Content="Button" HorizontalAlignment="Left" Margin="555,247,0,0" VerticalAlignment="Top" Click="Button_Click"/>
+        <GroupBox Margin="0,5,0,0" materialDesign:ColorZoneAssist.Mode="Custom"
+            materialDesign:ColorZoneAssist.Background="{DynamicResource BodyColor}"
+                    materialDesign:ColorZoneAssist.Foreground="{DynamicResource ForegroundColor}"
+  Header="              客户端列表" Width="250" HorizontalAlignment="Left" Padding="0,0,0,0" Grid.IsSharedSizeScope="True" FontFamily="HarmonyOS Sans Medium" FontSize="20" HorizontalContentAlignment="Center" Foreground="{x:Null}" BorderBrush="#FFB3DDF7">
+            <ListBox SelectedValuePath="Id" DisplayMemberPath="Name"  x:Name="list" Background="{DynamicResource BodyColorWith50Opacity}" 
+                     Width="249" VerticalAlignment="Top" Height="350" HorizontalAlignment="Center" 
+                    ItemContainerStyle="{DynamicResource color}"
+                     ItemsSource="{Binding Source={StaticResource t},Path=clients,UpdateSourceTrigger=PropertyChanged}"  SelectionChanged="list_SelectionChanged" UseLayoutRounding="False" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" />
+
+        </GroupBox>
+        <Button x:Name="launch" BorderBrush="{x:Null}" Foreground="{DynamicResource ForegroundColor}" Cursor="Hand"  IsDefault="True" Background="{DynamicResource BodyColorWith50Opacity}" FocusVisualStyle="{x:Null}"  Style="{StaticResource MaterialDesignOutlinedLightButton}" Content="启动游戏" HorizontalAlignment="Left" Margin="611,292,0,0" VerticalAlignment="Top" Click="Button_Click_1"/>
     </Grid>
 </Page>

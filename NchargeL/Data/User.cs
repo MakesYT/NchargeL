@@ -19,11 +19,11 @@ namespace NchargeL
     {
 
         private static readonly ILog log = LogManager.GetLogger("User");
-        private string _name;
+        public string _name;
         private string _email;
         private string _password;
-        private string _useruuid;
-        private string _token;
+        public string _useruuid;
+        public string _token;
         static System.Windows.Media.ImageSource image;
         NotificationManager notificationManager = new NotificationManager();
         //private Color _color;

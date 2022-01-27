@@ -31,8 +31,8 @@ namespace NchargeL
         {
             InitializeComponent();
             Data.init();//初始化列表
-
-            main = this;
+        
+        main = this;
             hello.Text = Environment.UserName;
 
             FrameWork.Content = new Frame() { Content = Home };
@@ -120,11 +120,12 @@ namespace NchargeL
 
         private async void LauncherButton(object sender, RoutedEventArgs e)//启动游戏按钮
         {
+            //Properties.Settings.Default.GameDir = @"D:\\IDEAJava\\6th\\V6\\out\\artifacts\\V6_jar\\.minecraft";
             if (Properties.Settings.Default.GameDir != "")
             {
                 NCLcore nCLCore = new NCLcore(DownloadSource.MCBBS, Properties.Settings.Default.GameDir);
                 Data.clients = nCLCore.Clients;
-                notificationManager.Show(NotificationContentSDK.notificationSuccess((string)nCLCore.Clients.Count.ToString(), ""), "WindowArea");
+                notificationManager.Show(NotificationContentSDK.notificationSuccess("客户端列表已更新", ""), "WindowArea");
                 launcher=new Launcher();
                 FrameWork.Content = launcher;
             }
