@@ -14,7 +14,7 @@
         <Style x:Key="color" TargetType="{x:Type ListBoxItem}" >
             <Setter Property="Foreground" Value="{DynamicResource TextColor}" />
             <Setter Property="Height" Value="40"></Setter>
-            
+
         </Style>
     </Page.Resources>
     <Grid>
@@ -28,6 +28,8 @@
                      ItemsSource="{Binding Source={StaticResource t},Path=clients,UpdateSourceTrigger=PropertyChanged}"  SelectionChanged="list_SelectionChanged" UseLayoutRounding="False" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" ScrollViewer.VerticalScrollBarVisibility="Auto" />
 
         </GroupBox>
+        <Button x:Name="logs" BorderBrush="{x:Null}" Foreground="{DynamicResource ForegroundColor}" Cursor="Hand"  IsDefault="True" Background="{DynamicResource BodyColorWith50Opacity}" FocusVisualStyle="{x:Null}"  Style="{StaticResource MaterialDesignOutlinedLightButton}" Content="打开logs目录" HorizontalAlignment="Left" Margin="597,242,0,0" VerticalAlignment="Top" Click="logs_Click"/>
+
         <Button x:Name="launch" BorderBrush="{x:Null}" Foreground="{DynamicResource ForegroundColor}" Cursor="Hand"  IsDefault="True" Background="{DynamicResource BodyColorWith50Opacity}" FocusVisualStyle="{x:Null}"  Style="{StaticResource MaterialDesignOutlinedLightButton}" Content="启动游戏" HorizontalAlignment="Left" Margin="611,292,0,0" VerticalAlignment="Top" Click="Button_Click_1"/>
     </Grid>
 </Page>

@@ -5,6 +5,7 @@ using Notification.Wpf;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -83,6 +84,13 @@ namespace NchargeL
             })).Wait();
             
 
+        }
+
+        private void logs_Click(object sender, RoutedEventArgs e)
+        {
+            SDK sDK = new SDK();
+            sDK.ExecuteInCmd("start "+Directory.GetCurrentDirectory()+"\\logs", "");
+           // System.Diagnostics.Process.Start(Directory.GetCurrentDirectory() );
         }
     }
 }

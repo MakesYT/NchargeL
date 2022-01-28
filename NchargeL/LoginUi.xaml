@@ -81,7 +81,7 @@
 
 
 
-            <CheckBox Style="{StaticResource MaterialDesignFilterChipAccentCheckBox}" IsChecked="False" Content="保留密码"  Background="{DynamicResource BodyColor}" Foreground="{DynamicResource ForegroundColor}" BorderBrush="{DynamicResource BodyColor}" Cursor="Hand" Panel.ZIndex="2" FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi" FontSize="25" Canvas.Top="15" Margin="400,270,0,0" VerticalAlignment="Top" />
+            <CheckBox x:Name="save" Style="{StaticResource MaterialDesignFilterChipAccentCheckBox}" IsChecked="False" Content="保留密码"  Background="{DynamicResource BodyColor}" Foreground="{DynamicResource ForegroundColor}" BorderBrush="{DynamicResource BodyColor}" Cursor="Hand" Panel.ZIndex="2" FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi" FontSize="25" Canvas.Top="15" Margin="400,270,0,0" VerticalAlignment="Top" />
 
 
 
