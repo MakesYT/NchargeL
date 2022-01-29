@@ -180,7 +180,7 @@ namespace NchargeL
                                 bithead.SetPixel(i, j, Color.Transparent);
                             }
                     }
-                    //bithead.MakeTransparent(Color.White);
+                    bithead.MakeTransparent(Color.Transparent);
                     bithead.Save(Environment.CurrentDirectory + "\\3.png");
                     MemoryStream ms = new MemoryStream();
                     bithead.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
