@@ -162,5 +162,10 @@ namespace NchargeL
             }
 
         }
+
+        private void Minimze(object sender, RoutedEventArgs e)
+        {
+            SystemCommands.MinimizeWindow(this);
+        }
     }
 }
