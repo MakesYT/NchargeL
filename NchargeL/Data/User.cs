@@ -126,7 +126,7 @@ namespace NchargeL
 
                         g.DrawImage(downImage, rectDest, rectSource, GraphicsUnit.Pixel);
                         head = bmpDest;
-                        head = KiResizeImage(head, 112, 112);
+                        head = KiResizeImage(head, 104, 104);
                         head.Save(Environment.CurrentDirectory + "\\1.png");
                         //head.Dispose();
                     }//获取头部的图像
@@ -161,14 +161,14 @@ namespace NchargeL
                     Graphics ghead = Graphics.FromImage(bithead);
                     ghead.DrawImage((Image)cover, 0, 0);
 
-                    for (int i = 4; i < 114; i++)
+                    for (int i = 8; i < 111; i++)
                     {
-                        for (int j = 4; j < 114; j++)
+                        for (int j = 8; j < 111; j++)
                         {
                             //log.Debug(cover.GetPixel(i, j));
                             if (cover.GetPixel(i, j) == ColorTranslator.FromHtml("#ffffff"))// Color.FromArgb(255, 255, 255, 255)白色
                             {
-                                bithead.SetPixel(i, j, head.GetPixel(i - 4, j - 4));
+                                bithead.SetPixel(i, j, head.GetPixel(i - 8, j - 8));
                             }
                         }
                     }//将覆盖层的空白颜色替换为头像的图像
