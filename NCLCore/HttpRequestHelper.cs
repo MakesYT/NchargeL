@@ -7,9 +7,9 @@ using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
-namespace NchargeL
+namespace NCLCore
 {
-    class HttpRequestHelper
+    public class HttpRequestHelper
     {
         public static HttpWebResponse CreatePostHttpResponse(string url, IDictionary<string, string> parameters)
         {

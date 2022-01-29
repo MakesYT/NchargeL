@@ -1,6 +1,7 @@
 ﻿using log4net;
 using NchargeL.Info;
 using NCLCore;
+using Newtonsoft.Json.Linq;
 using Notification.Wpf;
 using System;
 using System.Collections.Generic;
@@ -74,15 +75,65 @@ namespace NchargeL
         public  void  StartClient(object clt)
         {
                 SDK sDK = new SDK();
-           var re=   sDK.StartClient((Client)clt, Data.users[0]._name, Data.users[0]._useruuid, Data.users[0]._token);
-            log.Debug(re.Result);
-            //StartClient(clt).GetAwaiter().GetResult().GetAwaiter().GetResult();
-            notificationManager.Show(NotificationContentSDK.notificationInformation("", "客户端已退出"), "WindowArea");
-            Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+            bool flag = true;
+            while (flag)
             {
+                var re=   sDK.StartClient((Client)clt, Data.users[0]._name, Data.users[0]._useruuid, Data.users[0]._token);
+                log.Debug(re.Result);
+
+            //StartClient(clt).GetAwaiter().GetResult().GetAwaiter().GetResult();
+            if(re.Result == 1)
+            {
+                notificationManager.Show(NotificationContentSDK.notificationInformation("", "客户端已退出"), "WindowArea");
+                flag = false;
+            }if(re.Result == 2)
+            {
+                if (Data.users[0]._password != null)
+                {
+                        Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+                        {notificationManager.Show(NotificationContentSDK.notificationWarning("", "用户令牌已失效,正在重新获取"), "WindowArea");
+                            
+                        })).Wait();
+                        
+                        Dictionary<String, String> pList = new Dictionary<String, String>();
+                    pList.Add("username", Data.users[0]._email);
+                    pList.Add("password", Data.users[0]._password);
+
+
+                    try
+                    {
+                        string re1 = HttpRequestHelper.GetResponseString(HttpRequestHelper.CreatePostHttpResponse("https://www.ncserver.top:666/api/yggdrasil/authserver/authenticate", pList));
+                        var jObject = JObject.Parse(re1);
+                        log.Debug(jObject.ToString());
+                        Data.users[0]._token= jObject["accessToken"].ToString();
+                        Properties.Settings.Default.User = XmlUtil.Serializer(typeof(User), Data.users[0]); 
+                    }
+                    catch (Exception ex)
+                    {
+                        log.Debug(ex.ToString());
+                        log.Debug(ex.Message);
+                    }
+                    }
+                    else
+                    {
+                        Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+                        {
+                            WarnDialog warn = new WarnDialog(Data.users[0]._password, "用户令牌已失效请重新登陆");
+                            warn.ShowDialog();
+                            Main.main.FrameWork.Content = LoginUi;
+                        })).Wait();
+                        Data.users.Clear();
+                            flag = false;
+                    }
+                   
+            }
+             Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+                {
                 launch.IsEnabled = true; 
-            })).Wait();
+                })).Wait();
             
+            }
+           
 
         }
 

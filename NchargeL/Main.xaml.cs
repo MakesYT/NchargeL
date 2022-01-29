@@ -36,6 +36,10 @@ namespace NchargeL
             hello.Text = Environment.UserName;
 
             FrameWork.Content = new Frame() { Content = Home };
+            if(Data.users.Count > 0)
+            {
+                Data.users[0].reloadUser();
+            }
         }
         public void InfoDialogShow(string infostr, string str)
         {

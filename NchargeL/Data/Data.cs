@@ -21,6 +21,8 @@ namespace NchargeL
         {
 
             users = new List<User>();
+            if (Properties.Settings.Default.User != "")
+                users.Add(XmlUtil.Deserialize(typeof(User), Properties.Settings.Default.User) as User);
             clients = new ObservableCollection<Client>();
         }
        

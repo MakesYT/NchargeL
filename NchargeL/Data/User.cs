@@ -1,5 +1,6 @@
 ﻿using log4net;
 using NchargeL.Info;
+using NCLCore;
 using Newtonsoft.Json.Linq;
 using Notification.Wpf;
 using System;
@@ -20,13 +21,32 @@ namespace NchargeL
 
         private static readonly ILog log = LogManager.GetLogger("User");
         public string _name;
-        private string _email;
-        private string _password;
+        public string _email;
+        public string? _password;
         public string _useruuid;
         public string _token;
-        static System.Windows.Media.ImageSource image;
+        //private ImageSourse 
+
+        public byte[] image;
         NotificationManager notificationManager = new NotificationManager();
         //private Color _color;
+        public void reloadUser()
+        {
+            Main.main.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
+            {
+
+                Main.main.hello.Text = _name;
+                BitmapImage bmp = new BitmapImage();
+                bmp.BeginInit();
+                bmp.StreamSource = new MemoryStream(image);
+                bmp.EndInit();
+                Main.main.userImage.Source = bmp;
+            });
+        }
+        public User()
+        {
+
+        }
         public BitmapImage ConvertBitmapToBitmapImage(Bitmap bitmap)
         {
             MemoryStream stream = new MemoryStream();
@@ -39,6 +59,7 @@ namespace NchargeL
 
             return image;
         }
+        
 
         public static Bitmap KiResizeImage(Bitmap bmp, int newW, int newH)
         {
@@ -149,12 +170,14 @@ namespace NchargeL
                         }
                     }
                     bithead.Save(Environment.CurrentDirectory + "\\3.png");
-                    image = ConvertBitmapToBitmapImage(bithead);
-
+                    MemoryStream ms = new MemoryStream();
+                    bithead.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
+                    image = ms.GetBuffer();
+                    ms.Close();
                     Application.Current.Dispatcher.BeginInvoke(new Action(delegate
                     {
-
-                        Main.main.userImage.Source = ConvertBitmapToBitmapImage(bithead);
+                        Main.main.userImage.Source = ConvertBitmapToBitmapImage(bithead); 
+                       
                         notificationManager.Show(NotificationContentSDK.notificationSuccess("头像获取成功", ""), "WindowArea");
                     })).Wait();
                     //Home.home.userImage.Source = ConvertBitmapToBitmapImage(bithead);

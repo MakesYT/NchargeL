@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Net;
 
 namespace NCLCore
 {
@@ -136,6 +137,7 @@ namespace NCLCore
 
             return clients;
         }
+        
         public Libs GetLibs(string dir)
         {
             Libs libs = new Libs();
@@ -213,9 +215,22 @@ namespace NCLCore
             libs.Nativelibs = Nativelibs;
             return libs;
         }
-        
-        public async Task<string> StartClient(Client clt,string name,string uuid,string token)
-        { 
+        /// <summary>
+        /// 正常启动 返回代码1
+        /// 令牌无效 返回代码2
+        /// 其他异常 返回代码-1
+        /// </summary>
+        /// <param name="clt"></param>
+        /// <param name="name"></param>
+        /// <param name="uuid"></param>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        public async Task<int> StartClient(Client clt,string name,string uuid,string token)
+        {
+            if (!CheckToken(token))
+            {
+                return 2;
+            }
             string libstr = null;
             
             if (clt.Forge)
@@ -274,7 +289,30 @@ namespace NCLCore
             }
             //return 
                 ExecuteInCmd(all, clt.rootdir + "\\versions\\" + clt.Name);
-            return all;
+            return 1;
+        }
+        public bool CheckToken(string token)
+        {
+            Dictionary<String, String> pList = new Dictionary<String, String>();
+            pList.Add("accessToken", token);
+            try
+            {
+                HttpWebResponse re =HttpRequestHelper.CreatePostHttpResponse("https://www.ncserver.top:666/api/yggdrasil/authserver/validate", pList);
+                if(re.StatusCode== HttpStatusCode.NoContent)
+                {
+                    re.Close();
+                    return true;
+                }
+
+            }
+            catch (Exception ex)
+            {
+                log.Debug(ex.ToString());
+                log.Debug(ex.Message);
+
+                
+            }
+            return false;
         }
         public string ExecuteInCmd(string cmdline,string dir)
         {
