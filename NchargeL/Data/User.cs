@@ -111,8 +111,7 @@ namespace NchargeL
 
 
                     System.Drawing.Image downImage = System.Drawing.Image.FromStream(HttpRequestHelper.CreatePostHttpResponse(selectedProfileJson["textures"]["SKIN"]["url"].ToString(), new Dictionary<String, String>()).GetResponseStream());
-                    //downImage.Save(Environment.CurrentDirectory+"\\1.png");
-                    //downImage.Dispose();
+                    //从网络获取的皮肤图像
                     Bitmap head;
                     Bitmap cover;
                     // _color = Color.Black;
@@ -121,14 +120,14 @@ namespace NchargeL
 
                         Graphics g = Graphics.FromImage(bmpDest);               //创建GDI
 
-                        Rectangle rectDest = new Rectangle(0, 0, 8, 8);
-                        Rectangle rectSource = new Rectangle(8, 8, 8, 8);
+                        Rectangle rectDest = new Rectangle(0, 0, 8, 8);//输出的图片开始位置及大小 XY
+                        Rectangle rectSource = new Rectangle(8, 8, 8, 8);//要截取的图片开始的位置，及大小
 
                         g.DrawImage(downImage, rectDest, rectSource, GraphicsUnit.Pixel);
                         head = bmpDest;
                         head.Save(Environment.CurrentDirectory + "\\1.png");
                         //head.Dispose();
-                    }
+                    }//获取头部的图像
                     {
                         Bitmap bmpDest = new Bitmap(8, 8, PixelFormat.Format32bppRgb);       //目标图片大小
 
@@ -153,7 +152,7 @@ namespace NchargeL
                         //Home.home.userCoverImage.Source = ConvertBitmapToBitmapImage(bmpDest);
                         cover.Save(Environment.CurrentDirectory + "\\2.png");
                         //cover.Dispose();
-                    }
+                    }//获取头部覆盖层的图像
                     Bitmap bithead = new Bitmap(8, 8, PixelFormat.Format32bppRgb);
                     Graphics ghead = Graphics.FromImage(bithead);
                     ghead.DrawImage((Image)head, 0, 0);
@@ -163,16 +162,16 @@ namespace NchargeL
                         for (int j = 0; j < 8; j++)
                         {
                             //log.Debug(cover.GetPixel(i, j));
-                            if (cover.GetPixel(i, j) != Color.FromArgb(255, 255, 255, 255))
+                            if (cover.GetPixel(i, j) != Color.FromArgb(255, 255, 255, 255))// Color.FromArgb(255, 255, 255, 255)白色
                             {
                                 bithead.SetPixel(i, j, cover.GetPixel(i, j));
                             }
                         }
-                    }
+                    }//将覆盖层的空白颜色替换为头像的图像
                     bithead.Save(Environment.CurrentDirectory + "\\3.png");
                     MemoryStream ms = new MemoryStream();
                     bithead.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
-                    image = ms.GetBuffer();
+                    image = ms.GetBuffer();//转写为Byte[]方便保存
                     ms.Close();
                     Application.Current.Dispatcher.BeginInvoke(new Action(delegate
                     {
