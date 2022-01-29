@@ -40,6 +40,7 @@ namespace NchargeL
                 bmp.BeginInit();
                 bmp.StreamSource = new MemoryStream(image);
                 bmp.EndInit();
+                
                 Main.main.userImage.Source = bmp;
             });
         }
@@ -183,7 +184,7 @@ namespace NchargeL
                     bithead.MakeTransparent(Color.Transparent);
                     bithead.Save(Environment.CurrentDirectory + "\\3.png");
                     MemoryStream ms = new MemoryStream();
-                    bithead.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
+                    bithead.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
                     image = ms.GetBuffer();//转写为Byte[]方便保存
                     ms.Close();
                     Application.Current.Dispatcher.BeginInvoke(new Action(delegate
