@@ -50,7 +50,7 @@ namespace NchargeL
         public BitmapImage ConvertBitmapToBitmapImage(Bitmap bitmap)
         {
             MemoryStream stream = new MemoryStream();
-            bitmap.Save(stream, ImageFormat.Bmp);
+            bitmap.Save(stream, ImageFormat.Png);
             //stream.Close();
             BitmapImage image = new BitmapImage();
             image.BeginInit();
@@ -69,7 +69,7 @@ namespace NchargeL
                 Graphics g = Graphics.FromImage(b);
 
                 // 插值算法的质量
-                g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                g.InterpolationMode = InterpolationMode.NearestNeighbor;
 
                 g.DrawImage(bmp, new Rectangle(0, 0, newW, newH), new Rectangle(0, 0, bmp.Width, bmp.Height), GraphicsUnit.Pixel);
                 g.Dispose();
@@ -111,6 +111,7 @@ namespace NchargeL
 
 
                     System.Drawing.Image downImage = System.Drawing.Image.FromStream(HttpRequestHelper.CreatePostHttpResponse(selectedProfileJson["textures"]["SKIN"]["url"].ToString(), new Dictionary<String, String>()).GetResponseStream());
+                    downImage.Save(Environment.CurrentDirectory + "\\all.png");
                     //从网络获取的皮肤图像
                     Bitmap head;
                     Bitmap cover;
@@ -125,6 +126,7 @@ namespace NchargeL
 
                         g.DrawImage(downImage, rectDest, rectSource, GraphicsUnit.Pixel);
                         head = bmpDest;
+                        head = KiResizeImage(head, 112, 112);
                         head.Save(Environment.CurrentDirectory + "\\1.png");
                         //head.Dispose();
                     }//获取头部的图像
@@ -149,25 +151,36 @@ namespace NchargeL
                             }
                         }
                         cover = bmpDest;
+                        cover = KiResizeImage(cover, 128, 128);
                         //Home.home.userCoverImage.Source = ConvertBitmapToBitmapImage(bmpDest);
                         cover.Save(Environment.CurrentDirectory + "\\2.png");
                         //cover.Dispose();
                     }//获取头部覆盖层的图像
-                    Bitmap bithead = new Bitmap(8, 8, PixelFormat.Format32bppRgb);
-                    Graphics ghead = Graphics.FromImage(bithead);
-                    ghead.DrawImage((Image)head, 0, 0);
 
-                    for (int i = 0; i < 8; i++)
+                    Bitmap bithead = new Bitmap(114, 114, PixelFormat.Format32bppRgb);
+                    Graphics ghead = Graphics.FromImage(bithead);
+                    ghead.DrawImage((Image)cover, 0, 0);
+
+                    for (int i = 4; i < 114; i++)
                     {
-                        for (int j = 0; j < 8; j++)
+                        for (int j = 4; j < 114; j++)
                         {
                             //log.Debug(cover.GetPixel(i, j));
-                            if (cover.GetPixel(i, j) != Color.FromArgb(255, 255, 255, 255))// Color.FromArgb(255, 255, 255, 255)白色
+                            if (cover.GetPixel(i, j) == ColorTranslator.FromHtml("#ffffff"))// Color.FromArgb(255, 255, 255, 255)白色
                             {
-                                bithead.SetPixel(i, j, cover.GetPixel(i, j));
+                                bithead.SetPixel(i, j, head.GetPixel(i - 4, j - 4));
                             }
                         }
                     }//将覆盖层的空白颜色替换为头像的图像
+                    for (int i = 0; i < bithead.Height; i++)
+                    {
+                        for (int j = 0; j < bithead.Width; j++)
+                            if (bithead.GetPixel(i, j) == ColorTranslator.FromHtml("#ffffff") || bithead.GetPixel(i, j) == ColorTranslator.FromHtml("#000000"))
+                            {
+                                bithead.SetPixel(i, j, Color.Transparent);
+                            }
+                    }
+                    //bithead.MakeTransparent(Color.White);
                     bithead.Save(Environment.CurrentDirectory + "\\3.png");
                     MemoryStream ms = new MemoryStream();
                     bithead.Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
