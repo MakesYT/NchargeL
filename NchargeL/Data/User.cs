@@ -59,7 +59,7 @@ namespace NchargeL
 
             return image;
         }
-        
+
 
         public static Bitmap KiResizeImage(Bitmap bmp, int newW, int newH)
         {
@@ -176,8 +176,8 @@ namespace NchargeL
                     ms.Close();
                     Application.Current.Dispatcher.BeginInvoke(new Action(delegate
                     {
-                        Main.main.userImage.Source = ConvertBitmapToBitmapImage(bithead); 
-                       
+                        Main.main.userImage.Source = ConvertBitmapToBitmapImage(bithead);
+
                         notificationManager.Show(NotificationContentSDK.notificationSuccess("头像获取成功", ""), "WindowArea");
                     })).Wait();
                     //Home.home.userImage.Source = ConvertBitmapToBitmapImage(bithead);

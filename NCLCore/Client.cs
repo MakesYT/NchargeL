@@ -12,7 +12,7 @@
         /// <summary>
         /// 我的世界版本
         /// </summary>
-        public string McVer=null;
+        public string McVer = null;
         /// <summary>
         /// 是否为Ncharge客户端
         /// </summary>
@@ -28,14 +28,15 @@
         public string dir;
         public Client()
         {
-           
+
         }
         public bool isNotNull()
         {
-            if (Name != null && McVer != null&& dir!=null)
+            if (Name != null && McVer != null && dir != null)
             {
                 return true;
-            }else return false;
+            }
+            else return false;
         }
     }
 }

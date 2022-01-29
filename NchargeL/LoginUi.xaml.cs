@@ -1,5 +1,6 @@
 ﻿using log4net;
 using NchargeL.Info;
+using NCLCore;
 using Newtonsoft.Json.Linq;
 using Notification.Wpf;
 using System;
@@ -12,7 +13,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Navigation;
 using System.Windows.Threading;
-using NCLCore;
 namespace NchargeL
 {
     /// <summary>
@@ -108,12 +108,13 @@ namespace NchargeL
                     Data.users.Add(user);
                     this.Dispatcher.BeginInvoke(DispatcherPriority.Normal, (ThreadStart)delegate ()
                     {
-                        if (save.IsChecked==false|| save.IsChecked == null)
+                        if (save.IsChecked == false || save.IsChecked == null)
                         {
                             user._password = null;
                             notificationManager.Show(NotificationContentSDK.notificationSuccess("", "没有保存密码"), "WindowArea");
-                        }else notificationManager.Show(NotificationContentSDK.notificationSuccess(user._password, "已保存密码"), "WindowArea");
-                        Properties.Settings.Default.User = XmlUtil.Serializer(typeof(User),user);
+                        }
+                        else notificationManager.Show(NotificationContentSDK.notificationSuccess(user._password, "已保存密码"), "WindowArea");
+                        Properties.Settings.Default.User = XmlUtil.Serializer(typeof(User), user);
                         host.IsOpen = false;
                         NavigationService.GetNavigationService(this).Navigate(Account.account);
 

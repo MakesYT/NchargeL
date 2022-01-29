@@ -102,7 +102,7 @@ namespace NchargeL.SettingUIs
 
             public event PropertyChangedEventHandler PropertyChanged;
         }
-        
+
 
         private void ListBoxItem_Selected(object sender, RoutedEventArgs e)
         {

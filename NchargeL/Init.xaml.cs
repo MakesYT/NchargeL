@@ -48,7 +48,7 @@ namespace Ncharge
 
             //long timeStamp = DateTimeOffset.Now.ToUniversalTime().Ticks; 
             log.Info("初始化....");
-           // log.Info(NchargeL.Properties.Settings.Default.User._token);
+            // log.Info(NchargeL.Properties.Settings.Default.User._token);
 
             check64();
 

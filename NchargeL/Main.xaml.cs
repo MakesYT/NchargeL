@@ -1,14 +1,14 @@
 ﻿using log4net;
+using Microsoft.WindowsAPICodePack.Dialogs;
+using NchargeL.Info;
+using NCLCore;
 using Notification.Wpf;
 using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
-using NCLCore;
 using static NCLCore.SDK;
-using NchargeL.Info;
-using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace NchargeL
 {
@@ -21,7 +21,7 @@ namespace NchargeL
         public static Main main;
 
         private static readonly ILog log = LogManager.GetLogger("Main");
-       // public Data data = new Data();
+        // public Data data = new Data();
         public Home Home = new Home();
         public Account Account = new Account();
         public LoginUi LoginUi = new LoginUi();
@@ -31,12 +31,12 @@ namespace NchargeL
         {
             InitializeComponent();
             Data.init();//初始化列表
-        
-        main = this;
+
+            main = this;
             hello.Text = Environment.UserName;
 
             FrameWork.Content = new Frame() { Content = Home };
-            if(Data.users.Count > 0)
+            if (Data.users.Count > 0)
             {
                 Data.users[0].reloadUser();
             }
@@ -130,7 +130,7 @@ namespace NchargeL
                 NCLcore nCLCore = new NCLcore(DownloadSource.MCBBS, Properties.Settings.Default.GameDir);
                 Data.clients = nCLCore.Clients;
                 notificationManager.Show(NotificationContentSDK.notificationSuccess("客户端列表已更新", ""), "WindowArea");
-                launcher=new Launcher();
+                launcher = new Launcher();
                 FrameWork.Content = launcher;
             }
             else
@@ -139,11 +139,11 @@ namespace NchargeL
                 dlg.IsFolderPicker = true;
                 //dlg.InitialDirectory = currentDirectory;
                 dlg.Title = "选择\".minecraft\"游戏目录";
-                while (dlg.ShowDialog() == CommonFileDialogResult.Ok )
+                while (dlg.ShowDialog() == CommonFileDialogResult.Ok)
                 {
-                    if(dlg.FileName.EndsWith(".minecraft"))
+                    if (dlg.FileName.EndsWith(".minecraft"))
                     {
-                        Properties.Settings.Default.GameDir=dlg.FileName;
+                        Properties.Settings.Default.GameDir = dlg.FileName;
                         NCLcore nCLCore = new NCLcore(DownloadSource.MCBBS, dlg.FileName);
                         Data.clients = nCLCore.Clients;
                         notificationManager.Show(NotificationContentSDK.notificationSuccess((string)nCLCore.Clients.Count.ToString(), ""), "WindowArea");
@@ -153,14 +153,14 @@ namespace NchargeL
                     }
                     else
                     {
-                    InfoDialog info = new InfoDialog("选择游戏目录", "您需要选择以.minecraft命名的文件夹");
-                    info.ShowDialog();
+                        InfoDialog info = new InfoDialog("选择游戏目录", "您需要选择以.minecraft命名的文件夹");
+                        info.ShowDialog();
                     }
-              
+
                 }
-            
+
             }
-            
+
         }
     }
 }

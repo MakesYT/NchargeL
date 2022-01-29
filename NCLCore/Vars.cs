@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace NCLCore
+﻿namespace NCLCore
 {
     internal class Vars
     {
