@@ -1,4 +1,6 @@
-﻿using log4net;
+﻿using Downloader;
+using ICSharpCode.SharpZipLib.Zip;
+using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.ObjectModel;
@@ -138,8 +140,21 @@ namespace NCLCore
             return clients;
         }
 
-        public Libs GetLibs(string dir)
+        public Libs GetLibs(string rootdir,string ver,string dir)
         {
+            var downloadOpt = new DownloadConfiguration()
+            {
+                BufferBlockSize = 10240, // usually, hosts support max to 8000 bytes, default values is 8000
+                ChunkCount = 8, // file parts to download, default value is 1
+                MaximumBytesPerSecond = 1024 * 1024, // download speed limited to 1MB/s, default values is zero or unlimited
+                MaxTryAgainOnFailover = int.MaxValue, // the maximum number of times to fail
+                OnTheFlyDownload = false, // caching in-memory or not? default values is true
+                ParallelDownload = true, // download parts of file as parallel or not. Default value is false
+                TempDirectory = "C:\\temp", // Set the temp path for buffering chunk files, the default path is Path.GetTempPath()
+                Timeout = 1000, // timeout (millisecond) per stream block reader, default values is 1000
+                
+    
+            }; var downloader = new DownloadService(downloadOpt);
             Libs libs = new Libs();
             List<Lib> Normallibs = new List<Lib>();
             List<Lib> Nativelibs = new List<Lib>();
@@ -184,6 +199,18 @@ namespace NCLCore
                                             sha1 = tmplibsjosn["classifiers"]["natives-windows"]["sha1"].ToString(),
                                             native = true
                                         };
+                                        FileInfo fileInfo1 = new FileInfo(rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"));
+                                        if (!fileInfo1.Exists)
+                                        {
+                                            log.Debug(lib.path + "库文件不存在");
+                                            downloader.DownloadFileTaskAsync(lib.url, rootdir + "\\libraries\\" + lib.path).Wait();
+                                        }
+                                        log.Debug(rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"));
+                                        DirectoryInfo nativedir = new DirectoryInfo(ver + "\\natives");
+                                        if (!nativedir.Exists)
+                                            nativedir.Create();
+                                        log.Debug(nativedir.FullName);
+                                        (new FastZip()).ExtractZip(rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"), ver+"\\natives\\", "");
                                         Nativelibs.Add(lib);
                                     }
                                     else if (tmplibsjosn["artifact"] != null)
@@ -195,7 +222,12 @@ namespace NCLCore
                                             sha1 = tmplibsjosn["artifact"]["sha1"].ToString(),
 
                                         };
-
+                                        FileInfo fileInfo1 = new FileInfo(rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"));
+                                        if (!fileInfo1.Exists)
+                                        {
+                                            log.Debug(lib.path + "库文件不存在");
+                                            downloader.DownloadFileTaskAsync(lib.url, rootdir + "\\libraries\\" + lib.path).Wait();
+                                        }
                                         Normallibs.Add(lib);
                                     }
                                 }
@@ -235,14 +267,14 @@ namespace NCLCore
 
             if (clt.Forge)
             {
-                Libs libs2 = GetLibs(clt.rootdir + "\\versions\\" + clt.McVer + "\\" + clt.McVer + ".json");
+                Libs libs2 = GetLibs(clt.rootdir, clt.rootdir + "\\versions\\" + clt.Name,clt.rootdir + "\\versions\\" + clt.McVer + "\\" + clt.McVer + ".json");
                 // throw new NCLException("");
                 foreach (Lib lib in libs2.Normallibs)
                 {
                     libstr = libstr + clt.rootdir + "\\libraries\\" + lib.path + ";";
                 }
 
-                Libs libs = GetLibs(clt.dir + "\\" + clt.Name + ".json");
+                Libs libs = GetLibs(clt.rootdir,clt.dir, clt.dir + "\\" + clt.Name + ".json");
                 //libstr = libstr + "\"";
                 foreach (Lib lib in libs.Normallibs)
                 {
@@ -252,7 +284,7 @@ namespace NCLCore
             }
             else
             {
-                Libs libs = GetLibs(clt.dir + "\\" + clt.Name + ".json");
+                Libs libs = GetLibs(clt.rootdir,clt.dir, clt.dir + "\\" + clt.Name + ".json");
 
                 foreach (Lib lib in libs.Normallibs)
                 {
@@ -277,7 +309,7 @@ namespace NCLCore
                 // "-Dauthlibinjector.side=client -Dauthlibinjector.yggdrasil.prefetched=eyJtZXRhIjp7InNlcnZlck5hbWUiOiJOY2hhcmdlIE1DXHU1OTE2XHU3ZjZlXHU3NjdiXHU1ZjU1IiwiaW1wbGVtZW50YXRpb25OYW1lIjoiWWdnZHJhc2lsIEFQSSBmb3IgQmxlc3NpbmcgU2tpbiIsImltcGxlbWVudGF0aW9uVmVyc2lvbiI6IjUuMS41IiwibGlua3MiOnsiaG9tZXBhZ2UiOiJodHRwczpcL1wvd3d3Lm5jc2VydmVyLnRvcDo2NjYiLCJyZWdpc3RlciI6Imh0dHBzOlwvXC93d3cubmNzZXJ2ZXIudG9wOjY2NlwvYXV0aFwvcmVnaXN0ZXIifSwiZmVhdHVyZS5ub25fZW1haWxfbG9naW4iOnRydWV9LCJza2luRG9tYWlucyI6WyJ3d3cubmNzZXJ2ZXIudG9wIl0sInNpZ25hdHVyZVB1YmxpY2tleSI6Ii0tLS0tQkVHSU4gUFVCTElDIEtFWS0tLS0tXG5NSUlDSWpBTkJna3Foa2lHOXcwQkFRRUZBQU9DQWc4QU1JSUNDZ0tDQWdFQXlmcjY0R09icXZkRENFcjhFT1JBXG5QaTg5VkxiUDVOV3JSaG9BbDcyZ2pLbTRvUmppblp2WFMrRzZnRCtaTGJvdnlMVmg3SktKSUc1QlI5SHJWTGNLXG5Jb3ArMFNuN0lQUUo4XC9YMkt1UkhqYnNiVEFTREtLV1RkTHNCcDMzcTR5SEIwMFJpNzFTbkxhK2tQdFZ4UE5kcFxuelE0Tnk0czU0c2JCejdOWmM0OHJXdWh4RG1rZTh5anIycWxXQ0FwS1ZHVngxYUJrNVYxb3loeFwveFFnVUtaUmRcbndYeDVhVmtkY2NDd045eWc2STlMY0hPa2d1Y1NCUHY4NTZSU2ZTTnZHbHVYV1N0VlFXTVhLNVVcL25YU2pYUTdHXG45bFdiNUJ4T1JqY3h0TDFIWXBnYm9RanVVNW9oTWUrdmRMRytmUmp4TE1mVDdLUlgzTzZRelkyOGdlT096d1l6XG5MSGwyV0xISEhlTXdiRDJtYng5MlZCY0tsZkwwUDR1eGVxeG9mYWplOURyWVVIY1VvN2ZGbUF2VHN0UU00VDNIXG5GXC85YTZ1emxHRHV1MHp4RjljWkJ6Z3JyXC92MDRROGZ4Tkh0TjlZRjl2MGZSazk0b0c4QVcrSU5CQmFnTWFTbkNcblQ4XC9XYUtaOUtSRStBMk5YWFhvZ1E1NWppOU12dFB6NlJNalBQNWtlR0hNZW8xbXNWN2VPTExXZGRaYStxWE5OXG5aZ0ZUcXlpc3pYRnhRTWZRVTRDREcyZEVsdUZ6MndTemsxY0xVN3pYemUwVk9ldVorQnJvVm5pWmZ1enpSTFBTXG5PbENTSUJYQys1dGVnd3lXWTVCaU1zSldhWmdveUhpVmppWHpFaVJ4aW9xelJGbkorc1FJSFpYWnI2UVpyVXBqXG5MalBvQUtBOWs5QkZ3d0Fhbkl5ajF6a0NBd0VBQVE9PVxuLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tXG4ifQ==" +
                 " -XX:+UseG1GC -XX:-UseAdaptiveSizePolicy -XX:-OmitStackTraceInFastThrow -Dfml.ignoreInvalidMinecraftCertificates=True -Dfml.ignorePatchDiscrepancies=True -XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump -Xmn256m -Xmx11673m \"-Djava.library.path=" + clt.dir + "\\natives\"" + " -cp \"" + libstr + "\"" + " " + mainClass +
         " --username " + name + " --version " + clt.Name + " --gameDir \"" + clt.dir + "\" --assetsDir \"" + clt.rootdir + "\\assets\" --assetIndex " + clt.assets + " --versionType NCL" +
-        " --uuid " + uuid + " --accessToken " + token + " --userProperties {} --userType mojang --width 854 --height 480";
+        " --uuid " + uuid + " --accessToken " + token + " --userType mojang --width 854 --height 480";
             all = all.Replace("\\", "/");
             all = all.Replace("//", "/");
             all = all.Replace("/", "\\");

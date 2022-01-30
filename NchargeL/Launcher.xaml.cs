@@ -1,4 +1,5 @@
 ﻿using log4net;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using NchargeL.Info;
 using NCLCore;
 using Newtonsoft.Json.Linq;
@@ -143,6 +144,33 @@ namespace NchargeL
             SDK sDK = new SDK();
             sDK.ExecuteInCmd("start " + Directory.GetCurrentDirectory() + "\\logs", "");
             // System.Diagnostics.Process.Start(Directory.GetCurrentDirectory() );
+        }
+
+        private void GameDir(object sender, RoutedEventArgs e)
+        {
+            var dlg = new CommonOpenFileDialog();
+            dlg.IsFolderPicker = true;
+            //dlg.InitialDirectory = currentDirectory;
+            dlg.Title = "选择\".minecraft\"游戏目录";
+            while (dlg.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                if (dlg.FileName.EndsWith(".minecraft"))
+                {
+                    Properties.Settings.Default.GameDir = dlg.FileName;
+                    NCLcore nCLCore = new NCLcore(SDK.DownloadSource.MCBBS, dlg.FileName);
+                    Data.clients = nCLCore.Clients;
+                    notificationManager.Show(NotificationContentSDK.notificationSuccess("客户端列表已更新", ""), "WindowArea");
+                    Main.main.launcher = new Launcher();
+                    Main.main.FrameWork.Content = Main.main.launcher;
+                    break;
+                }
+                else
+                {
+                    InfoDialog info = new InfoDialog("选择游戏目录", "您需要选择以.minecraft命名的文件夹");
+                    info.ShowDialog();
+                }
+
+            }
         }
     }
 }

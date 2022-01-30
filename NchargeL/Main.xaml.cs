@@ -26,7 +26,7 @@ namespace NchargeL
         public Account Account = new Account();
         public LoginUi LoginUi = new LoginUi();
         private SettingUi settingUi = new SettingUi();
-        private Launcher launcher;
+        public Launcher launcher=new Launcher();
         public Main()
         {
             InitializeComponent();
@@ -124,6 +124,7 @@ namespace NchargeL
 
         private async void LauncherButton(object sender, RoutedEventArgs e)//启动游戏按钮
         {
+            //launcher=new Launcher();
             //Properties.Settings.Default.GameDir = @"D:\\IDEAJava\\6th\\V6\\out\\artifacts\\V6_jar\\.minecraft";
             if (Properties.Settings.Default.GameDir != "")
             {
@@ -146,7 +147,7 @@ namespace NchargeL
                         Properties.Settings.Default.GameDir = dlg.FileName;
                         NCLcore nCLCore = new NCLcore(DownloadSource.MCBBS, dlg.FileName);
                         Data.clients = nCLCore.Clients;
-                        notificationManager.Show(NotificationContentSDK.notificationSuccess((string)nCLCore.Clients.Count.ToString(), ""), "WindowArea");
+                        notificationManager.Show(NotificationContentSDK.notificationSuccess("客户端列表已更新", ""), "WindowArea");
                         launcher = new Launcher();
                         FrameWork.Content = launcher;
                         break;
