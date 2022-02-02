@@ -27,6 +27,7 @@ namespace NchargeL
         public LoginUi LoginUi = new LoginUi();
         private SettingUi settingUi = new SettingUi();
         public Launcher launcher=new Launcher();
+        public AboutNCL aboutNCL = new AboutNCL();
         public Main()
         {
             InitializeComponent();
@@ -167,6 +168,12 @@ namespace NchargeL
         private void Minimze(object sender, RoutedEventArgs e)
         {
             SystemCommands.MinimizeWindow(this);
+        }
+
+        private void AboutButton(object sender, RoutedEventArgs e)
+        {
+
+            FrameWork.Content = aboutNCL;
         }
     }
 }
