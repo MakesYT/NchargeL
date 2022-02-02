@@ -154,5 +154,29 @@ namespace NchargeL.Properties {
                 this["User"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("java")]
+        public string Java {
+            get {
+                return ((string)(this["Java"]));
+            }
+            set {
+                this["Java"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("8000")]
+        public int RAM {
+            get {
+                return ((int)(this["RAM"]));
+            }
+            set {
+                this["RAM"] = value;
+            }
+        }
     }
 }

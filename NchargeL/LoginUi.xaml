@@ -49,6 +49,7 @@
 
                 <TextBox x:Name="email"
                       materialDesign:ColorZoneAssist.Mode="Custom"
+                         materialDesign:TextFieldAssist.HasClearButton="True"
             materialDesign:ColorZoneAssist.Background="{DynamicResource BodyColor}"
                          materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource BodyColor}"
                     materialDesign:ColorZoneAssist.Foreground="{DynamicResource ForegroundColor}"  
@@ -63,6 +64,7 @@
 
 
                 <PasswordBox x:Name="pwd" materialDesign:HintAssist.Hint="密码"
+                             materialDesign:TextFieldAssist.HasClearButton="True"
                              materialDesign:ColorZoneAssist.Mode="Custom"
             materialDesign:ColorZoneAssist.Background="{DynamicResource BodyColor}"
                          materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource BodyColor}"

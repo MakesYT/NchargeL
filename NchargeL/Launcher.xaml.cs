@@ -7,6 +7,7 @@ using Notification.Wpf;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -52,10 +53,42 @@ namespace NchargeL
             {//当前有账号登录
                 if (list.SelectedIndex >= 0)
                 {
-                    notificationManager.Show(NotificationContentSDK.notificationInformation("正在启动客户端", ""), "WindowArea");
                     ((Button)sender).IsEnabled = false;
-                    Thread thread = new Thread(new ParameterizedThreadStart(StartClient));
-                    thread.Start(Data.clients[list.SelectedIndex]);
+                    notificationManager.Show(NotificationContentSDK.notificationInformation("正在检查Java合理性", ""), "WindowArea");
+                    SDK sDK = new SDK();
+                    int javaVer = sDK.JavaCheck(Properties.Settings.Default.Java, Data.clients[list.SelectedIndex].McVer);
+                    switch (javaVer)
+                    {
+                        case 0:
+                            {
+                                notificationManager.Show(NotificationContentSDK.notificationInformation("正在启动客户端", ""), "WindowArea");
+
+                                Thread thread = new Thread(new ParameterizedThreadStart(StartClient));
+                                thread.Start(Data.clients[list.SelectedIndex]);
+                                break;
+                            }
+                        case -1:
+                            {
+                                notificationManager.Show(NotificationContentSDK.notificationError("Java版本为32位,停止启动", ""), "WindowArea");
+                                launch.IsEnabled = true;
+                                break;
+                            }
+                        case 1:
+                            {
+                                notificationManager.Show(NotificationContentSDK.notificationError("Java版本不正确,请使用Java8", ""), "WindowArea");
+                                launch.IsEnabled = true;
+                                break;
+                            }
+                        default:
+                            {
+                                notificationManager.Show(NotificationContentSDK.notificationInformation("可以尝试使用Java"+javaVer+"来获得更好的体验", ""), "WindowArea");
+
+                                Thread thread = new Thread(new ParameterizedThreadStart(StartClient));
+                                thread.Start(Data.clients[list.SelectedIndex]);
+                                break;
+                            }
+                    }
+
 
                 }
                 else notificationManager.Show(NotificationContentSDK.notificationWarning("请先选择启动的客户端", ""), "WindowArea");
@@ -78,7 +111,7 @@ namespace NchargeL
             bool flag = true;
             while (flag)
             {
-                var re = sDK.StartClient((Client)clt, Data.users[0]._name, Data.users[0]._useruuid, Data.users[0]._token);
+                var re = sDK.StartClient((Client)clt, Data.users[0]._name, Data.users[0]._useruuid, Data.users[0]._token, Properties.Settings.Default.Java, Properties.Settings.Default.RAM);
                 log.Debug(re.Result);
 
                 //StartClient(clt).GetAwaiter().GetResult().GetAwaiter().GetResult();
@@ -125,14 +158,15 @@ namespace NchargeL
                             Main.main.FrameWork.Content = LoginUi;
                         })).Wait();
                         Data.users.Clear();
+                        Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+                        {
+                            launch.IsEnabled = true;
+                        })).Wait();
                         flag = false;
                     }
 
                 }
-                Application.Current.Dispatcher.BeginInvoke(new Action(delegate
-                   {
-                       launch.IsEnabled = true;
-                   })).Wait();
+                
 
             }
 
@@ -171,6 +205,37 @@ namespace NchargeL
                 }
 
             }
+        }
+
+        private void JavaDir(object sender, RoutedEventArgs e)
+        {
+            var dlg = new CommonOpenFileDialog();
+            dlg.Filters.Add(new CommonFileDialogFilter("javaw.exe", "exe"));
+            dlg.IsFolderPicker = false;
+            //dlg.InitialDirectory = currentDirectory;
+            dlg.Title = "选择\"javaw.exe\"";
+
+            while (dlg.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                if (dlg.FileName.EndsWith("\\javaw.exe"))
+                {
+                    Properties.Settings.Default.Java = dlg.FileName;
+
+                    break;
+                }
+                else
+                {
+                    InfoDialog info = new InfoDialog("选择了" + dlg.FileName.Substring(dlg.FileName.LastIndexOf("\\") + 1), "您需要选择以javaw.exe命名的文件");
+                    info.ShowDialog();
+                }
+
+            }
+        }
+
+        private void limitnumber(object sender, System.Windows.Input.TextCompositionEventArgs e)
+        {
+            Regex re = new Regex("[^0-9]+");
+            e.Handled = re.IsMatch(e.Text);
         }
     }
 }
