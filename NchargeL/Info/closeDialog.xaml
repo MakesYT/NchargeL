@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:NchargeL" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Title="closeDialog" WindowStyle="None" Width="433" Height="180" >
+        Title="是否关闭窗口" WindowStyle="None" Width="433" Height="180" >
     <Window.Resources>
         <Storyboard x:Key="Storyboard1">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="line" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)">

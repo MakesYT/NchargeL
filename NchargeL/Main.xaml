@@ -9,7 +9,7 @@
     xmlns:System1="clr-namespace:System;assembly=netstandard" x:Name="window" x:Class="NchargeL.Main"
     mc:Ignorable="d"
     AllowsTransparency="True" 
-        Title="Main" Height="450" Width="800" WindowStartupLocation="CenterScreen" BorderThickness="7"  WindowStyle="None" MouseDown="Window_MouseDown" Background="{x:Null}">
+        Title="NCL启动器" Height="450" Width="800" WindowStartupLocation="CenterScreen" BorderThickness="7"  WindowStyle="None" MouseDown="Window_MouseDown" Background="{x:Null}">
     <Window.Effect>
         <DropShadowEffect ShadowDepth="1" BlurRadius="6" Direction="270" Opacity="0.75" Color="#FF211613"/>
     </Window.Effect>
@@ -129,7 +129,7 @@
                                 <Label FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi" Content="下载客户端" Margin="2,2,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Background="{x:Null}" FontSize="18" Foreground="{DynamicResource TextColor}"/>
                             </StackPanel>
                         </Button>
-                        <Button FocusVisualStyle="{x:Null}" Style="{StaticResource MaterialDesignFlatButton}" BorderBrush="{x:Null}" HorizontalAlignment="Left" Padding="0" Background="{x:Null}" Height="50" Foreground="#FF6AA8FF" Width="180">
+                        <Button FocusVisualStyle="{x:Null}" Style="{StaticResource MaterialDesignFlatButton}" BorderBrush="{x:Null}" HorizontalAlignment="Left" Padding="0" Background="{x:Null}" Height="50" Foreground="#FF6AA8FF" Width="180" Click="ManageClient">
                             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="6,0,0,0" Orientation="Horizontal" Width="177">
                                 <materialDesign:PackIcon Kind="PackageVariantClosed" Width="40" Height="40" Foreground="{DynamicResource BodyColor}" HorizontalAlignment="Center" />
                                 <Label FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi" Content="管理客户端" Margin="2,2,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Background="{x:Null}" FontSize="18" Foreground="{DynamicResource TextColor}"/>
