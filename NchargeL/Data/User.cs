@@ -27,7 +27,7 @@ namespace NchargeL
         public string _token;
         //private ImageSourse 
 
-        public byte[] image;
+        public byte[]? image = null;
         NotificationManager notificationManager = new NotificationManager();
         //private Color _color;
         public void reloadUser()
@@ -36,12 +36,16 @@ namespace NchargeL
             {
 
                 Main.main.hello.Text = _name;
-                BitmapImage bmp = new BitmapImage();
-                bmp.BeginInit();
-                bmp.StreamSource = new MemoryStream(image);
-                bmp.EndInit();
-                
-                Main.main.userImage.Source = bmp;
+                if (image != null)
+                {
+                    BitmapImage bmp = new BitmapImage();
+                    bmp.BeginInit();
+                    bmp.StreamSource = new MemoryStream(image);
+                    bmp.EndInit();
+
+                    Main.main.userImage.Source = bmp;
+                }
+
             });
         }
         public User()
@@ -202,7 +206,8 @@ namespace NchargeL
                 else
                 {
                     // Main.main.notifier.ShowInformation("未设置皮肤,无法获取头像");
-                    notificationManager.Show(NotificationContentSDK.notificationWarning("未设置皮肤,无法获取头像", ""), "WindowArea");
+                   
+                  // notificationManager.Show(NotificationContentSDK.notificationWarning("未设置皮肤,无法获取头像", ""), "WindowArea");
                 }
             }
             catch (Exception ex)

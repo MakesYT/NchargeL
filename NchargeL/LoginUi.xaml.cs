@@ -114,12 +114,13 @@ namespace NchargeL
                             notificationManager.Show(NotificationContentSDK.notificationSuccess("", "没有保存密码"), "WindowArea");
                         }
                         else notificationManager.Show(NotificationContentSDK.notificationSuccess(user._password, "已保存密码"), "WindowArea");
+
                         Properties.Settings.Default.User = XmlUtil.Serializer(typeof(User), user);
-                        host.IsOpen = false;
-                        NavigationService.GetNavigationService(this).Navigate(Account.account);
+                       host.IsOpen = false;
+                        Main.main.FrameWork.Content = Account.account;
 
 
-                    });
+                    }).Wait();
                     // log.Debug(jObject.ToString());
                 }
 

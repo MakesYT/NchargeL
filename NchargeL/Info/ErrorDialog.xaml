@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:NchargeL" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Title="错误" WindowStyle="None" Width="433" >
+        Title="错误" WindowStyle="None" Width="700" Height="700">
     <Window.Resources>
         <Storyboard x:Key="Storyboard1">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="line" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)">
@@ -28,7 +28,7 @@
                 <TextBlock FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi" FontSize="30" Foreground="#FFBE0000">错误</TextBlock>
                 <TextBlock x:Name="info" FontFamily="/NchargeL;component/Resources/#HarmonyOS Sans" FontWeight="Bold" FontSize="20"  Foreground="#FFBE0000" VerticalAlignment="Bottom">提示</TextBlock>
             </StackPanel>
-            <Line x:Name="line" Stretch="Fill" Stroke="#FFBE0000" X2="1" Width="400" Height="2">
+            <Line x:Name="line" Stretch="Fill" Stroke="#FFBE0000" X2="1" Width="666" Height="2">
                 <Line.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform/>
@@ -38,9 +38,11 @@
                     </TransformGroup>
                 </Line.RenderTransform>
             </Line>
+            <ScrollViewer MaxWidth="680" MaxHeight="550" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+              <TextBox  IsReadOnly="True" x:Name="text"  FontSize="20"  Margin="0,8,0,0" FontFamily="/NchargeL;component/Resources/#HarmonyOS Sans" FontWeight="Bold" Foreground="{DynamicResource TextColor}" Cursor="IBeam">11111</TextBox>
 
-            <TextBox IsReadOnly="True" AcceptsReturn="True" TextWrapping="Wrap" x:Name="text"  FontSize="20"  Margin="0,8,0,0" FontFamily="/NchargeL;component/Resources/#HarmonyOS Sans" FontWeight="Bold" Foreground="{DynamicResource TextColor}" Cursor="IBeam">11111</TextBox>
-        </StackPanel>
+            </ScrollViewer>
+                    </StackPanel>
         <Button FocusVisualStyle="{x:Null}"  Style="{StaticResource MaterialDesignFlatButton}" IsCancel="True" HorizontalAlignment="Right" VerticalAlignment="Bottom" Cursor="Hand" FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi" FontSize="20" Content="确定" Margin="0,0,16,16" Foreground="{DynamicResource BodyColor}"/>
     </Grid>
 </Window>

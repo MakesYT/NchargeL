@@ -60,6 +60,7 @@ namespace NchargeL
                 }
                 else
                 {
+
                     log.Error("（1）发生了一个错误！请联系腐竹！" + Environment.NewLine
                                         + "（2）错误源：" + e.Exception.InnerException.Source + Environment.NewLine
                                         + "（3）错误信息：" + e.Exception.Message + Environment.NewLine
