@@ -179,7 +179,7 @@ namespace NchargeL
         private void ManageClient(object sender, RoutedEventArgs e)
         {
             ErrorDialog error = new ErrorDialog("", "（1）发生了一个错误！请联系腐竹！" + Environment.NewLine
-                                + "                                                                    1");
+                                + "                                                                        1");
             error.ShowDialog();
         }
     }
