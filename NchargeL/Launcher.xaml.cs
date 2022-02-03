@@ -43,7 +43,8 @@ namespace NchargeL
 
         private void list_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            info.Text="当前选择的客户端:\n"+((Client)((ListBox)e.OriginalSource).SelectedItem).Name;
+           // (ListBoxItem)((ListBox)e.Source).
         }
 
         private async void Button_Click_1(object sender, System.Windows.RoutedEventArgs e)
