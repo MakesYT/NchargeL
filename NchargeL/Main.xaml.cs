@@ -28,6 +28,7 @@ namespace NchargeL
         private SettingUi settingUi = new SettingUi();
         public Launcher launcher=new Launcher();
         public AboutNCL aboutNCL = new AboutNCL();
+        public DownloadUI  downloadUI = new DownloadUI();
         public Main()
         {
             InitializeComponent();
@@ -129,7 +130,7 @@ namespace NchargeL
             //Properties.Settings.Default.GameDir = @"D:\\IDEAJava\\6th\\V6\\out\\artifacts\\V6_jar\\.minecraft";
             if (Properties.Settings.Default.GameDir != "")
             {
-                NCLcore nCLCore = new NCLcore(DownloadSource.MCBBS, Properties.Settings.Default.GameDir);
+                NCLcore nCLCore = new NCLcore(Properties.Settings.Default.DownloadSource, Properties.Settings.Default.GameDir);
                 Data.clients = nCLCore.Clients;
                 notificationManager.Show(NotificationContentSDK.notificationSuccess("客户端列表已更新", ""), "WindowArea");
                 launcher = new Launcher();
@@ -147,7 +148,7 @@ namespace NchargeL
                     if (dlg.FileName.EndsWith(".minecraft"))
                     {
                         Properties.Settings.Default.GameDir = dlg.FileName;
-                        NCLcore nCLCore = new NCLcore(DownloadSource.MCBBS, dlg.FileName);
+                        NCLcore nCLCore = new NCLcore(Properties.Settings.Default.DownloadSource, dlg.FileName);
                         Data.clients = nCLCore.Clients;
                         notificationManager.Show(NotificationContentSDK.notificationSuccess("客户端列表已更新", ""), "WindowArea");
                         launcher = new Launcher();
@@ -183,6 +184,11 @@ namespace NchargeL
             ErrorDialog error = new ErrorDialog("", "（1）发生了一个错误！请联系腐竹！" + Environment.NewLine
                                 + "                                                                        1");
             error.ShowDialog();
+        }
+
+        private void DownloadUiButton(object sender, RoutedEventArgs e)
+        {
+            FrameWork.Content = downloadUI;
         }
     }
 }

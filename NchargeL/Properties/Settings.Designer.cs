@@ -121,13 +121,13 @@ namespace NchargeL.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string CustomSource {
+        [global::System.Configuration.DefaultSettingValueAttribute("https://bmclapi2.bangbang93.com/")]
+        public string DownloadSource {
             get {
-                return ((string)(this["CustomSource"]));
+                return ((string)(this["DownloadSource"]));
             }
             set {
-                this["CustomSource"] = value;
+                this["DownloadSource"] = value;
             }
         }
         

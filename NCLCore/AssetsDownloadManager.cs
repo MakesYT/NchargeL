@@ -3,16 +3,16 @@ using log4net;
 
 namespace NCLCore
 {
-    internal class DownloadManager
+    internal class AssetsDownloadManager
     {
         private static readonly ILog log = LogManager.GetLogger("DownloadManager");
-        List<DownloadItem> Hashs = new List<DownloadItem>();
+        List<string> Hashs = new List<string>();
         public string DownloadSoureURL;
         public string AssetsDir;
         public SDK sDK;
-        public void Add(DownloadItem di)
+        public void Add(string hash)
         {
-            Hashs.Add(di);
+            Hashs.Add(hash);
         }
         int nowthreadnum = 0;
         public void Start(int thread)
@@ -39,21 +39,24 @@ namespace NCLCore
 
         private void DownloadTool(int name)
         {
-            DownloadItem hash = Hashs.First();
+            if (Hashs.Count > 0)
+            {
+            string hash = Hashs.First();
             Hashs.Remove(hash);
-           
+            string url = DownloadSoureURL + "assets/" + hash[0] + hash[1] + "/" + hash;
+            string dir = AssetsDir + "\\assets\\objects\\" + hash[0] + hash[1];
             //log.Debug(url + " \n" + dir);
-
             DownloadBuilder.New()
-            .WithUrl(hash.uri)
-            .WithDirectory(hash.dir)
-            .WithFileName(hash.name)
+            .WithUrl(url)
+            .WithDirectory(dir)
             .Build()
             .StartAsync().Wait();
             if(name%100==0)
             sDK.info = new Info(name.ToString(), "info");
             //downloader.DownloadFileTaskAsync(url, dir).Wait();
             nowthreadnum--;
+            
+            }
             
             
 

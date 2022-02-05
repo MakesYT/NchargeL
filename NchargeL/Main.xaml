@@ -123,7 +123,7 @@
                                 <Label FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi" Content="启动客户端" Margin="2,2,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Background="{x:Null}" FontSize="18" Foreground="{DynamicResource TextColor}"/>
                             </StackPanel>
                         </Button>
-                        <Button FocusVisualStyle="{x:Null}" Style="{StaticResource MaterialDesignFlatButton}" Background="{x:Null}" BorderBrush="{x:Null}" HorizontalAlignment="Left" Padding="0" Click="Button_Click_1" Height="46" Foreground="#FF6AA8FF" Width="180">
+                        <Button FocusVisualStyle="{x:Null}" Style="{StaticResource MaterialDesignFlatButton}" Background="{x:Null}" BorderBrush="{x:Null}" HorizontalAlignment="Left" Padding="0" Click="DownloadUiButton" Height="46" Foreground="#FF6AA8FF" Width="180">
                             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="6,0,0,0" Orientation="Horizontal" Width="180">
                                 <materialDesign:PackIcon Kind="DownloadBox" Width="40" Height="40" Foreground="{DynamicResource BodyColor}" HorizontalAlignment="Center" />
                                 <Label FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi" Content="下载客户端" Margin="2,2,0,0" HorizontalAlignment="Left" VerticalAlignment="Center" Background="{x:Null}" FontSize="18" Foreground="{DynamicResource TextColor}"/>

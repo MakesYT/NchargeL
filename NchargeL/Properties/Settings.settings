@@ -26,8 +26,8 @@
     <Setting Name="BackgroundColor" Type="System.Windows.Media.Color" Scope="User">
       <Value Profile="(Default)">#FFFDFFF4</Value>
     </Setting>
-    <Setting Name="CustomSource" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+    <Setting Name="DownloadSource" Type="System.String" Scope="User">
+      <Value Profile="(Default)">https://bmclapi2.bangbang93.com/</Value>
     </Setting>
     <Setting Name="GameDir" Type="System.String" Scope="User">
       <Value Profile="(Default)" />

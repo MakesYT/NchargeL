@@ -193,7 +193,7 @@ namespace NCLCore
                     }
                 }
             }
-            DownloadManager downloadManager=new DownloadManager();
+            AssetsDownloadManager downloadManager=new AssetsDownloadManager();
             using (System.IO.StreamReader jsonfile = System.IO.File.OpenText(fileInfo.FullName))
             {
                 using (JsonTextReader reader = new JsonTextReader(jsonfile))
@@ -217,7 +217,7 @@ namespace NCLCore
             downloadManager.DownloadSoureURL = DownloadSoureURL;
             downloadManager.AssetsDir = rootdir;
             downloadManager.sDK = this;
-            downloadManager.Start(50);
+            downloadManager.Start(100);
            // DownloadPackage pack = downloader.Package;
             //downloader.CancelAsync();
             //while (!downloader.IsCancelled) { }
@@ -290,7 +290,7 @@ namespace NCLCore
                                             log.Debug(lib.path + "库文件不存在");
                                             if (DownloadSoureURL != null)
                                             {
-                                                lib.url = lib.url.Replace("https://libraries.minecraft.net/", DownloadSoureURL);
+                                                lib.url = lib.url.Replace("https://libraries.minecraft.net/", DownloadSoureURL+ "maven/");
                                             }
                                             downloader.DownloadFileTaskAsync(lib.url, rootdir + "\\libraries\\" + lib.path).Wait();
                                             info = new Info(lib.path + "库文件获取成功", "success");
@@ -319,7 +319,7 @@ namespace NCLCore
                                             info = new Info(lib.path + "库文件不存在,正在重新获取", "info");
                                             if (DownloadSoureURL != null)
                                             {
-                                                lib.url = lib.url.Replace("https://libraries.minecraft.net/", DownloadSoureURL);
+                                                lib.url = lib.url.Replace("https://libraries.minecraft.net/", DownloadSoureURL + "maven/");
                                             }
                                             downloader.DownloadFileTaskAsync(lib.url, rootdir + "\\libraries\\" + lib.path).Wait();
                                             info = new Info(lib.path + "库文件获取成功", "success");

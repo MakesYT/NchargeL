@@ -221,7 +221,7 @@ namespace NchargeL
                 if (dlg.FileName.EndsWith(".minecraft"))
                 {
                     Properties.Settings.Default.GameDir = dlg.FileName;
-                    NCLcore nCLCore = new NCLcore(SDK.DownloadSource.MCBBS, dlg.FileName);
+                    NCLcore nCLCore = new NCLcore(Properties.Settings.Default.DownloadSource, dlg.FileName);
                     Data.clients = nCLCore.Clients;
                     notificationManager.Show(NotificationContentSDK.notificationSuccess("客户端列表已更新", ""), "WindowArea");
                     Main.main.launcher = new Launcher();
