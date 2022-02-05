@@ -14,7 +14,7 @@ namespace NchargeL
         private static readonly ILog log = LogManager.GetLogger("App");
         protected override void OnStartup(StartupEventArgs e)
         {
-            ServicePointManager.DefaultConnectionLimit = 1024;
+            ServicePointManager.DefaultConnectionLimit = 10240;
             base.OnStartup(e);
             //UI线程的异常捕捉
             this.DispatcherUnhandledException += App_DispatcherUnhandledException;

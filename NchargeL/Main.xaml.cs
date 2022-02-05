@@ -133,6 +133,7 @@ namespace NchargeL
                 Data.clients = nCLCore.Clients;
                 notificationManager.Show(NotificationContentSDK.notificationSuccess("客户端列表已更新", ""), "WindowArea");
                 launcher = new Launcher();
+                launcher.NCLCore = nCLCore;
                 FrameWork.Content = launcher;
             }
             else
@@ -150,6 +151,7 @@ namespace NchargeL
                         Data.clients = nCLCore.Clients;
                         notificationManager.Show(NotificationContentSDK.notificationSuccess("客户端列表已更新", ""), "WindowArea");
                         launcher = new Launcher();
+                        launcher.NCLCore= nCLCore;
                         FrameWork.Content = launcher;
                         break;
                     }

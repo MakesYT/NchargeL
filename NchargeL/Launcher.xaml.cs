@@ -21,6 +21,7 @@ namespace NchargeL
     {
         public LoginUi LoginUi = new LoginUi();
         public NotificationManager notificationManager = new NotificationManager();
+        public NCLcore NCLCore;
         private static readonly ILog log = LogManager.GetLogger("Launcher");
         public Launcher()
         {
@@ -108,7 +109,31 @@ namespace NchargeL
         }
         public void StartClient(object clt)
         {
-            SDK sDK = new SDK();
+
+            SDK sDK = NCLCore.sDK;
+            sDK.PropertyChanged += (oo, ee) => {
+               // Console.WriteLine("值变了，新值是：" + (oo as NCLCore.Info).A);
+               switch((oo as SDK).info.TYPE)
+                {
+                    case "info":
+                        {
+                            notificationManager.Show(NotificationContentSDK.notificationInformation("", (oo as SDK).info.msg), "WindowArea");
+                            break;
+                        }
+                    case "error":
+                        {
+                            notificationManager.Show(NotificationContentSDK.notificationError("", (oo as SDK).info.msg), "WindowArea");
+                            break;
+                        }
+                    case "success":
+                        {
+                            notificationManager.Show(NotificationContentSDK.notificationSuccess("", (oo as SDK).info.msg), "WindowArea");
+                            break;
+                        }
+                }
+                
+            };
+            
             bool flag = true;
             while (flag)
             {
@@ -120,6 +145,10 @@ namespace NchargeL
                 {
                     notificationManager.Show(NotificationContentSDK.notificationInformation("", "客户端已退出"), "WindowArea");
                     flag = false;
+                    Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+                    {
+                        launch.IsEnabled = true;
+                    })).Wait();
                 }
                 if (re.Result == 2)
                 {
@@ -196,6 +225,7 @@ namespace NchargeL
                     Data.clients = nCLCore.Clients;
                     notificationManager.Show(NotificationContentSDK.notificationSuccess("客户端列表已更新", ""), "WindowArea");
                     Main.main.launcher = new Launcher();
+                    Main.main.launcher.NCLCore = nCLCore;
                     Main.main.FrameWork.Content = Main.main.launcher;
                     break;
                 }

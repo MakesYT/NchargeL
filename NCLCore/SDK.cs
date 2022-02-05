@@ -11,7 +11,27 @@ namespace NCLCore
 {
     public class SDK
     {
-        private static readonly ILog log = LogManager.GetLogger("SDK");
+        private Info _info = new("1", "info");
+        public string? DownloadSoureURL;
+        public Info info
+        {
+            get { return _info; }
+            set
+            {
+                _info = value;
+                this.OnWorkStateChanged(new EventArgs());
+            }
+        }
+        public event EventHandler PropertyChanged;
+        public void OnWorkStateChanged(EventArgs eventArgs)
+        {
+            if (this.PropertyChanged != null)//判断事件是否有处理函数
+            {
+                this.PropertyChanged(this, eventArgs);
+            }
+
+        }
+        private readonly ILog log = LogManager.GetLogger("SDK");
         public enum DownloadSource
         {
             Official,
@@ -29,7 +49,7 @@ namespace NCLCore
                 case DownloadSource.MCBBS:
                     return "https://download.mcbbs.net/";
                 case DownloadSource.BMCLAPI:
-                    return "https://bmclapi2.bangbang93.com";
+                    return "https://bmclapi2.bangbang93.com/";
                 case DownloadSource.Custom:
                     return "custom";
                 default:
@@ -69,7 +89,7 @@ namespace NCLCore
                                                 if (jObject["assets"] != null)
                                                 {
                                                     client.assets = jObject["assets"].ToString();
-                                                    client.McVer = jObject["assets"].ToString();
+                                                    client.McVer = jObject["id"].ToString();
                                                 }
                                                 else if (jObject["inheritsFrom"] != null)
                                                 {
@@ -139,16 +159,80 @@ namespace NCLCore
 
             return clients;
         }
+        public  void checkAssets(string rootdir, string dir,string assets,string clientdir)
+        {
+            var downloadOpt = new DownloadConfiguration()
+            {
+                // usually, hosts support max to 8000 bytes, default values is 8000
+                ChunkCount = 1, // file parts to download, default value is 1
+                OnTheFlyDownload = false,         // download speed limited to 1MB/s, default values is zero or unlimited
+                MaxTryAgainOnFailover = 10, // the maximum number of times to fail
 
+                ParallelDownload = true, // download parts of file as parallel or not. Default value is false
+                TempDirectory = "C:\\temp", // Set the temp path for buffering chunk files, the default path is Path.GetTempPath()
+                Timeout = 1000, // timeout (millisecond) per stream block reader, default values is 1000
+
+
+            }; var downloader = new DownloadService(downloadOpt);
+            
+            FileInfo fileInfo = new FileInfo(dir);
+            if (!fileInfo.Exists)
+            {
+                info = new Info("Assets-Index文件不存在,正在下载", "info");
+                
+                FileInfo AssetsFileInfo = new FileInfo(clientdir);
+                using (System.IO.StreamReader jsonfile = System.IO.File.OpenText(AssetsFileInfo.FullName))
+                {
+                    using (JsonTextReader reader = new JsonTextReader(jsonfile))
+                    {
+                        JObject jObject = (JObject)JToken.ReadFrom(reader);
+                        info = new Info(DownloadSoureURL, "info");
+                        info = new Info(jObject["assetIndex"]["url"].ToString().Replace("https://launchermeta.mojang.com/", DownloadSoureURL), "info");
+                        downloader.DownloadFileTaskAsync(jObject["assetIndex"]["url"].ToString().Replace("https://launchermeta.mojang.com/",DownloadSoureURL), dir).Wait();
+
+                    }
+                }
+            }
+            DownloadManager downloadManager=new DownloadManager();
+            using (System.IO.StreamReader jsonfile = System.IO.File.OpenText(fileInfo.FullName))
+            {
+                using (JsonTextReader reader = new JsonTextReader(jsonfile))
+                {
+                    JObject jObject = (JObject)JToken.ReadFrom(reader);
+                    string jstr;
+                    foreach (var o in ((JObject)jObject["objects"]).Properties())
+                    {
+                        jstr = o.Name;
+                       
+                        var hash = jObject["objects"][o.Name]["hash"].ToString();
+                        FileInfo assetinfo = new FileInfo(rootdir+ "\\assets\\objects\\"+hash[0]+hash[1]+"\\"+hash);
+                        if (!assetinfo.Exists)
+                        {
+                            log.Info("资源文件:"+hash+"不存在\n"+assetinfo.FullName);
+                             downloadManager.Add(hash);
+                        }
+                    }
+                }
+            }
+            downloadManager.DownloadSoureURL = DownloadSoureURL;
+            downloadManager.AssetsDir = rootdir;
+            downloadManager.sDK = this;
+            downloadManager.Start(50);
+           // DownloadPackage pack = downloader.Package;
+            //downloader.CancelAsync();
+            //while (!downloader.IsCancelled) { }
+            // downloader.DownloadFileTaskAsync(pack).Wait();
+
+        }
         public Libs GetLibs(string rootdir, string ver, string dir)
         {
             var downloadOpt = new DownloadConfiguration()
             {
-                BufferBlockSize = 10240, // usually, hosts support max to 8000 bytes, default values is 8000
-                ChunkCount = 8, // file parts to download, default value is 1
-                MaximumBytesPerSecond = 1024 * 1024, // download speed limited to 1MB/s, default values is zero or unlimited
-                MaxTryAgainOnFailover = int.MaxValue, // the maximum number of times to fail
-                OnTheFlyDownload = false, // caching in-memory or not? default values is true
+                // usually, hosts support max to 8000 bytes, default values is 8000
+                ChunkCount = 2, // file parts to download, default value is 1
+                                // download speed limited to 1MB/s, default values is zero or unlimited
+                MaxTryAgainOnFailover = 10, // the maximum number of times to fail
+
                 ParallelDownload = true, // download parts of file as parallel or not. Default value is false
                 TempDirectory = "C:\\temp", // Set the temp path for buffering chunk files, the default path is Path.GetTempPath()
                 Timeout = 1000, // timeout (millisecond) per stream block reader, default values is 1000
@@ -202,9 +286,16 @@ namespace NCLCore
                                         FileInfo fileInfo1 = new FileInfo(rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"));
                                         if (!fileInfo1.Exists)
                                         {
+                                            info = new Info(lib.path + "库文件不存在,正在重新获取", "info");
                                             log.Debug(lib.path + "库文件不存在");
+                                            if (DownloadSoureURL != null)
+                                            {
+                                                lib.url = lib.url.Replace("https://libraries.minecraft.net/", DownloadSoureURL);
+                                            }
                                             downloader.DownloadFileTaskAsync(lib.url, rootdir + "\\libraries\\" + lib.path).Wait();
+                                            info = new Info(lib.path + "库文件获取成功", "success");
                                         }
+                                        else log.Debug("库文件存在" + rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"));
                                         log.Debug(rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"));
                                         DirectoryInfo nativedir = new DirectoryInfo(ver + "\\natives");
                                         if (!nativedir.Exists)
@@ -225,9 +316,15 @@ namespace NCLCore
                                         FileInfo fileInfo1 = new FileInfo(rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"));
                                         if (!fileInfo1.Exists)
                                         {
-                                            log.Debug(lib.path + "库文件不存在");
+                                            info = new Info(lib.path + "库文件不存在,正在重新获取", "info");
+                                            if (DownloadSoureURL != null)
+                                            {
+                                                lib.url = lib.url.Replace("https://libraries.minecraft.net/", DownloadSoureURL);
+                                            }
                                             downloader.DownloadFileTaskAsync(lib.url, rootdir + "\\libraries\\" + lib.path).Wait();
+                                            info = new Info(lib.path + "库文件获取成功", "success");
                                         }
+                                        else log.Debug("库文件存在" + rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"));
                                         Normallibs.Add(lib);
                                     }
                                 }
@@ -259,12 +356,23 @@ namespace NCLCore
         /// <returns></returns>
         public async Task<int> StartClient(Client clt, string name, string uuid, string token, string java, int RAM)
         {
+
+            info = new Info("正在检测令牌是否失效", "info");
             if (!CheckToken(token))
             {
                 return 2;
             }
-            string libstr = null;
+            info = new Info("游戏令牌通过检测", "success");
+            info = new Info("正在验证Assets", "info");
+            //强烈推荐这种方法************* 
+            checkAssets(clt.rootdir, clt.rootdir + "\\assets\\indexes\\" + clt.assets + ".json", clt.assets, clt.rootdir + "\\versions\\" + clt.McVer + "\\" + clt.McVer + ".json");
+             
+            
+            
+            info = new Info("验证Assets完成", "success");
 
+            string libstr = null;
+            info = new Info("正在获取Libs", "info");
             if (clt.Forge)
             {
                 Libs libs2 = GetLibs(clt.rootdir, clt.rootdir + "\\versions\\" + clt.Name, clt.rootdir + "\\versions\\" + clt.McVer + "\\" + clt.McVer + ".json");
@@ -292,7 +400,7 @@ namespace NCLCore
                 }
                 libstr = libstr + clt.dir + "\\" + clt.Name + ".jar";
             }
-
+            info = new Info("Libs获取成功", "success");
             FileInfo fileInfo = new FileInfo(clt.dir + "\\" + clt.Name + ".json");
             string mainClass;
 
@@ -310,16 +418,20 @@ namespace NCLCore
                 " -XX:+UseG1GC -XX:-UseAdaptiveSizePolicy -XX:-OmitStackTraceInFastThrow -Dfml.ignoreInvalidMinecraftCertificates=True -Dfml.ignorePatchDiscrepancies=True -XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump -Xmn256m -Xmx" + RAM + "m \"-Djava.library.path=" + clt.dir + "\\natives\"" + " -cp \"" + libstr + "\"" + " " + mainClass +
         " --username " + name + " --version " + clt.Name + " --gameDir \"" + clt.dir + "\" --assetsDir \"" + clt.rootdir + "\\assets\" --assetIndex " + clt.assets + " --versionType NCL" +
         " --uuid " + uuid + " --accessToken " + token + " --userType mojang --width 854 --height 480";
+            info.msg = all;
             all = all.Replace("\\", "/");
             all = all.Replace("//", "/");
             all = all.Replace("/", "\\");
             all = all.Replace("{api}", "\"https://www.ncserver.top:666/api/yggdrasil\"");
+            info.msg = all;
+            // info.isWorking = false;
             //return 
             if (clt.Forge)
             {
                 all = all + " --tweakClass net.minecraftforge.fml.common.launcher.FMLTweaker";
             }
             //return 
+            info = new Info("正在启动游戏", "info");
             ExecuteInCmd(all, clt.rootdir + "\\versions\\" + clt.Name);
             return 1;
         }
@@ -349,7 +461,7 @@ namespace NCLCore
                 // process.StandardInput.AutoFlush = true;
                 process.StandardInput.WriteLine(java + " -jar " + Directory.GetCurrentDirectory() + "\\Resources\\Javacheck.jar" + "&exit");
                 process.StandardInput.Close();
-                string line="";
+                string line = "";
                 string linetemp;
                 while (true)
                 {
@@ -388,7 +500,7 @@ namespace NCLCore
 
 
             }
-           
+
         }
         public bool CheckToken(string token)
         {
