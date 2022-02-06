@@ -8,7 +8,23 @@
       Width="750" Height="400"
       Title="AboutNCL">
 
-    <Grid>
-        
-    </Grid>
+  <Grid>
+    <Image HorizontalAlignment="Left" Height="170" Margin="487,10,0,0" VerticalAlignment="Top" Width="129" Source="/f68fa724e01109bff5b69782fa0640db.jpg"/>
+    <Image HorizontalAlignment="Left" Height="170" Margin="344,10,0,0" VerticalAlignment="Top" Width="146" Source="/f6c082b631bddb16edba7e0fe0b6d720.png"/>
+    <Image HorizontalAlignment="Left" Height="170" Margin="616,10,0,0" VerticalAlignment="Top" Width="124" Source="/8ee20a6fa281ace6499d14210a46c8e3.png"/>
+    <Label Content="
+      新启动器下载的客户端不要传给别人！！！&#xD;&#xA;
+      客户端保存了玩家账号的可公开信息和电脑基本信息&#xD;&#xA;
+      这些信息用于保护服务器防止网络攻击&#xD;&#xA;
+      这些信息不会上传至互联网"
+     HorizontalAlignment="Left" Margin="-3,24,0,0" VerticalAlignment="Top" Width="313" Height="71"/>
+    <Border BorderBrush="Black" BorderThickness="1" Margin="315,185,10,73" Background="White"/>
+    <Label Content="许可证：" HorizontalAlignment="Left" Margin="323,0,0,0" VerticalAlignment="Center"/>
+    <Label Content="https://logging.apache.org/log4net/" HorizontalAlignment="Left" Margin="326,212,0,0" VerticalAlignment="Top" Background="White"/>
+    <Label Content="https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit" HorizontalAlignment="Left" Margin="325,258,0,0" VerticalAlignment="Top" Background="White"/>
+    <Label Content="https://github.com/Platonenkov/Notification.Wpf" HorizontalAlignment="Left" Margin="323,235,0,0" VerticalAlignment="Top" Background="White"/>
+    <Label Content="https://dot.net/" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,304,0,0"/>
+    <Label Content="https://www.newtonsoft.com/json" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="326,281,0,0"/>
+
+  </Grid>
 </Page>
