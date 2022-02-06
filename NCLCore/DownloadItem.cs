@@ -10,13 +10,12 @@ namespace NCLCore
     {
        public string uri;
        public string dir;
-        public string name;
-        public DownloadItem(string uri, string dir,string name)
+        
+        public DownloadItem(string uri, string dir)
         {
             this.uri = uri; 
             this.dir = dir;
-            this.name = name;
-            
+
         }
     }
 }

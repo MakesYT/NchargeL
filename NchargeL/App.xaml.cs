@@ -2,6 +2,7 @@
 using log4net;
 using System;
 using System.Net;
+using System.Threading.Tasks;
 using System.Windows;
 
 namespace NchargeL
@@ -17,12 +18,16 @@ namespace NchargeL
             ServicePointManager.DefaultConnectionLimit = 10240;
             base.OnStartup(e);
             //UI线程的异常捕捉
+            
             this.DispatcherUnhandledException += App_DispatcherUnhandledException;
             Current.DispatcherUnhandledException += Current_DispatcherUnhandledException;
             AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
         }
-        void Current_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+       
+
+            void Current_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
+            e.Handled = true;
             Exprint(e);
         }
 
@@ -35,11 +40,16 @@ namespace NchargeL
         }
         private void App_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
+            e.Handled = true;
             Exprint(e);
 
         }
         private void Exprint(System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
+            Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+            {
+               
+            
             try
             {
                 e.Handled = true;
@@ -87,6 +97,7 @@ namespace NchargeL
                 error.ShowDialog();
                 //MessageBox.Show("程序发生致命错误，将终止，请联系腐竹！");
             }
+            })).Wait();
         }
     }
 }

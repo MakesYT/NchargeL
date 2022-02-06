@@ -22,6 +22,7 @@ namespace NCLCore
                 this.OnWorkStateChanged(new EventArgs());
             }
         }
+       
         public event EventHandler PropertyChanged;
         public void OnWorkStateChanged(EventArgs eventArgs)
         {
@@ -208,7 +209,7 @@ namespace NCLCore
                         FileInfo assetinfo = new FileInfo(rootdir+ "\\assets\\objects\\"+hash[0]+hash[1]+"\\"+hash);
                         if (!assetinfo.Exists)
                         {
-                            log.Info("资源文件:"+hash+"不存在\n"+assetinfo.FullName);
+                            log.Info("资源文件:"+hash+"不存在");
                              downloadManager.Add(hash);
                         }
                     }
@@ -217,7 +218,7 @@ namespace NCLCore
             downloadManager.DownloadSoureURL = DownloadSoureURL;
             downloadManager.AssetsDir = rootdir;
             downloadManager.sDK = this;
-            downloadManager.Start(100);
+            downloadManager.Start(150);
            // DownloadPackage pack = downloader.Package;
             //downloader.CancelAsync();
             //while (!downloader.IsCancelled) { }
@@ -226,19 +227,7 @@ namespace NCLCore
         }
         public Libs GetLibs(string rootdir, string ver, string dir)
         {
-            var downloadOpt = new DownloadConfiguration()
-            {
-                // usually, hosts support max to 8000 bytes, default values is 8000
-                ChunkCount = 2, // file parts to download, default value is 1
-                                // download speed limited to 1MB/s, default values is zero or unlimited
-                MaxTryAgainOnFailover = 10, // the maximum number of times to fail
-
-                ParallelDownload = true, // download parts of file as parallel or not. Default value is false
-                TempDirectory = "C:\\temp", // Set the temp path for buffering chunk files, the default path is Path.GetTempPath()
-                Timeout = 1000, // timeout (millisecond) per stream block reader, default values is 1000
-
-
-            }; var downloader = new DownloadService(downloadOpt);
+            DownloadManager downloadManager=new DownloadManager();
             Libs libs = new Libs();
             List<Lib> Normallibs = new List<Lib>();
             List<Lib> Nativelibs = new List<Lib>();
@@ -255,26 +244,26 @@ namespace NCLCore
                         {
                             foreach (JObject libsjosn in jObject["libraries"])
                             {
-                                bool need = true;
+                                bool need = false;
                                 if ((JArray)libsjosn["rules"] != null)
                                 {
                                     foreach (JObject js in (JArray)libsjosn["rules"])
                                     {
                                         if (js["action"].ToString() == "allow")
                                         {
-                                            if (js["os"] != null)
-                                            {
-                                                need = false;
-                                            }
+                                            if(js["os"]==null)need = true;
+                                            else if(js["os"]["name"].ToString()=="windows") need = true;
+                                            
+                                            
                                         }
                                     }
-                                }
+                                }else need = true;
 
 
                                 if (need)
                                 {
                                     JObject tmplibsjosn = (JObject)libsjosn["downloads"];
-                                    if (libsjosn["natives"] != null && libsjosn["extract"] != null)
+                                    if (libsjosn["natives"] != null && libsjosn["natives"]["windows"] != null)
                                     {
                                         Lib lib = new Lib()
                                         {
@@ -286,22 +275,19 @@ namespace NCLCore
                                         FileInfo fileInfo1 = new FileInfo(rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"));
                                         if (!fileInfo1.Exists)
                                         {
-                                            info = new Info(lib.path + "库文件不存在,正在重新获取", "info");
-                                            log.Debug(lib.path + "库文件不存在");
+                                            info = new Info(lib.path + "Natives库文件不存在,正在重新获取", "info");
+                                            //log.Debug(lib.path + "Natives库文件不存在");
                                             if (DownloadSoureURL != null)
                                             {
                                                 lib.url = lib.url.Replace("https://libraries.minecraft.net/", DownloadSoureURL+ "maven/");
                                             }
-                                            downloader.DownloadFileTaskAsync(lib.url, rootdir + "\\libraries\\" + lib.path).Wait();
-                                            info = new Info(lib.path + "库文件获取成功", "success");
+                                            downloadManager.Add(new DownloadItem( lib.url, rootdir + "\\libraries\\" + lib.path.Replace("/", "\\")));
+                                            //info = new Info(lib.path + "Natives库文件获取成功", "success");
                                         }
-                                        else log.Debug("库文件存在" + rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"));
-                                        log.Debug(rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"));
-                                        DirectoryInfo nativedir = new DirectoryInfo(ver + "\\natives");
-                                        if (!nativedir.Exists)
-                                            nativedir.Create();
-                                        log.Debug(nativedir.FullName);
-                                        (new FastZip()).ExtractZip(rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"), ver + "\\natives\\", "");
+                                        else log.Debug("Natives库文件存在" + rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"));
+                                        //log.Debug(rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"));
+                                        
+                                       // lib.verDir = rootdir + "\\libraries\\" + lib.path.Replace("/", "\\");
                                         Nativelibs.Add(lib);
                                     }
                                     else if (tmplibsjosn["artifact"] != null)
@@ -316,13 +302,13 @@ namespace NCLCore
                                         FileInfo fileInfo1 = new FileInfo(rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"));
                                         if (!fileInfo1.Exists)
                                         {
-                                            info = new Info(lib.path + "库文件不存在,正在重新获取", "info");
+                                           // info = new Info(lib.path + "库文件不存在,正在重新获取", "info");
                                             if (DownloadSoureURL != null)
                                             {
-                                                lib.url = lib.url.Replace("https://libraries.minecraft.net/", DownloadSoureURL + "maven/");
+                                                lib.url = lib.url.Replace("https://libraries.minecraft.net/", DownloadSoureURL + "maven/" );
                                             }
-                                            downloader.DownloadFileTaskAsync(lib.url, rootdir + "\\libraries\\" + lib.path).Wait();
-                                            info = new Info(lib.path + "库文件获取成功", "success");
+                                            downloadManager.Add(new DownloadItem( lib.url, rootdir + "\\libraries\\" + lib.path.Replace("/", "\\")));
+                                            //info = new Info(lib.path + "库文件获取成功", "success");
                                         }
                                         else log.Debug("库文件存在" + rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"));
                                         Normallibs.Add(lib);
@@ -340,8 +326,17 @@ namespace NCLCore
                 }
             }
             catch (Exception ex) { }
+            downloadManager.Start(10);
             libs.Normallibs = Normallibs;
             libs.Nativelibs = Nativelibs;
+            foreach (Lib lib in Nativelibs)
+            {
+                DirectoryInfo nativedir = new DirectoryInfo(ver + "\\natives");
+                if (!nativedir.Exists)
+                    nativedir.Create();
+                log.Debug(nativedir.FullName);
+                (new FastZip()).ExtractZip(rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"), ver + "\\natives\\", "");
+            }
             return libs;
         }
         /// <summary>
@@ -356,7 +351,7 @@ namespace NCLCore
         /// <returns></returns>
         public async Task<int> StartClient(Client clt, string name, string uuid, string token, string java, int RAM)
         {
-
+            //infostr = new Info("有" + 1 + "个资源文件下载失败,但仍将尝试启动\n错误信息" , "error");
             info = new Info("正在检测令牌是否失效", "info");
             if (!CheckToken(token))
             {
@@ -364,7 +359,7 @@ namespace NCLCore
             }
             info = new Info("游戏令牌通过检测", "success");
             info = new Info("正在验证Assets", "info");
-            //强烈推荐这种方法************* 
+            
             checkAssets(clt.rootdir, clt.rootdir + "\\assets\\indexes\\" + clt.assets + ".json", clt.assets, clt.rootdir + "\\versions\\" + clt.McVer + "\\" + clt.McVer + ".json");
              
             

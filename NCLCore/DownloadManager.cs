@@ -7,8 +7,6 @@ namespace NCLCore
     {
         private static readonly ILog log = LogManager.GetLogger("DownloadManager");
         List<DownloadItem> Hashs = new List<DownloadItem>();
-        public string DownloadSoureURL;
-        public string AssetsDir;
         public SDK sDK;
         public void Add(DownloadItem di)
         {
@@ -19,13 +17,14 @@ namespace NCLCore
         {
             
             log.Debug(Hashs.Count);
-            while (Hashs.Count != 0)
+            while (Hashs.Count != 0|| nowthreadnum!=0)
                 while (nowthreadnum < thread)
                 {
                     if (Hashs.Count > 0)
                     {
-
-                        Thread t5 = new Thread(() => DownloadTool(Hashs.Count));
+                        DownloadItem hash = Hashs.First();
+                        Hashs.Remove(hash);
+                        Thread t5 = new Thread(() => DownloadTool(Hashs.Count+1,hash));
                         t5.IsBackground = true;
                         t5.Name = Hashs.Count.ToString();
                         t5.Start();
@@ -37,17 +36,16 @@ namespace NCLCore
                 }
         }
 
-        private void DownloadTool(int name)
+        private void DownloadTool(int name,DownloadItem hash)
         {
-            DownloadItem hash = Hashs.First();
-            Hashs.Remove(hash);
+            
            
-            //log.Debug(url + " \n" + dir);
-
+            log.Debug(hash.dir);
+            log.Debug(Path.GetDirectoryName(hash.dir));
             DownloadBuilder.New()
             .WithUrl(hash.uri)
-            .WithDirectory(hash.dir)
-            .WithFileName(hash.name)
+            .WithFileLocation(hash.dir)
+            .WithConfiguration(new DownloadConfiguration() { Timeout = 5000,  ParallelDownload = true })
             .Build()
             .StartAsync().Wait();
             if(name%100==0)

@@ -44,8 +44,8 @@ namespace NchargeL
 
         private void list_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            info.Text="当前选择的客户端:\n"+((Client)((ListBox)e.OriginalSource).SelectedItem).Name;
-           // (ListBoxItem)((ListBox)e.Source).
+            info.Text = "当前选择的客户端:\n" + ((Client)((ListBox)e.OriginalSource).SelectedItem).Name;
+            // (ListBoxItem)((ListBox)e.Source).
         }
 
         private async void Button_Click_1(object sender, System.Windows.RoutedEventArgs e)
@@ -83,7 +83,7 @@ namespace NchargeL
                             }
                         default:
                             {
-                                notificationManager.Show(NotificationContentSDK.notificationInformation("可以尝试使用Java"+javaVer+"来获得更好的体验", ""), "WindowArea");
+                                notificationManager.Show(NotificationContentSDK.notificationInformation("可以尝试使用Java" + javaVer + "来获得更好的体验", ""), "WindowArea");
 
                                 Thread thread = new Thread(new ParameterizedThreadStart(StartClient));
                                 thread.Start(Data.clients[list.SelectedIndex]);
@@ -111,29 +111,42 @@ namespace NchargeL
         {
 
             SDK sDK = NCLCore.sDK;
-            sDK.PropertyChanged += (oo, ee) => {
-               // Console.WriteLine("值变了，新值是：" + (oo as NCLCore.Info).A);
-               switch((oo as SDK).info.TYPE)
+            sDK.PropertyChanged += (oo, ee) =>
+            {
+                // Console.WriteLine("值变了，新值是：" + (oo as NCLCore.Info).A);
+                switch ((oo as SDK).info.TYPE)
                 {
                     case "info":
                         {
-                            notificationManager.Show(NotificationContentSDK.notificationInformation("", (oo as SDK).info.msg), "WindowArea");
+                            notificationManager.Show(NotificationContentSDK.notificationInformation( (oo as SDK).info.msg,""), "WindowArea");
                             break;
                         }
                     case "error":
                         {
-                            notificationManager.Show(NotificationContentSDK.notificationError("", (oo as SDK).info.msg), "WindowArea");
+                            notificationManager.Show(NotificationContentSDK.notificationError( (oo as SDK).info.msg,""), "WindowArea");
                             break;
                         }
                     case "success":
                         {
-                            notificationManager.Show(NotificationContentSDK.notificationSuccess("", (oo as SDK).info.msg), "WindowArea");
+                            notificationManager.Show(NotificationContentSDK.notificationSuccess((oo as SDK).info.msg, ""), "WindowArea");
+                            break;
+                        }
+                    case "errorDia":
+                        {
+                            Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+                            {
+                                ErrorDialog warn = new ErrorDialog("", (oo as SDK).info.msg);
+                                warn.Show();
+
+                            })).Wait();
+
                             break;
                         }
                 }
-                
+
             };
-            
+           
+
             bool flag = true;
             while (flag)
             {
@@ -196,7 +209,7 @@ namespace NchargeL
                     }
 
                 }
-                
+
 
             }
 

@@ -14,8 +14,8 @@ namespace NCLCore
         public void DownloadOfficialClient(string ver)
         {
             DownloadManager downloadManager = new DownloadManager();
-            downloadManager.Add(new DownloadItem(DownloadSoureURL + "version/" + ver + "/client", minecraftDir + "\\versions\\" + ver,ver+".jar"));
-            downloadManager.Add(new DownloadItem(DownloadSoureURL + "version/" + ver + "/json", minecraftDir + "\\versions\\" + ver,ver+".json"));
+            downloadManager.Add(new DownloadItem(DownloadSoureURL + "version/" + ver + "/client", minecraftDir + "\\versions\\" + ver+"\\"+ver+".jar"));
+            downloadManager.Add(new DownloadItem(DownloadSoureURL + "version/" + ver + "/json", minecraftDir + "\\versions\\" + ver+"\\"+ver+".json"));
             downloadManager.Start(2);
         }
     }

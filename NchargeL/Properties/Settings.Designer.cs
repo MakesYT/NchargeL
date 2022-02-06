@@ -121,7 +121,7 @@ namespace NchargeL.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://bmclapi2.bangbang93.com/")]
+        [global::System.Configuration.DefaultSettingValueAttribute("https://download.mcbbs.net/")]
         public string DownloadSource {
             get {
                 return ((string)(this["DownloadSource"]));

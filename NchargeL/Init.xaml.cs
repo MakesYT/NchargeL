@@ -29,15 +29,25 @@ namespace Ncharge
         {
             if (ver.IndexOf("alpha") != -1)
             {
+                Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+                {
+
+                    WarnDialog warn = new WarnDialog("", "您当前使用的是Alpha内测版本\r\n存在未知bug,如遇bug请反馈");
+                    warn.ShowDialog();
+                })).Wait();
                 //MessageBox.Show("您当前使用的是Alpha内测版本\r\n存在未知bug,如遇bug请反馈", "警告", MessageBoxButton.OK, MessageBoxImage.Question);
-                WarnDialog warn = new WarnDialog("", "您当前使用的是Alpha内测版本\r\n存在未知bug,如遇bug请反馈");
-                warn.ShowDialog();
+
             }
             else if (ver.IndexOf("beta") != -1)
             {
+                Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+                {
+
+                    WarnDialog warn = new WarnDialog("", "您当前使用的是Beta公测版本\r\n可能存在bug,如遇bug请反馈");
+                    warn.ShowDialog();
+                })).Wait();
                 //MessageBox.Show("您当前使用的是Beta公测版本\r\n可能存在bug,如遇bug请反馈", "警告", MessageBoxButton.OK, MessageBoxImage.Question);
-                WarnDialog warn = new WarnDialog("", "您当前使用的是Beta公测版本\r\n可能存在bug,如遇bug请反馈");
-                warn.ShowDialog();
+
             }
         }
 

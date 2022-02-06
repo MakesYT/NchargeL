@@ -43,6 +43,6 @@
 
             </ScrollViewer>
                     </StackPanel>
-        <Button FocusVisualStyle="{x:Null}"  Style="{StaticResource MaterialDesignFlatButton}" IsCancel="True" HorizontalAlignment="Right" VerticalAlignment="Bottom" Cursor="Hand" FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi" FontSize="20" Content="确定" Margin="0,0,16,16" Foreground="{DynamicResource BodyColor}"/>
+        <Button FocusVisualStyle="{x:Null}"  Style="{StaticResource MaterialDesignFlatButton}" IsCancel="True" HorizontalAlignment="Right" VerticalAlignment="Bottom" Cursor="Hand" FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi" FontSize="20" Content="确定" Margin="0,0,16,16" Foreground="{DynamicResource BodyColor}" Click="Button_Click"/>
     </Grid>
 </Window>
