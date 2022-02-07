@@ -12,7 +12,10 @@
   <ItemGroup>
     <None Remove="bg21.png" />
     <None Remove="log4net.config" />
+    <None Remove="Resources\8ee20a6fa281ace6499d14210a46c8e3.png" />
     <None Remove="Resources\authlib-injector.jar" />
+    <None Remove="Resources\f68fa724e01109bff5b69782fa0640db.jpg" />
+    <None Remove="Resources\f6c082b631bddb16edba7e0fe0b6d720.png" />
     <None Remove="Resources\HarmonyOS_Sans_Bold.ttf" />
     <None Remove="Resources\HarmonyOS_Sans_Light.ttf" />
     <None Remove="Resources\HarmonyOS_Sans_Medium.ttf" />
@@ -36,6 +39,15 @@
     <Content Include="Resources\Javacheck.jar">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Resources\8ee20a6fa281ace6499d14210a46c8e3.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\f68fa724e01109bff5b69782fa0640db.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\f6c082b631bddb16edba7e0fe0b6d720.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Resources\HarmonyOS_Sans_Light.ttf" />
   </ItemGroup>
 
