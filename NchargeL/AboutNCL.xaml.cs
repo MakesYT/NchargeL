@@ -29,5 +29,20 @@ namespace NchargeL
 		{
 
 		}
+
+		private void Button_Click(object sender, RoutedEventArgs e)
+		{
+
+		}
+
+		private void java_TextChanged(object sender, TextChangedEventArgs e)
+		{
+
+		}
+
+		private void Button_Click_61(object sender, RoutedEventArgs e)
+		{
+			MessageBox.Show("https://logging.apache.org/log4net/");
+		}
 	}
 }
