@@ -29,6 +29,7 @@ namespace NchargeL
         public Launcher launcher=new Launcher();
         public AboutNCL aboutNCL = new AboutNCL();
         public DownloadUI  downloadUI = new DownloadUI();
+        
         public Main()
         {
             InitializeComponent();
@@ -123,6 +124,45 @@ namespace NchargeL
         {
             FrameWork.Content = settingUi;
         }
+        public  NCLcore newNCLcore(string ds, string dir)
+        {
+            NCLcore nCLCore = new NCLcore(ds,dir);
+            nCLCore.sDK.PropertyChanged += (oo, ee) =>
+            {
+                // Console.WriteLine("值变了，新值是：" + (oo as NCLCore.Info).A);
+                switch ((oo as SDK).info.TYPE)
+                {
+                    case "info":
+                        {
+                            notificationManager.Show(NotificationContentSDK.notificationInformation((oo as SDK).info.msg, ""), "WindowArea");
+                            break;
+                        }
+                    case "error":
+                        {
+                            notificationManager.Show(NotificationContentSDK.notificationError((oo as SDK).info.msg, ""), "WindowArea");
+                            break;
+                        }
+                    case "success":
+                        {
+                            notificationManager.Show(NotificationContentSDK.notificationSuccess((oo as SDK).info.msg, ""), "WindowArea");
+                            break;
+                        }
+                    case "errorDia":
+                        {
+                            Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+                            {
+                                ErrorDialog warn = new ErrorDialog("", (oo as SDK).info.msg);
+                                warn.Show();
+
+                            })).Wait();
+
+                            break;
+                        }
+                }
+
+            };
+            return nCLCore;
+        }
 
         private async void LauncherButton(object sender, RoutedEventArgs e)//启动游戏按钮
         {
@@ -130,7 +170,7 @@ namespace NchargeL
             //Properties.Settings.Default.GameDir = @"D:\\IDEAJava\\6th\\V6\\out\\artifacts\\V6_jar\\.minecraft";
             if (Properties.Settings.Default.GameDir != "")
             {
-                NCLcore nCLCore = new NCLcore(Properties.Settings.Default.DownloadSource, Properties.Settings.Default.GameDir);
+                NCLcore nCLCore = newNCLcore(Properties.Settings.Default.DownloadSource, Properties.Settings.Default.GameDir);
                 Data.clients = nCLCore.Clients;
                 notificationManager.Show(NotificationContentSDK.notificationSuccess("客户端列表已更新", ""), "WindowArea");
                 launcher = new Launcher();
@@ -148,7 +188,7 @@ namespace NchargeL
                     if (dlg.FileName.EndsWith(".minecraft"))
                     {
                         Properties.Settings.Default.GameDir = dlg.FileName;
-                        NCLcore nCLCore = new NCLcore(Properties.Settings.Default.DownloadSource, dlg.FileName);
+                        NCLcore nCLCore = newNCLcore(Properties.Settings.Default.DownloadSource, dlg.FileName);
                         Data.clients = nCLCore.Clients;
                         notificationManager.Show(NotificationContentSDK.notificationSuccess("客户端列表已更新", ""), "WindowArea");
                         launcher = new Launcher();

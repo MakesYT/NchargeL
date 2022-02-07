@@ -3,7 +3,7 @@ using System.Windows.Media;
 
 namespace NchargeL.Info
 {
-    internal class NotificationContentSDK
+    public class NotificationContentSDK
     {
         public static NotificationContent notificationSuccess(string title, string Msg)
         {

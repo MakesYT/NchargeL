@@ -29,7 +29,7 @@ namespace NchargeL
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            NCLcore nCLCore = new NCLcore(Properties.Settings.Default.DownloadSource, Properties.Settings.Default.GameDir);
+            NCLcore nCLCore = Main.main.newNCLcore(Properties.Settings.Default.DownloadSource, Properties.Settings.Default.GameDir);
             nCLCore.clientDownload.DownloadOfficialClient("1.16.5");
         }
     }
