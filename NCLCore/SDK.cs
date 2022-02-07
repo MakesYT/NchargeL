@@ -22,7 +22,7 @@ namespace NCLCore
                 this.OnWorkStateChanged(new EventArgs());
             }
         }
-       
+
         public event EventHandler PropertyChanged;
         public void OnWorkStateChanged(EventArgs eventArgs)
         {
@@ -64,12 +64,12 @@ namespace NCLCore
             {
                 DirectoryInfo root = new DirectoryInfo(dir);
 
-                foreach (DirectoryInfo directory in root.GetDirectories())
+                //foreach (DirectoryInfo directory in root.GetDirectories())
                 {
-                    if (directory.Name == "versions")
+                    // if (directory.Name == "versions")
                     {
-                        root = new DirectoryInfo(directory.FullName);
-                        foreach (DirectoryInfo file in directory.GetDirectories())
+                        root = new DirectoryInfo(dir + "\\versions");
+                        foreach (DirectoryInfo file in root.GetDirectories())
                         {
                             Client client = new Client();
                             client.dir = file.FullName;
@@ -160,7 +160,7 @@ namespace NCLCore
 
             return clients;
         }
-        public  void checkAssets(string rootdir, string dir,string assets,string clientdir)
+        public void checkAssets(string rootdir, string dir, string assets, string clientdir)
         {
             var downloadOpt = new DownloadConfiguration()
             {
@@ -175,12 +175,12 @@ namespace NCLCore
 
 
             }; var downloader = new DownloadService(downloadOpt);
-            
+
             FileInfo fileInfo = new FileInfo(dir);
             if (!fileInfo.Exists)
             {
                 info = new Info("Assets-Index文件不存在,正在下载", "info");
-                
+
                 FileInfo AssetsFileInfo = new FileInfo(clientdir);
                 using (System.IO.StreamReader jsonfile = System.IO.File.OpenText(AssetsFileInfo.FullName))
                 {
@@ -189,12 +189,12 @@ namespace NCLCore
                         JObject jObject = (JObject)JToken.ReadFrom(reader);
                         info = new Info(DownloadSoureURL, "info");
                         info = new Info(jObject["assetIndex"]["url"].ToString().Replace("https://launchermeta.mojang.com/", DownloadSoureURL), "info");
-                        downloader.DownloadFileTaskAsync(jObject["assetIndex"]["url"].ToString().Replace("https://launchermeta.mojang.com/",DownloadSoureURL), dir).Wait();
+                        downloader.DownloadFileTaskAsync(jObject["assetIndex"]["url"].ToString().Replace("https://launchermeta.mojang.com/", DownloadSoureURL), dir).Wait();
 
                     }
                 }
             }
-            AssetsDownloadManager downloadManager=new AssetsDownloadManager();
+            AssetsDownloadManager downloadManager = new AssetsDownloadManager();
             using (System.IO.StreamReader jsonfile = System.IO.File.OpenText(fileInfo.FullName))
             {
                 using (JsonTextReader reader = new JsonTextReader(jsonfile))
@@ -204,13 +204,13 @@ namespace NCLCore
                     foreach (var o in ((JObject)jObject["objects"]).Properties())
                     {
                         jstr = o.Name;
-                       
+
                         var hash = jObject["objects"][o.Name]["hash"].ToString();
-                        FileInfo assetinfo = new FileInfo(rootdir+ "\\assets\\objects\\"+hash[0]+hash[1]+"\\"+hash);
+                        FileInfo assetinfo = new FileInfo(rootdir + "\\assets\\objects\\" + hash[0] + hash[1] + "\\" + hash);
                         if (!assetinfo.Exists)
                         {
-                            log.Info("资源文件:"+hash+"不存在");
-                             downloadManager.Add(hash);
+                            log.Info("资源文件:" + hash + "不存在");
+                            downloadManager.Add(hash);
                         }
                     }
                 }
@@ -219,7 +219,7 @@ namespace NCLCore
             downloadManager.AssetsDir = rootdir;
             downloadManager.sDK = this;
             downloadManager.Start(150);
-           // DownloadPackage pack = downloader.Package;
+            // DownloadPackage pack = downloader.Package;
             //downloader.CancelAsync();
             //while (!downloader.IsCancelled) { }
             // downloader.DownloadFileTaskAsync(pack).Wait();
@@ -227,7 +227,7 @@ namespace NCLCore
         }
         public Libs GetLibs(string rootdir, string ver, string dir)
         {
-            DownloadManager downloadManager=new DownloadManager();
+            DownloadManager downloadManager = new DownloadManager();
             Libs libs = new Libs();
             List<Lib> Normallibs = new List<Lib>();
             List<Lib> Nativelibs = new List<Lib>();
@@ -251,13 +251,14 @@ namespace NCLCore
                                     {
                                         if (js["action"].ToString() == "allow")
                                         {
-                                            if(js["os"]==null)need = true;
-                                            else if(js["os"]["name"].ToString()=="windows") need = true;
-                                            
-                                            
+                                            if (js["os"] == null) need = true;
+                                            else if (js["os"]["name"].ToString() == "windows") need = true;
+
+
                                         }
                                     }
-                                }else need = true;
+                                }
+                                else need = true;
 
 
                                 if (need)
@@ -279,15 +280,15 @@ namespace NCLCore
                                             //log.Debug(lib.path + "Natives库文件不存在");
                                             if (DownloadSoureURL != null)
                                             {
-                                                lib.url = lib.url.Replace("https://libraries.minecraft.net/", DownloadSoureURL+ "maven/");
+                                                lib.url = lib.url.Replace("https://libraries.minecraft.net/", DownloadSoureURL + "maven/");
                                             }
-                                            downloadManager.Add(new DownloadItem( lib.url, rootdir + "\\libraries\\" + lib.path.Replace("/", "\\")));
+                                            downloadManager.Add(new DownloadItem(lib.url, rootdir + "\\libraries\\" + lib.path.Replace("/", "\\")));
                                             //info = new Info(lib.path + "Natives库文件获取成功", "success");
                                         }
                                         else log.Debug("Natives库文件存在" + rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"));
                                         //log.Debug(rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"));
-                                        
-                                       // lib.verDir = rootdir + "\\libraries\\" + lib.path.Replace("/", "\\");
+
+                                        // lib.verDir = rootdir + "\\libraries\\" + lib.path.Replace("/", "\\");
                                         Nativelibs.Add(lib);
                                     }
                                     else if (tmplibsjosn["artifact"] != null)
@@ -302,12 +303,12 @@ namespace NCLCore
                                         FileInfo fileInfo1 = new FileInfo(rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"));
                                         if (!fileInfo1.Exists)
                                         {
-                                           // info = new Info(lib.path + "库文件不存在,正在重新获取", "info");
+                                            info = new Info(lib.path + "库文件不存在,正在重新获取", "info");
                                             if (DownloadSoureURL != null)
                                             {
-                                                lib.url = lib.url.Replace("https://libraries.minecraft.net/", DownloadSoureURL + "maven/" );
+                                                lib.url = lib.url.Replace("https://libraries.minecraft.net/", DownloadSoureURL + "maven/");
                                             }
-                                            downloadManager.Add(new DownloadItem( lib.url, rootdir + "\\libraries\\" + lib.path.Replace("/", "\\")));
+                                            downloadManager.Add(new DownloadItem(lib.url, rootdir + "\\libraries\\" + lib.path.Replace("/", "\\")));
                                             //info = new Info(lib.path + "库文件获取成功", "success");
                                         }
                                         else log.Debug("库文件存在" + rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"));
@@ -359,11 +360,11 @@ namespace NCLCore
             }
             info = new Info("游戏令牌通过检测", "success");
             info = new Info("正在验证Assets", "info");
-            
+
             checkAssets(clt.rootdir, clt.rootdir + "\\assets\\indexes\\" + clt.assets + ".json", clt.assets, clt.rootdir + "\\versions\\" + clt.McVer + "\\" + clt.McVer + ".json");
-             
-            
-            
+
+
+
             info = new Info("验证Assets完成", "success");
 
             string libstr = null;

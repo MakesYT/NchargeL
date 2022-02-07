@@ -40,8 +40,8 @@ namespace NCLCore
         {
             
            
-            log.Debug(hash.dir);
-            log.Debug(Path.GetDirectoryName(hash.dir));
+            log.Debug(hash.uri);
+            //log.Debug(Path.GetDirectoryName(hash.dir));
             DownloadBuilder.New()
             .WithUrl(hash.uri)
             .WithFileLocation(hash.dir)
