@@ -189,8 +189,10 @@ namespace NCLCore
                         JObject jObject = (JObject)JToken.ReadFrom(reader);
                         info = new Info(DownloadSoureURL, "info");
                         info = new Info(jObject["assetIndex"]["url"].ToString().Replace("https://launchermeta.mojang.com/", DownloadSoureURL), "info");
-                        downloader.DownloadFileTaskAsync(jObject["assetIndex"]["url"].ToString().Replace("https://launchermeta.mojang.com/", DownloadSoureURL), dir).Wait();
-
+                        //downloader.DownloadFileTaskAsync(jObject["assetIndex"]["url"].ToString().Replace("https://launchermeta.mojang.com/", DownloadSoureURL), dir).Wait();
+                        DownloadBuilder.New()
+                        .WithUrl(jObject["assetIndex"]["url"].ToString().Replace("https://launchermeta.mojang.com/", DownloadSoureURL))
+                        .WithFileLocation(dir).Build().StartAsync().Wait();
                     }
                 }
             }
@@ -228,6 +230,7 @@ namespace NCLCore
         public Libs GetLibs(string rootdir, string ver, string dir)
         {
             DownloadManager downloadManager = new DownloadManager();
+            downloadManager.sDK = this;
             Libs libs = new Libs();
             List<Lib> Normallibs = new List<Lib>();
             List<Lib> Nativelibs = new List<Lib>();
@@ -271,6 +274,7 @@ namespace NCLCore
                                             path = tmplibsjosn["classifiers"]["natives-windows"]["path"].ToString(),
                                             url = tmplibsjosn["classifiers"]["natives-windows"]["url"].ToString(),
                                             sha1 = tmplibsjosn["classifiers"]["natives-windows"]["sha1"].ToString(),
+                                            name = libsjosn["name"].ToString(),
                                             native = true
                                         };
                                         FileInfo fileInfo1 = new FileInfo(rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"));
@@ -298,18 +302,31 @@ namespace NCLCore
                                             path = tmplibsjosn["artifact"]["path"].ToString(),
                                             url = tmplibsjosn["artifact"]["url"].ToString(),
                                             sha1 = tmplibsjosn["artifact"]["sha1"].ToString(),
+                                            name = libsjosn["name"].ToString()
 
                                         };
                                         FileInfo fileInfo1 = new FileInfo(rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"));
                                         if (!fileInfo1.Exists)
                                         {
                                             info = new Info(lib.path + "库文件不存在,正在重新获取", "info");
-                                            if (DownloadSoureURL != null)
+                                            if (!lib.path.Contains("net/minecraftforge/forge/"))
                                             {
-                                                lib.url = lib.url.Replace("https://libraries.minecraft.net/", DownloadSoureURL + "maven/");
+                                                if (DownloadSoureURL != null)
+                                                {
+                                                    lib.url = lib.url.Replace("https://libraries.minecraft.net/", DownloadSoureURL + "maven/");
+                                                    downloadManager.Add(new DownloadItem(lib.url, rootdir + "\\libraries\\" + lib.path.Replace("/", "\\")));
+                                                }
+
+                                                //info = new Info(lib.path + "库文件获取成功", "success");
                                             }
-                                            downloadManager.Add(new DownloadItem(lib.url, rootdir + "\\libraries\\" + lib.path.Replace("/", "\\")));
-                                            //info = new Info(lib.path + "库文件获取成功", "success");
+                                            else
+                                            {
+                                                lib.url = DownloadSoureURL + "maven/" + lib.path.Replace(".jar", "-installer.jar");
+                                                DownloadBuilder.New()
+                                                .WithUrl(lib.url)
+                                                .WithFileLocation(rootdir + "\\libraries\\" + lib.path.Replace("/", "\\")).Build().StartAsync().Wait();
+                                            }
+
                                         }
                                         else log.Debug("库文件存在" + rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"));
                                         Normallibs.Add(lib);
@@ -409,7 +426,7 @@ namespace NCLCore
 
                 }
             }
-            string all = java + " -javaagent:" + Directory.GetCurrentDirectory() + "\\Resources\\authlib-injector.jar={api} " +
+            string all = "\"" + java + "\"" + " -javaagent:\"" + Directory.GetCurrentDirectory() + "\\Resources\\authlib-injector.jar\"={api} " +
                 // "-Dauthlibinjector.side=client -Dauthlibinjector.yggdrasil.prefetched=eyJtZXRhIjp7InNlcnZlck5hbWUiOiJOY2hhcmdlIE1DXHU1OTE2XHU3ZjZlXHU3NjdiXHU1ZjU1IiwiaW1wbGVtZW50YXRpb25OYW1lIjoiWWdnZHJhc2lsIEFQSSBmb3IgQmxlc3NpbmcgU2tpbiIsImltcGxlbWVudGF0aW9uVmVyc2lvbiI6IjUuMS41IiwibGlua3MiOnsiaG9tZXBhZ2UiOiJodHRwczpcL1wvd3d3Lm5jc2VydmVyLnRvcDo2NjYiLCJyZWdpc3RlciI6Imh0dHBzOlwvXC93d3cubmNzZXJ2ZXIudG9wOjY2NlwvYXV0aFwvcmVnaXN0ZXIifSwiZmVhdHVyZS5ub25fZW1haWxfbG9naW4iOnRydWV9LCJza2luRG9tYWlucyI6WyJ3d3cubmNzZXJ2ZXIudG9wIl0sInNpZ25hdHVyZVB1YmxpY2tleSI6Ii0tLS0tQkVHSU4gUFVCTElDIEtFWS0tLS0tXG5NSUlDSWpBTkJna3Foa2lHOXcwQkFRRUZBQU9DQWc4QU1JSUNDZ0tDQWdFQXlmcjY0R09icXZkRENFcjhFT1JBXG5QaTg5VkxiUDVOV3JSaG9BbDcyZ2pLbTRvUmppblp2WFMrRzZnRCtaTGJvdnlMVmg3SktKSUc1QlI5SHJWTGNLXG5Jb3ArMFNuN0lQUUo4XC9YMkt1UkhqYnNiVEFTREtLV1RkTHNCcDMzcTR5SEIwMFJpNzFTbkxhK2tQdFZ4UE5kcFxuelE0Tnk0czU0c2JCejdOWmM0OHJXdWh4RG1rZTh5anIycWxXQ0FwS1ZHVngxYUJrNVYxb3loeFwveFFnVUtaUmRcbndYeDVhVmtkY2NDd045eWc2STlMY0hPa2d1Y1NCUHY4NTZSU2ZTTnZHbHVYV1N0VlFXTVhLNVVcL25YU2pYUTdHXG45bFdiNUJ4T1JqY3h0TDFIWXBnYm9RanVVNW9oTWUrdmRMRytmUmp4TE1mVDdLUlgzTzZRelkyOGdlT096d1l6XG5MSGwyV0xISEhlTXdiRDJtYng5MlZCY0tsZkwwUDR1eGVxeG9mYWplOURyWVVIY1VvN2ZGbUF2VHN0UU00VDNIXG5GXC85YTZ1emxHRHV1MHp4RjljWkJ6Z3JyXC92MDRROGZ4Tkh0TjlZRjl2MGZSazk0b0c4QVcrSU5CQmFnTWFTbkNcblQ4XC9XYUtaOUtSRStBMk5YWFhvZ1E1NWppOU12dFB6NlJNalBQNWtlR0hNZW8xbXNWN2VPTExXZGRaYStxWE5OXG5aZ0ZUcXlpc3pYRnhRTWZRVTRDREcyZEVsdUZ6MndTemsxY0xVN3pYemUwVk9ldVorQnJvVm5pWmZ1enpSTFBTXG5PbENTSUJYQys1dGVnd3lXWTVCaU1zSldhWmdveUhpVmppWHpFaVJ4aW9xelJGbkorc1FJSFpYWnI2UVpyVXBqXG5MalBvQUtBOWs5QkZ3d0Fhbkl5ajF6a0NBd0VBQVE9PVxuLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tXG4ifQ==" +
                 " -XX:+UseG1GC -XX:-UseAdaptiveSizePolicy -XX:-OmitStackTraceInFastThrow -Dfml.ignoreInvalidMinecraftCertificates=True -Dfml.ignorePatchDiscrepancies=True -XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump -Xmn256m -Xmx" + RAM + "m \"-Djava.library.path=" + clt.dir + "\\natives\"" + " -cp \"" + libstr + "\"" + " " + mainClass +
         " --username " + name + " --version " + clt.Name + " --gameDir \"" + clt.dir + "\" --assetsDir \"" + clt.rootdir + "\\assets\" --assetIndex " + clt.assets + " --versionType NCL" +
@@ -430,6 +447,7 @@ namespace NCLCore
             info = new Info("正在启动游戏", "info");
             ExecuteInCmd(all, clt.rootdir + "\\versions\\" + clt.Name);
             return 1;
+
         }
 
         /// <summary>
@@ -455,7 +473,7 @@ namespace NCLCore
 
                 process.Start();
                 // process.StandardInput.AutoFlush = true;
-                process.StandardInput.WriteLine(java + " -jar " + Directory.GetCurrentDirectory() + "\\Resources\\Javacheck.jar" + "&exit");
+                process.StandardInput.WriteLine("\"" + java + "\" -jar \"" + Directory.GetCurrentDirectory() + "\\Resources\\Javacheck.jar\"" + "&exit");
                 process.StandardInput.Close();
                 string line = "";
                 string linetemp;

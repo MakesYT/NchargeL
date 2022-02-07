@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -20,7 +21,7 @@ namespace NchargeL
     public partial class Launcher : Page
     {
         public LoginUi LoginUi = new LoginUi();
-        public NotificationManager notificationManager = new NotificationManager();
+         NotificationManager notificationManager = new NotificationManager();
         public NCLcore NCLCore;
         private static readonly ILog log = LogManager.GetLogger("Launcher");
         public Launcher()
@@ -111,45 +112,15 @@ namespace NchargeL
         {
 
             SDK sDK = NCLCore.sDK;
-            sDK.PropertyChanged += (oo, ee) =>
-            {
-                // Console.WriteLine("值变了，新值是：" + (oo as NCLCore.Info).A);
-                switch ((oo as SDK).info.TYPE)
-                {
-                    case "info":
-                        {
-                            notificationManager.Show(NotificationContentSDK.notificationInformation( (oo as SDK).info.msg,""), "WindowArea");
-                            break;
-                        }
-                    case "error":
-                        {
-                            notificationManager.Show(NotificationContentSDK.notificationError( (oo as SDK).info.msg,""), "WindowArea");
-                            break;
-                        }
-                    case "success":
-                        {
-                            notificationManager.Show(NotificationContentSDK.notificationSuccess((oo as SDK).info.msg, ""), "WindowArea");
-                            break;
-                        }
-                    case "errorDia":
-                        {
-                            Application.Current.Dispatcher.BeginInvoke(new Action(delegate
-                            {
-                                ErrorDialog warn = new ErrorDialog("", (oo as SDK).info.msg);
-                                warn.Show();
 
-                            })).Wait();
-
-                            break;
-                        }
-                }
-
-            };
+            
            
 
             bool flag = true;
             while (flag)
             {
+
+               // Task<int> task = Task.Factory.StartNew<int>(() => DownloadString("http://ww.linqpad.net"));
                 var re = sDK.StartClient((Client)clt, Data.users[0]._name, Data.users[0]._useruuid, Data.users[0]._token, Properties.Settings.Default.Java, Properties.Settings.Default.RAM);
                 log.Debug(re.Result);
 
@@ -167,11 +138,9 @@ namespace NchargeL
                 {
                     if (Data.users[0]._password != null)
                     {
-                        Application.Current.Dispatcher.BeginInvoke(new Action(delegate
-                        {
+                        
                             notificationManager.Show(NotificationContentSDK.notificationWarning("", "用户令牌已失效,正在重新获取"), "WindowArea");
 
-                        })).Wait();
 
                         Dictionary<String, String> pList = new Dictionary<String, String>();
                         pList.Add("username", Data.users[0]._email);
@@ -234,7 +203,7 @@ namespace NchargeL
                 if (dlg.FileName.EndsWith(".minecraft"))
                 {
                     Properties.Settings.Default.GameDir = dlg.FileName;
-                    NCLcore nCLCore = new NCLcore(Properties.Settings.Default.DownloadSource, dlg.FileName);
+                    NCLcore nCLCore = Main.main.newNCLcore(Properties.Settings.Default.DownloadSource, dlg.FileName);
                     Data.clients = nCLCore.Clients;
                     notificationManager.Show(NotificationContentSDK.notificationSuccess("客户端列表已更新", ""), "WindowArea");
                     Main.main.launcher = new Launcher();
