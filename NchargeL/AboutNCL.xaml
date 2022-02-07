@@ -24,6 +24,7 @@
                 materialDesign:ColorZoneAssist.Foreground="{DynamicResource ForegroundColor}"  
                 materialDesign:HintAssist.Foreground="{DynamicResource BodyColor}"  
                 materialDesign:HintAssist.Hint="
+  服务器版本&#xA;
   新启动器下载的客户端不要&#xA;传给别人！！！&#xA;
   客户端保存了玩家账号的可&#xA;公开信息和电脑基本信息&#xA;
   这些信息用于保护服务器防止&#xA;遭受网络攻击&#xA;
@@ -40,19 +41,9 @@
             </TextBox>
 
         </GroupBox>
-        <TextBlock HorizontalAlignment="Left" Width="249" VerticalAlignment="Top" Height="350"
-                FontFamily="HarmonyOS Sans Medium" FontSize="15" Margin="440,40,0,0">
-                <Run Language="zh-cn" Text="  "/><Run Language="zh-cn" Text="  新启动器下载的客户端不要传给别人！！！&#xA; "/>
-                <Run Language="zh-cn" Text="  "/><Run Text="客户端保存了玩家账号的可公开信息和电脑基本信息&#xA; "/>
-                <Run Language="zh-cn" Text="  "/><Run Text="这些信息用于保护服务器防止网络攻击&#xA;   "/>
-                <Run Language="zh-cn" Text=" "/><Run Text="这些信息不会上传至互联网"/>
-        </TextBlock>
-
         <Image HorizontalAlignment="Left" Height="170" Margin="487,10,0,0" VerticalAlignment="Top" Width="129" Source="Resources/f68fa724e01109bff5b69782fa0640db.jpg"/>
         <Image HorizontalAlignment="Left" Height="170" Margin="344,10,0,0" VerticalAlignment="Top" Width="146" Source="Resources/f6c082b631bddb16edba7e0fe0b6d720.png"/>
         <Image HorizontalAlignment="Left" Height="170" Margin="616,10,0,0" VerticalAlignment="Top" Width="124" Source="Resources/8ee20a6fa281ace6499d14210a46c8e3.png"/>
-
-
         <Button x:Name="showpermit" BorderBrush="{x:Null}" 
                 Foreground="{DynamicResource ForegroundColor}" Cursor="Hand"  
                 IsDefault="True" Background="{DynamicResource BodyColorWith50Opacity}" 
