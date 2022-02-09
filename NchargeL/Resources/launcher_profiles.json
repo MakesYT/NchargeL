@@ -1,0 +1,13 @@
+{
+    "profiles":  {
+        "NchargeL": {
+            "icon": "Grass",
+            "name": "NCL",
+            "lastVersionId": "latest-release",
+            "type": "latest-release",
+            "lastUsed": "2022-02-07T22:57:02.0000Z"
+        }
+    },
+    "selectedProfile": "NCL",
+    "clientToken": "23323323323323323323323323323333"
+}

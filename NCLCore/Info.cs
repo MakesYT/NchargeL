@@ -6,8 +6,8 @@ namespace NCLCore
     {
         public string msg;
         public string TYPE="info";
-        private static readonly ILog log = LogManager.GetLogger("Info");
-        public Info(string msg, string TYPE)
+        private  readonly ILog log = LogManager.GetLogger("Info");
+        public  Info(string msg, string TYPE)
         {
             this.msg = msg;
             this.TYPE = TYPE;

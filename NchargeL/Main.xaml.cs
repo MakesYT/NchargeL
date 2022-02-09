@@ -34,7 +34,9 @@ namespace NchargeL
         {
             InitializeComponent();
             Data.init();//初始化列表
-
+          //  Properties.Settings.Default.DownloadSource = "https://bmclapi2.bangbang93.com/";
+            notificationManager.Show(NotificationContentSDK.notificationInformation("弹窗测试", ""), "WindowArea");
+            notificationManager.Show(NotificationContentSDK.notificationWarning("弹窗测试", ""), "WindowArea");
             main = this;
             hello.Text = Environment.UserName;
 
@@ -140,6 +142,12 @@ namespace NchargeL
                     case "error":
                         {
                             notificationManager.Show(NotificationContentSDK.notificationError((oo as SDK).info.msg, ""), "WindowArea");
+                            break;
+                        }
+                    case "warn":
+                        {
+
+                            notificationManager.Show(NotificationContentSDK.notificationWarning((oo as SDK).info.msg, ""), "WindowArea");
                             break;
                         }
                     case "success":

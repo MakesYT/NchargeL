@@ -47,7 +47,7 @@ namespace NCLCore
                 IDownload download = DownloadBuilder.New()
                 .WithUrl(hash.uri)
                 .WithFileLocation(hash.dir)
-                .WithConfiguration(new DownloadConfiguration() { Timeout = 5000, BufferBlockSize = 4096, ChunkCount = 32})
+               // .WithConfiguration(new DownloadConfiguration() { Timeout = 5000, BufferBlockSize = 10240, ChunkCount = 16,ParallelDownload = true })
                 .Build();
                 download.DownloadFileCompleted += (s, e) =>
                 {

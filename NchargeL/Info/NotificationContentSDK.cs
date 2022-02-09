@@ -52,7 +52,7 @@ namespace NchargeL.Info
                 Message = Msg,
                 Type = NotificationType.Warning,
 
-                Background = (Brush)App.Current.FindResource("NotificationError"),
+                Background = (Brush)App.Current.FindResource("NotificationWarning"),
                 Foreground = (Brush)App.Current.FindResource("ForegroundColor"),
             };
             return content;

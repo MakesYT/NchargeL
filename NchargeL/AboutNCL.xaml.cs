@@ -40,9 +40,6 @@ namespace NchargeL
 
 		}
 
-		private void Button_Click_61(object sender, RoutedEventArgs e)
-		{
-			MessageBox.Show(System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString());
-		}
+		
 	}
 }

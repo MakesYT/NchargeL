@@ -6,6 +6,8 @@ using Newtonsoft.Json.Linq;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Net;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace NCLCore
 {
@@ -227,6 +229,27 @@ namespace NCLCore
             // downloader.DownloadFileTaskAsync(pack).Wait();
 
         }
+        string GetSHA1(string s)
+        {
+            try
+            {
+                FileStream file = new FileStream(s, FileMode.Open);
+                SHA1 sha1 = new SHA1CryptoServiceProvider();
+                byte[] retval = sha1.ComputeHash(file);
+                file.Close();
+
+                StringBuilder sc = new StringBuilder();
+                for (int i = 0; i < retval.Length; i++)
+                {
+                    sc.Append(retval[i].ToString("x2"));
+                }
+                return sc.ToString();
+            }
+            catch (Exception ex)
+            {
+                throw new NCLException("c");
+            }
+        }
         public Libs GetLibs(string rootdir, string ver, string dir)
         {
             DownloadManager downloadManager = new DownloadManager();
@@ -267,7 +290,7 @@ namespace NCLCore
                                 if (need)
                                 {
                                     JObject tmplibsjosn = (JObject)libsjosn["downloads"];
-                                    if (libsjosn["natives"] != null && libsjosn["natives"]["windows"] != null)
+                                    if (libsjosn["natives"] != null)
                                     {
                                         Lib lib = new Lib()
                                         {
@@ -289,7 +312,23 @@ namespace NCLCore
                                             downloadManager.Add(new DownloadItem(lib.url, rootdir + "\\libraries\\" + lib.path.Replace("/", "\\")));
                                             //info = new Info(lib.path + "Natives库文件获取成功", "success");
                                         }
-                                        else log.Debug("Natives库文件存在" + rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"));
+                                        else
+                                        {
+
+                                            if (GetSHA1(fileInfo1.FullName) == lib.sha1)
+                                            {
+                                                log.Debug("Natives库文件存在" + rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"));
+                                            }
+                                            else
+                                            {
+                                                if (DownloadSoureURL != null)
+                                                {
+                                                    lib.url = lib.url.Replace("https://libraries.minecraft.net/", DownloadSoureURL + "maven/");
+                                                }
+                                                downloadManager.Add(new DownloadItem(lib.url, rootdir + "\\libraries\\" + lib.path.Replace("/", "\\")));
+                                                log.Debug("Natives库文件异常sha1校验不通过" + rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"));
+                                            }
+                                        }
                                         //log.Debug(rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"));
 
                                         // lib.verDir = rootdir + "\\libraries\\" + lib.path.Replace("/", "\\");
@@ -321,14 +360,42 @@ namespace NCLCore
                                             }
                                             else
                                             {
+                                                info = new Info("Forge状态异常,正在重新安装", "warn");
                                                 lib.url = DownloadSoureURL + "maven/" + lib.path.Replace(".jar", "-installer.jar");
+                                                string jardir = (rootdir + "\\libraries\\" + lib.path.Replace("/", "\\")).Replace(".jar", "-installer.jar");
                                                 DownloadBuilder.New()
                                                 .WithUrl(lib.url)
-                                                .WithFileLocation(rootdir + "\\libraries\\" + lib.path.Replace("/", "\\")).Build().StartAsync().Wait();
+                                                .WithFileLocation(jardir).Build().StartAsync().Wait();
+                                                (new FastZip()).ExtractZip(jardir, jardir[..jardir.LastIndexOf("\\")], jardir.Substring(jardir.LastIndexOf("\\") + 1).Replace("-installer.jar", ".jar"));
+                                                FileInfo fileInfo2 = new FileInfo(jardir[..jardir.LastIndexOf("\\")] + "\\maven\\" + lib.path.Replace("/", "\\"));
+                                                fileInfo2.CopyTo(jardir.Replace("-installer.jar", ".jar"));
                                             }
 
+                                        }else
+                                        {
+                                            if (!lib.path.Contains("net/minecraftforge/forge/"))
+                                            {
+                                                if (DownloadSoureURL != null)
+                                                {
+                                                    lib.url = lib.url.Replace("https://libraries.minecraft.net/", DownloadSoureURL + "maven/");
+                                                }
+                                                downloadManager.Add(new DownloadItem(lib.url, rootdir + "\\libraries\\" + lib.path.Replace("/", "\\")));
+                                                log.Debug("库文件异常sha1校验不通过" + rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"));
+                                            }
+                                            else
+                                            {
+                                                info = new Info("Forge sha1校验未通过,正在重新安装", "warn");
+                                                lib.url = DownloadSoureURL + "maven/" + lib.path.Replace(".jar", "-installer.jar");
+                                                string jardir = (rootdir + "\\libraries\\" + lib.path.Replace("/", "\\")).Replace(".jar", "-installer.jar");
+                                                DownloadBuilder.New()
+                                                .WithUrl(lib.url)
+                                                .WithFileLocation(jardir).Build().StartAsync().Wait();
+                                                (new FastZip()).ExtractZip(jardir, jardir[..jardir.LastIndexOf("\\")], jardir.Substring(jardir.LastIndexOf("\\") + 1).Replace("-installer.jar", ".jar"));
+                                                FileInfo fileInfo2 = new FileInfo(jardir[..jardir.LastIndexOf("\\")] + "\\maven\\" + lib.path.Replace("/", "\\"));
+                                                fileInfo2.CopyTo(jardir.Replace("-installer.jar", ".jar"),true);
+                                            }
                                         }
-                                        else log.Debug("库文件存在" + rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"));
+                                         log.Debug("库文件存在" + rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"));
                                         Normallibs.Add(lib);
                                     }
                                 }
@@ -344,7 +411,7 @@ namespace NCLCore
                 }
             }
             catch (Exception ex) { }
-            downloadManager.Start(10);
+            downloadManager.Start(50);
             libs.Normallibs = Normallibs;
             libs.Nativelibs = Nativelibs;
             foreach (Lib lib in Nativelibs)
@@ -370,6 +437,8 @@ namespace NCLCore
         public async Task<int> StartClient(Client clt, string name, string uuid, string token, string java, int RAM)
         {
             //infostr = new Info("有" + 1 + "个资源文件下载失败,但仍将尝试启动\n错误信息" , "error");
+            FileInfo launcher_profiles = new FileInfo(Directory.GetCurrentDirectory() + "\\Resources\\launcher_profiles.json");
+            launcher_profiles.CopyTo(clt.rootdir + "\\launcher_profiles.json", true);
             info = new Info("正在检测令牌是否失效", "info");
             if (!CheckToken(token))
             {
