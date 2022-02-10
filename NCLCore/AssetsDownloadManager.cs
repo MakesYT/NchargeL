@@ -12,6 +12,8 @@ namespace NCLCore
         public SDK sDK;
         int cancellationsOccurrenceCount = 0;
         string error;
+        int All = 0;
+        int Count = 0;
         public void Add(string hash)
         {
             Hashs.Add(hash);
@@ -19,17 +21,17 @@ namespace NCLCore
         int nowthreadnum = 0;
         public  void Start(int thread)
         {
-
+            All=Hashs.Count;
             log.Debug(Hashs.Count);
-            while (Hashs.Count != 0)
+            while (Hashs.Count != 0 || nowthreadnum != 0)
                 while (nowthreadnum < thread)
                 {
                     if (Hashs.Count > 0)
                     {
                         string hash = Hashs.First();
-                        int name = Hashs.Count;
+                       // int name = Hashs.Count;
                         Hashs.Remove(hash);
-                         Task.Factory.StartNew(() => DownloadTool(name, hash));
+                         Task.Factory.StartNew(() => DownloadTool( hash));
 
                         nowthreadnum++;
 
@@ -41,7 +43,7 @@ namespace NCLCore
                 sDK.info = new Info("有" + cancellationsOccurrenceCount + "个资源文件下载失败,但仍将尝试启动\n错误信息" + error, "errorDia");
         }
 
-        private void DownloadTool(int name, string hash)
+        private void DownloadTool( string hash)
         {
             try
             {
@@ -62,11 +64,12 @@ namespace NCLCore
                     }
                 };
                 // download.DownloadFileCompleted += OnDownloadFileCompleted;
-                // if (name%100==0)
-                sDK.info = new Info(name.ToString(), "info");
+                
                 download.StartAsync().Wait();
                 nowthreadnum--;
-
+                Count++;
+                if (Count%16==0)
+                sDK.info = new Info("还有"+(All-Count).ToString()+"个资源文件未下载", "info");
             }
             catch (Exception ex)
             {

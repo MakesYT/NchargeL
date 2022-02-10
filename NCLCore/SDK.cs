@@ -165,19 +165,7 @@ namespace NCLCore
         }
         public void checkAssets(string rootdir, string dir, string assets, string clientdir)
         {
-            var downloadOpt = new DownloadConfiguration()
-            {
-                // usually, hosts support max to 8000 bytes, default values is 8000
-                ChunkCount = 1, // file parts to download, default value is 1
-                OnTheFlyDownload = false,         // download speed limited to 1MB/s, default values is zero or unlimited
-                MaxTryAgainOnFailover = 10, // the maximum number of times to fail
-
-                ParallelDownload = true, // download parts of file as parallel or not. Default value is false
-                TempDirectory = "C:\\temp", // Set the temp path for buffering chunk files, the default path is Path.GetTempPath()
-                Timeout = 1000, // timeout (millisecond) per stream block reader, default values is 1000
-
-
-            }; var downloader = new DownloadService(downloadOpt);
+            
 
             FileInfo fileInfo = new FileInfo(dir);
             if (!fileInfo.Exists)

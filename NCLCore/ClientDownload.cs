@@ -68,7 +68,7 @@ namespace NCLCore
             NchargeModsDownload modsdownload = new NchargeModsDownload();
             modsdownload.ClientDownload = this;
             modsdownload.toDir = minecraftDir + "\\versions\\" + nchargeClient.name + "\\mods\\";
-            modsdownload.Start(10,nchargeClient.mods);
+            modsdownload.Start(100,nchargeClient.mods);
             log = "下载" + nchargeClient.name + "客户端完成";
         }
     }
