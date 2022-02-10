@@ -40,6 +40,9 @@ namespace NchargeL
 
 		}
 
-		
-	}
+        private void showpermit_Click(object sender, RoutedEventArgs e)
+        {
+          //  System.Deployment.Application.ApplicationDeployment.CurrentDeployment.CurrentVersion
+        }
+    }
 }

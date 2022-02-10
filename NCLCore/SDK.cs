@@ -71,6 +71,7 @@ namespace NCLCore
                     // if (directory.Name == "versions")
                     {
                         root = new DirectoryInfo(dir + "\\versions");
+                        if (!root.Exists) root.Create();
                         foreach (DirectoryInfo file in root.GetDirectories())
                         {
                             Client client = new Client();
@@ -321,9 +322,11 @@ namespace NCLCore
                                             }
                                             else
                                             {
+                                                fileInfo1.Delete();
                                                 if (DownloadSoureURL != null)
                                                 {
                                                     lib.url = lib.url.Replace("https://libraries.minecraft.net/", DownloadSoureURL + "maven/");
+                                                    lib.url = lib.url.Replace("https://maven.minecraftforge.net/", DownloadSoureURL + "maven/");
                                                 }
                                                 downloadManager.Add(new DownloadItem(lib.url, rootdir + "\\libraries\\" + lib.path.Replace("/", "\\")));
                                                 log.Debug("Natives库文件异常sha1校验不通过" + rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"));
@@ -344,17 +347,21 @@ namespace NCLCore
                                             name = libsjosn["name"].ToString()
 
                                         };
+                                        //log.Debug(DownloadSoureURL);
+                                        if (DownloadSoureURL != null)
+                                        {
+                                            lib.url = lib.url.Replace("https://maven.minecraftforge.net/", DownloadSoureURL + "maven/");
+                                            lib.url = lib.url.Replace("https://libraries.minecraft.net/", DownloadSoureURL + "maven/");
+                                        }
                                         FileInfo fileInfo1 = new FileInfo(rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"));
                                         if (!fileInfo1.Exists)
                                         {
                                             info = new Info(lib.path + "库文件不存在,正在重新获取", "info");
                                             if (!lib.path.Contains("net/minecraftforge/forge/"))
                                             {
-                                                if (DownloadSoureURL != null)
-                                                {
-                                                    lib.url = lib.url.Replace("https://libraries.minecraft.net/", DownloadSoureURL + "maven/");
-                                                    downloadManager.Add(new DownloadItem(lib.url, rootdir + "\\libraries\\" + lib.path.Replace("/", "\\")));
-                                                }
+
+                                                downloadManager.Add(new DownloadItem(lib.url, rootdir + "\\libraries\\" + lib.path.Replace("/", "\\")));
+
 
                                                 //info = new Info(lib.path + "库文件获取成功", "success");
                                             }
@@ -371,16 +378,15 @@ namespace NCLCore
                                                 fileInfo2.CopyTo(jardir.Replace("-installer.jar", ".jar"));
                                             }
 
-                                        }else
+                                        }
+                                        else if (GetSHA1(fileInfo1.FullName) != lib.sha1)
                                         {
+                                            fileInfo1.Delete();
                                             if (!lib.path.Contains("net/minecraftforge/forge/"))
                                             {
-                                                if (DownloadSoureURL != null)
-                                                {
-                                                    lib.url = lib.url.Replace("https://libraries.minecraft.net/", DownloadSoureURL + "maven/");
-                                                }
+
                                                 downloadManager.Add(new DownloadItem(lib.url, rootdir + "\\libraries\\" + lib.path.Replace("/", "\\")));
-                                                log.Debug("库文件异常sha1校验不通过" + rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"));
+                                                log.Debug("库文件异常sha1校验不通过" + fileInfo1.FullName );
                                             }
                                             else
                                             {
@@ -392,10 +398,10 @@ namespace NCLCore
                                                 .WithFileLocation(jardir).Build().StartAsync().Wait();
                                                 (new FastZip()).ExtractZip(jardir, jardir[..jardir.LastIndexOf("\\")], jardir.Substring(jardir.LastIndexOf("\\") + 1).Replace("-installer.jar", ".jar"));
                                                 FileInfo fileInfo2 = new FileInfo(jardir[..jardir.LastIndexOf("\\")] + "\\maven\\" + lib.path.Replace("/", "\\"));
-                                                fileInfo2.CopyTo(jardir.Replace("-installer.jar", ".jar"),true);
+                                                fileInfo2.CopyTo(jardir.Replace("-installer.jar", ".jar"), true);
                                             }
                                         }
-                                         log.Debug("库文件存在" + rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"));
+                                        else log.Debug("库文件存在" + rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"));
                                         Normallibs.Add(lib);
                                     }
                                 }

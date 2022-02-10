@@ -3,13 +3,15 @@ using log4net;
 
 namespace NCLCore
 {
-    internal class DownloadManager
+    internal class NchargeClientDownload
     {
-        private static readonly ILog log = LogManager.GetLogger("DownloadManager");
+        private static readonly ILog log = LogManager.GetLogger("NchargeClientDownload");
         List<DownloadItem> Hashs = new List<DownloadItem>();
-        public int DownloadCount =0;
-        public SDK sDK;
+        public ClientDownload ClientDownload { get; set; }
+        public int DownloadCount = 0;
+        public int AllCount = 0;
         int cancellationsOccurrenceCount = 0;
+
         string error="";
         public void Add(DownloadItem di)
         {
@@ -20,6 +22,7 @@ namespace NCLCore
         {
 
             log.Debug(Hashs.Count);
+            AllCount=Hashs.Count;
             while (Hashs.Count != 0 || nowthreadnum != 0)
                 while (nowthreadnum < thread)
                 {
@@ -35,7 +38,7 @@ namespace NCLCore
                     else if (nowthreadnum == 0) break;
                 }
             if (cancellationsOccurrenceCount != 0)
-                sDK.info = new Info("有" + cancellationsOccurrenceCount + "个资源文件下载失败,但仍将尝试启动\n错误信息" + error, "errorDia");
+                ClientDownload.log = "有" + cancellationsOccurrenceCount + "个文件下载失败\n错误信息" + error;
         }
 
         private void DownloadTool(int name, DownloadItem hash)
@@ -61,8 +64,9 @@ namespace NCLCore
                     }
                 };
                 download.StartAsync().Wait();
-              //  if (name % 100 == 0)
-                    sDK.info = new Info(name.ToString(), "info");
+                DownloadCount++;
+                //  if (name % 100 == 0)
+                ClientDownload.log = "当前已下载:" + DownloadCount + ",总计:" + AllCount;
                 //downloader.DownloadFileTaskAsync(url, dir).Wait();
 
             }
@@ -71,7 +75,7 @@ namespace NCLCore
                 cancellationsOccurrenceCount++;
                 error = error + "下载" + hash.dir + "时出现错误\n下载地址:" + hash.uri + "\n错误信息:不存在下载地址"  + "\n";
             }
-            DownloadCount++;
+
             nowthreadnum--;
 
 

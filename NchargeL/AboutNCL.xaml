@@ -48,7 +48,7 @@
                 Foreground="{DynamicResource ForegroundColor}" Cursor="Hand"  
                 IsDefault="True" Background="{DynamicResource BodyColorWith50Opacity}" 
                 FocusVisualStyle="{x:Null}"  Style="{StaticResource MaterialDesignOutlinedLightButton}" 
-                Content="许可证" HorizontalAlignment="Left" Margin="10,215,0,0" VerticalAlignment="Top"/>
+                Content="许可证" HorizontalAlignment="Left" Margin="10,215,0,0" VerticalAlignment="Top" Click="showpermit_Click"/>
         <TextBox x:Name="permition" Text="
  https://logging.apache.org/log4net/ &#xD;&#xA;
  https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit &#xD;&#xA;
