@@ -165,7 +165,7 @@ namespace NCLCore
         }
         public void checkAssets(string rootdir, string dir, string assets, string clientdir)
         {
-            
+
 
             FileInfo fileInfo = new FileInfo(dir);
             if (!fileInfo.Exists)
@@ -374,7 +374,7 @@ namespace NCLCore
                                             {
 
                                                 downloadManager.Add(new DownloadItem(lib.url, rootdir + "\\libraries\\" + lib.path.Replace("/", "\\")));
-                                                log.Debug("库文件异常sha1校验不通过" + fileInfo1.FullName );
+                                                log.Debug("库文件异常sha1校验不通过" + fileInfo1.FullName);
                                             }
                                             else
                                             {

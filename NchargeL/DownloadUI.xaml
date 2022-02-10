@@ -65,8 +65,6 @@
 
             
         </GroupBox>
-        <Button Content="1.12.2&#xD;&#xA;" HorizontalAlignment="Left" Margin="669,264,0,0" VerticalAlignment="Top" Click="Button_Click" Cursor="Hand"/>
-        <Button Content="Forge" HorizontalAlignment="Left" Margin="669,301,0,0" VerticalAlignment="Top" Click="Button_Click_1"/>
         <Button x:Name="download" BorderBrush="{x:Null}" Foreground="{DynamicResource ForegroundColor}" Cursor="Hand"  IsDefault="True" Background="{DynamicResource BodyColorWith50Opacity}" FocusVisualStyle="{x:Null}"  Style="{StaticResource MaterialDesignOutlinedLightButton}" Content="下载客户端" HorizontalAlignment="Left" Margin="527,296,0,0" VerticalAlignment="Top" Click="Button_Click_1"/>
 
     </Grid>

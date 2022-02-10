@@ -206,8 +206,8 @@ namespace NchargeL
                 else
                 {
                     // Main.main.notifier.ShowInformation("未设置皮肤,无法获取头像");
-                   
-                  // notificationManager.Show(NotificationContentSDK.notificationWarning("未设置皮肤,无法获取头像", ""), "WindowArea");
+
+                    // notificationManager.Show(NotificationContentSDK.notificationWarning("未设置皮肤,无法获取头像", ""), "WindowArea");
                 }
             }
             catch (Exception ex)

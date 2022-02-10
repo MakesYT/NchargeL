@@ -11,7 +11,6 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Navigation;
 using System.Windows.Threading;
 namespace NchargeL
 {
@@ -116,7 +115,7 @@ namespace NchargeL
                         else notificationManager.Show(NotificationContentSDK.notificationSuccess(user._password, "已保存密码"), "WindowArea");
 
                         Properties.Settings.Default.User = XmlUtil.Serializer(typeof(User), user);
-                       host.IsOpen = false;
+                        host.IsOpen = false;
                         Main.main.FrameWork.Content = Account.account;
 
 

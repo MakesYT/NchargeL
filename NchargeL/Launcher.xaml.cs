@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -21,7 +20,7 @@ namespace NchargeL
     public partial class Launcher : Page
     {
         public LoginUi LoginUi = new LoginUi();
-         NotificationManager notificationManager = new NotificationManager();
+        NotificationManager notificationManager = new NotificationManager();
         public NCLcore NCLCore;
         private static readonly ILog log = LogManager.GetLogger("Launcher");
         public Launcher()
@@ -113,14 +112,14 @@ namespace NchargeL
 
             SDK sDK = NCLCore.sDK;
 
-            
-           
+
+
 
             bool flag = true;
             while (flag)
             {
 
-               // Task<int> task = Task.Factory.StartNew<int>(() => DownloadString("http://ww.linqpad.net"));
+                // Task<int> task = Task.Factory.StartNew<int>(() => DownloadString("http://ww.linqpad.net"));
                 var re = sDK.StartClient((Client)clt, Data.users[0]._name, Data.users[0]._useruuid, Data.users[0]._token, Properties.Settings.Default.Java, Properties.Settings.Default.RAM);
                 log.Debug(re.Result);
 
@@ -138,8 +137,8 @@ namespace NchargeL
                 {
                     if (Data.users[0]._password != null)
                     {
-                        
-                            notificationManager.Show(NotificationContentSDK.notificationWarning("", "用户令牌已失效,正在重新获取"), "WindowArea");
+
+                        notificationManager.Show(NotificationContentSDK.notificationWarning("", "用户令牌已失效,正在重新获取"), "WindowArea");
 
 
                         Dictionary<String, String> pList = new Dictionary<String, String>();

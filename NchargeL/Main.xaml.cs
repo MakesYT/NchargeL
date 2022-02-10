@@ -8,7 +8,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
-using static NCLCore.SDK;
 
 namespace NchargeL
 {
@@ -26,15 +25,15 @@ namespace NchargeL
         public Account Account = new Account();
         public LoginUi LoginUi = new LoginUi();
         private SettingUi settingUi = new SettingUi();
-        public Launcher launcher=new Launcher();
+        public Launcher launcher = new Launcher();
         public AboutNCL aboutNCL = new AboutNCL();
-        public DownloadUI  downloadUI = new DownloadUI();
-        
+        public DownloadUI downloadUI = new DownloadUI();
+
         public Main()
         {
             InitializeComponent();
             Data.init();//初始化列表
-          //  Properties.Settings.Default.DownloadSource = "https://bmclapi2.bangbang93.com/";
+                        //  Properties.Settings.Default.DownloadSource = "https://bmclapi2.bangbang93.com/";
             notificationManager.Show(NotificationContentSDK.notificationInformation("弹窗测试", ""), "WindowArea");
             notificationManager.Show(NotificationContentSDK.notificationWarning("弹窗测试", ""), "WindowArea");
             main = this;
@@ -126,9 +125,9 @@ namespace NchargeL
         {
             FrameWork.Content = settingUi;
         }
-        public  NCLcore newNCLcore(string ds, string dir)
+        public NCLcore newNCLcore(string ds, string dir)
         {
-            NCLcore nCLCore = new NCLcore(ds,dir);
+            NCLcore nCLCore = new NCLcore(ds, dir);
             nCLCore.sDK.PropertyChanged += (oo, ee) =>
             {
                 // Console.WriteLine("值变了，新值是：" + (oo as NCLCore.Info).A);
@@ -200,7 +199,7 @@ namespace NchargeL
                         Data.clients = nCLCore.Clients;
                         notificationManager.Show(NotificationContentSDK.notificationSuccess("客户端列表已更新", ""), "WindowArea");
                         launcher = new Launcher();
-                        launcher.NCLCore= nCLCore;
+                        launcher.NCLCore = nCLCore;
                         FrameWork.Content = launcher;
                         break;
                     }
@@ -230,7 +229,7 @@ namespace NchargeL
         private void ManageClient(object sender, RoutedEventArgs e)
         {
             ErrorDialog error = new ErrorDialog("", "（1）发生了一个错误！请联系腐竹！" + Environment.NewLine
-                                + "                                                                        1");
+                                + "这个还没有完成敬请期待");
             error.ShowDialog();
         }
 

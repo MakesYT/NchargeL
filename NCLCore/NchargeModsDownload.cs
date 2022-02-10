@@ -40,7 +40,7 @@ namespace NCLCore
                         Thread.Sleep(10);
                         Task.Factory.StartNew(() => DownloadTool(hash));
                         nowthreadnum++;
-                        
+
 
                     }
                     else if (nowthreadnum == 0) break;
@@ -81,12 +81,12 @@ namespace NCLCore
                 log.Debug(uri);
                 bool flag = false;
                 //log.Debug(Path.GetDirectoryName(hash.dir));
-                if (File.Exists(dir)&& jObject["hashes"]!=null && ((JArray)jObject["hashes"]).Count>0)
+                if (File.Exists(dir) && jObject["hashes"] != null && ((JArray)jObject["hashes"]).Count > 0)
                 {
                     if (GetSHA1(dir) == jObject["hashes"][0]["value"].ToString())
                     {
                         flag = true;
-                        ClientDownload.log = DownloadCount+"/"+AllCount+"文件"+dir.Substring(dir.LastIndexOf("\\")+1)+"无需下载,sha1校验通过";
+                        ClientDownload.log = DownloadCount + "/" + AllCount + "文件" + dir.Substring(dir.LastIndexOf("\\") + 1) + "无需下载,sha1校验通过";
                     }
                 }
                 if (!flag)
@@ -94,7 +94,7 @@ namespace NCLCore
                     IDownload download = DownloadBuilder.New()
                     .WithUrl(uri)
                     .WithFileLocation(dir)
-                   // .WithConfiguration(new DownloadConfiguration() { Timeout = 5000, BufferBlockSize = 10240, ChunkCount = 16,ParallelDownload = true })
+                    // .WithConfiguration(new DownloadConfiguration() { Timeout = 5000, BufferBlockSize = 10240, ChunkCount = 16,ParallelDownload = true })
                     .Build();
                     download.DownloadFileCompleted += (s, e) =>
                     {
@@ -112,7 +112,7 @@ namespace NCLCore
 
                 DownloadCount++;
                 //  if (name % 100 == 0)
-                
+
                 //downloader.DownloadFileTaskAsync(url, dir).Wait();
 
             }

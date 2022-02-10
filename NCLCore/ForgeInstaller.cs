@@ -7,15 +7,15 @@ namespace NCLCore
     public class ForgeInstaller
     {
         private static readonly ILog log = LogManager.GetLogger("ForgeInstaller");
-        public static void installForge(string DownloadS, string name, string rootdir, string installerVer,ClientDownload cd)
+        public static void installForge(string DownloadS, string name, string rootdir, string installerVer, ClientDownload cd)
         {
             string tempdir = rootdir + "\\temp";
             DownloadBuilder.New()
-            .WithUrl(DownloadS + "maven/net/minecraftforge/forge/" +installerVer + "/forge-"+installerVer + "-installer.jar")
-            .WithFileLocation(tempdir+"\\"+ installerVer+"-installer.jar").Build().StartAsync().Wait();
+            .WithUrl(DownloadS + "maven/net/minecraftforge/forge/" + installerVer + "/forge-" + installerVer + "-installer.jar")
+            .WithFileLocation(tempdir + "\\" + installerVer + "-installer.jar").Build().StartAsync().Wait();
             cd.log = "Forge下载成功";
             // log.Debug("111");
-            (new FastZip()).ExtractZip(tempdir + "\\" + installerVer + "-installer.jar", tempdir, "forge-"+installerVer + ".jar");
+            (new FastZip()).ExtractZip(tempdir + "\\" + installerVer + "-installer.jar", tempdir, "forge-" + installerVer + ".jar");
             (new FastZip()).ExtractZip(tempdir + "\\" + installerVer + "-installer.jar", tempdir, "version.json");
             cd.log = "解压文件完成";
             // log.Debug("111");

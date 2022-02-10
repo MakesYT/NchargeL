@@ -7,10 +7,10 @@ namespace NCLCore
     {
         private static readonly ILog log = LogManager.GetLogger("DownloadManager");
         List<DownloadItem> Hashs = new List<DownloadItem>();
-        public int DownloadCount =0;
+        public int DownloadCount = 0;
         public SDK sDK;
         int cancellationsOccurrenceCount = 0;
-        string error="";
+        string error = "";
         int All = 0;
         int Count = 0;
         public void Add(DownloadItem di)
@@ -29,7 +29,7 @@ namespace NCLCore
                     {
                         DownloadItem hash = Hashs.First();
                         Hashs.Remove(hash);
-                        Task.Factory.StartNew(() => DownloadTool( hash));
+                        Task.Factory.StartNew(() => DownloadTool(hash));
                         nowthreadnum++;
                         Thread.Sleep(10);
 
@@ -40,17 +40,17 @@ namespace NCLCore
                 sDK.info = new Info("有" + cancellationsOccurrenceCount + "个资源文件下载失败,但仍将尝试启动\n错误信息" + error, "errorDia");
         }
 
-        private void DownloadTool( DownloadItem hash)
+        private void DownloadTool(DownloadItem hash)
         {
 
-            if (hash.uri != null&& hash.uri != "")
+            if (hash.uri != null && hash.uri != "")
             {
                 log.Debug(hash.uri);
                 //log.Debug(Path.GetDirectoryName(hash.dir));
                 IDownload download = DownloadBuilder.New()
                 .WithUrl(hash.uri)
                 .WithFileLocation(hash.dir)
-               // .WithConfiguration(new DownloadConfiguration() { Timeout = 5000, BufferBlockSize = 10240, ChunkCount = 16,ParallelDownload = true })
+                // .WithConfiguration(new DownloadConfiguration() { Timeout = 5000, BufferBlockSize = 10240, ChunkCount = 16,ParallelDownload = true })
                 .Build();
                 download.DownloadFileCompleted += (s, e) =>
                 {
@@ -72,7 +72,7 @@ namespace NCLCore
             else
             {
                 cancellationsOccurrenceCount++;
-                error = error + "下载" + hash.dir + "时出现错误\n下载地址:" + hash.uri + "\n错误信息:不存在下载地址"  + "\n";
+                error = error + "下载" + hash.dir + "时出现错误\n下载地址:" + hash.uri + "\n错误信息:不存在下载地址" + "\n";
             }
             DownloadCount++;
             nowthreadnum--;

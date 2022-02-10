@@ -12,7 +12,7 @@ namespace NCLCore
         public int AllCount = 0;
         int cancellationsOccurrenceCount = 0;
 
-        string error="";
+        string error = "";
         public void Add(DownloadItem di)
         {
             Hashs.Add(di);
@@ -22,7 +22,7 @@ namespace NCLCore
         {
 
             log.Debug(Hashs.Count);
-            AllCount=Hashs.Count;
+            AllCount = Hashs.Count;
             while (Hashs.Count != 0 || nowthreadnum != 0)
                 while (nowthreadnum < thread)
                 {
@@ -44,14 +44,14 @@ namespace NCLCore
         private void DownloadTool(int name, DownloadItem hash)
         {
 
-            if (hash.uri != null&& hash.uri != "")
+            if (hash.uri != null && hash.uri != "")
             {
                 log.Debug(hash.uri);
                 //log.Debug(Path.GetDirectoryName(hash.dir));
                 IDownload download = DownloadBuilder.New()
                 .WithUrl(hash.uri)
                 .WithFileLocation(hash.dir)
-               // .WithConfiguration(new DownloadConfiguration() { Timeout = 5000, BufferBlockSize = 10240, ChunkCount = 16,ParallelDownload = true })
+                // .WithConfiguration(new DownloadConfiguration() { Timeout = 5000, BufferBlockSize = 10240, ChunkCount = 16,ParallelDownload = true })
                 .Build();
                 download.DownloadFileCompleted += (s, e) =>
                 {
@@ -73,7 +73,7 @@ namespace NCLCore
             else
             {
                 cancellationsOccurrenceCount++;
-                error = error + "下载" + hash.dir + "时出现错误\n下载地址:" + hash.uri + "\n错误信息:不存在下载地址"  + "\n";
+                error = error + "下载" + hash.dir + "时出现错误\n下载地址:" + hash.uri + "\n错误信息:不存在下载地址" + "\n";
             }
 
             nowthreadnum--;

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 
 
 namespace NCLCore
@@ -19,7 +18,7 @@ namespace NCLCore
             GameDir = dir;
             Clients = sDK.GetALLClient(dir);
         }
-        
+
 
     }
 }
