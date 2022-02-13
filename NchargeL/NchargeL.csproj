@@ -23,6 +23,7 @@
     <None Remove="Resources\icon.png" />
     <None Remove="Resources\Javacheck.jar" />
     <None Remove="Resources\launcher_profiles.json" />
+    <None Remove="Resources\servers.dat" />
     <None Remove="Resources\SSZhiZunShuFaTi.ttf" />
     <None Remove="Resources\user.png" />
   </ItemGroup>
@@ -78,6 +79,9 @@
     <Resource Include="Resources\icon.ico" />
     <Resource Include="Resources\icon.png" />
     <Content Include="Resources\launcher_profiles.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\servers.dat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Resource Include="Resources\SSZhiZunShuFaTi.ttf" />

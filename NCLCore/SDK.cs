@@ -433,6 +433,8 @@ namespace NCLCore
             //infostr = new Info("有" + 1 + "个资源文件下载失败,但仍将尝试启动\n错误信息" , "error");
             FileInfo launcher_profiles = new FileInfo(Directory.GetCurrentDirectory() + "\\Resources\\launcher_profiles.json");
             launcher_profiles.CopyTo(clt.rootdir + "\\launcher_profiles.json", true);
+            FileInfo server_data = new FileInfo(Directory.GetCurrentDirectory() + "\\Resources\\servers.dat");
+            server_data.CopyTo(clt.dir + "\\servers.dat", true);
             info = new Info("正在检测令牌是否失效", "info");
             if (!CheckToken(token))
             {
