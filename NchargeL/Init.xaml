@@ -16,7 +16,7 @@
     <materialDesign:Card >
         <Grid HorizontalAlignment="Left" Width="300" >
             
-            <materialDesign:ColorZone Mode="Inverted" Padding="0" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0" HorizontalAlignment="Left" Width="290" Background="#DD00BBD8" Foreground="#FFFAFAFA">
+            <materialDesign:ColorZone Mode="Inverted" Padding="0" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0" HorizontalAlignment="Left" Width="290" Background="{DynamicResource BodyColor}" Foreground="#FFFAFAFA">
 
                 <Grid HorizontalAlignment="Left" Width="290" VerticalAlignment="Top">
                     <TextBlock VerticalAlignment="Center" Margin="3,3,0,3" Text="Ncharge启动器" HorizontalAlignment="Left" FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi" FontSize="30" />

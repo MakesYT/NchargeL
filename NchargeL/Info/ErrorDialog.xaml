@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:NchargeL" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Title="错误" WindowStyle="None" Width="700" Height="700">
+        Title="错误" WindowStyle="None" Width="700" Height="400">
     <Window.Resources>
         <Storyboard x:Key="Storyboard1">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetName="line" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)">
@@ -38,7 +38,7 @@
                     </TransformGroup>
                 </Line.RenderTransform>
             </Line>
-            <ScrollViewer MaxWidth="680" MaxHeight="550" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+            <ScrollViewer MaxWidth="680" MaxHeight="300" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
               <TextBox  IsReadOnly="True" x:Name="text"  FontSize="20"  Margin="0,8,0,0" FontFamily="/NchargeL;component/Resources/#HarmonyOS Sans" FontWeight="Bold" Foreground="{DynamicResource TextColor}" Cursor="IBeam">11111</TextBox>
 
             </ScrollViewer>
