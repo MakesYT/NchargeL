@@ -1,6 +1,9 @@
 ﻿using log4net;
 using NchargeL;
+using NCLCore;
+using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
 
@@ -12,7 +15,7 @@ namespace Ncharge
     public partial class MainWindow : Window
     {
         private static readonly ILog log = LogManager.GetLogger("Init");
-        private string ver = "1.0.0-net-alpha-only-owner";
+        private string ver = "1.1.0-beta";
 
         private void check64()
         {
@@ -22,6 +25,30 @@ namespace Ncharge
                 error.ShowDialog();
                 Application.Current.Shutdown();
                 //MessageBox.Show("您当前使用的系统为32位,Java内存无法超过1G,\r\n无法启动本服务器的客户端,按确定退出启动器", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
+                Environment.Exit(0);
+            }
+        }
+        private void checkUpdate()
+        {
+            string re1 = HttpRequestHelper.GetResponseString(HttpRequestHelper.CreatePostHttpResponse("http://download.ncserver.top:8000/NCL/config.json", new Dictionary<String, String>()));
+            var jObject = JObject.Parse(re1);
+            if (jObject["ver"].ToString() == ver)
+            {
+                Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+                {
+
+                    InfoDialog warn = new InfoDialog("", "当前版本:"+ver+"与服务器版本匹配,是最新版本");
+                    warn.ShowDialog();
+                })).Wait();
+            }
+            else
+            {
+                Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+                {
+
+                    InfoDialog warn = new InfoDialog("", "当前版本:" + ver + "与服务器版本不匹配\n最新版本:"+ jObject["ver"].ToString()+ "请在http://download.ncserver.top:9000/选择启动按钮手动进行更新");
+                    warn.ShowDialog();
+                })).Wait();
                 Environment.Exit(0);
             }
         }
@@ -79,7 +106,7 @@ namespace Ncharge
             }
 
             check64();
-
+            checkUpdate();
             checkInsider();
             Main main = new Main();
             main.Show();
