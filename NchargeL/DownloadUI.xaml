@@ -60,9 +60,12 @@
         <GroupBox Margin="0,185,0,0" materialDesign:ColorZoneAssist.Mode="Custom"
             materialDesign:ColorZoneAssist.Background="{DynamicResource BodyColor}"
                     materialDesign:ColorZoneAssist.Foreground="{DynamicResource ForegroundColor}" 
-  Header="                               安装Logs" Width="433" HorizontalAlignment="Left" Padding="0,0,0,0" Grid.IsSharedSizeScope="True" FontFamily="HarmonyOS Sans Medium" FontSize="20" HorizontalContentAlignment="Center" Foreground="{x:Null}" BorderBrush="#FFB3DDF7">
-                <TextBox VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" IsReadOnly="True" x:Name="logs"  FontSize="20"  FontFamily="/NchargeL;component/Resources/#HarmonyOS Sans" FontWeight="Bold" Foreground="{DynamicResource TextColor}" Cursor="IBeam" Height="170" Background="{DynamicResource BodyColorWith50Opacity}"></TextBox>
-
+  Header="                               安装Logs" Width="433" HorizontalAlignment="Left" Padding="0,0,0,0" Grid.IsSharedSizeScope="True" FontFamily="HarmonyOS Sans Medium" FontSize="20" HorizontalContentAlignment="Center" Foreground="{x:Null}" BorderBrush="#FFB3DDF7" Panel.ZIndex="-4">
+              <!--  <TextBox VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" IsReadOnly="True" x:Name="logs"  FontSize="20"  FontFamily="/NchargeL;component/Resources/#HarmonyOS Sans" FontWeight="Bold" Foreground="{DynamicResource TextColor}" Cursor="IBeam" Height="170" Background="{DynamicResource BodyColorWith50Opacity}" IsTabStop="False"></TextBox>
+            -->
+            
+            <Run x:Name="logs" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Visible" Foreground="{DynamicResource TextColor}" Background="{DynamicResource BodyColorWith50Opacity}" FontSize="20"  FontFamily="/NchargeL;component/Resources/#HarmonyOS Sans" FontWeight="Bold"></Run>
+           
             
         </GroupBox>
         <Button x:Name="download" BorderBrush="{x:Null}" Foreground="{DynamicResource ForegroundColor}" Cursor="Hand"  IsDefault="True" Background="{DynamicResource BodyColorWith50Opacity}" FocusVisualStyle="{x:Null}"  Style="{StaticResource MaterialDesignOutlinedLightButton}" Content="下载客户端" HorizontalAlignment="Left" Margin="527,296,0,0" VerticalAlignment="Top" Click="Button_Click_1"/>

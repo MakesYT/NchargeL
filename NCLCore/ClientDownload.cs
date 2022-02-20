@@ -41,6 +41,7 @@ namespace NCLCore
         }
         public void DownloadNchargeClient(NchargeClient nchargeClient)
         {
+            
             log = "开始下载客户端:" + nchargeClient.name + "(" + nchargeClient.Cname + ")";
             log = "开始下载原版" + nchargeClient.version + "客户端";
             NchargeClientDownload downloadManager = new NchargeClientDownload();
@@ -62,7 +63,7 @@ namespace NCLCore
             NchargeModsDownload modsdownload = new NchargeModsDownload();
             modsdownload.ClientDownload = this;
             modsdownload.toDir = minecraftDir + "\\versions\\" + nchargeClient.name + "\\mods\\";
-            modsdownload.Start(100, nchargeClient.mods);
+            modsdownload.Start(50, nchargeClient.mods);
             log = "下载" + nchargeClient.name + "客户端完成";
         }
     }

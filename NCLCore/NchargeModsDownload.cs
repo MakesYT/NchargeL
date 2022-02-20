@@ -30,21 +30,23 @@ namespace NCLCore
 
             log.Debug(jArray.Count);
             AllCount = jArray.Count;
-            while (modJsons.Count != 0 || nowthreadnum != 0)
+            while (modJsons.Count != 0 || nowthreadnum != 0) {
+                Thread.Sleep(500);
                 while (nowthreadnum < thread)
                 {
+                    Thread.Sleep(100);
                     if (modJsons.Count > 0)
                     {
                         JObject hash = modJsons.First();
-                        modJsons.Remove(hash);
-                        Thread.Sleep(10);
-                        Task.Factory.StartNew(() => DownloadTool(hash));
-                        nowthreadnum++;
-
-
+                        if (modJsons.Remove(hash))
+                        {
+                            Thread.Sleep(10);
+                            Task.Factory.StartNew(() => DownloadTool(hash));
+                            nowthreadnum++;
+                        }
                     }
                     else if (nowthreadnum == 0) break;
-                }
+                }}
             if (cancellationsOccurrenceCount != 0)
                 ClientDownload.log = "有" + cancellationsOccurrenceCount + "个文件下载失败\n错误信息" + error;
         }
@@ -86,15 +88,18 @@ namespace NCLCore
                     if (GetSHA1(dir) == jObject["hashes"][0]["value"].ToString())
                     {
                         flag = true;
+                        DownloadCount++;
                         ClientDownload.log = DownloadCount + "/" + AllCount + "文件" + dir.Substring(dir.LastIndexOf("\\") + 1) + "无需下载,sha1校验通过";
                     }
                 }
                 if (!flag)
                 {
+                    int cout = 0;
+                    bool toStop=false;
                     IDownload download = DownloadBuilder.New()
                     .WithUrl(uri)
                     .WithFileLocation(dir)
-                    // .WithConfiguration(new DownloadConfiguration() { Timeout = 5000, BufferBlockSize = 10240, ChunkCount = 16,ParallelDownload = true })
+                    // .WithConfiguration(new DownloadConfiguration() { Timeout = 5000, BufferBlockSize = 10240, ChunkCount = 4,ParallelDownload = true })
                     .Build();
                     download.DownloadFileCompleted += (s, e) =>
                     {
@@ -105,12 +110,41 @@ namespace NCLCore
                             error = error + "下载" + dir + "时出现错误\n下载地址:" + uri + "\n错误信息" + e.Error.Message + "\n";
 
                         }
+                        if (e.Error == null)
+                        {
+                            DownloadCount++;
+                            ClientDownload.log = "当前已下载:" + DownloadCount + ",总计:" + AllCount;
+                        }
+                    };
+                    download.DownloadProgressChanged += (s, e) =>
+                    {
+                        if (e.BytesPerSecondSpeed < 1024*2)
+                        {
+                            cout++;
+                            //ClientDownload.log = "下载速度" + e.BytesPerSecondSpeed + dir.Substring(dir.LastIndexOf("\\") + 1);
+                        }
+                        else cout = 0;
+                        if (cout >= 1500) { toStop = true; }
+                            if (toStop)
+                            {
+                            toStop = false;
+                            cout = 0;
+                            ClientDownload.log = "重新开始下载" + dir.Substring(dir.LastIndexOf("\\") + 1) + "";
+                            download.Stop();
+                            if (download.Status == DownloadStatus.Stopped)
+                            {
+                             
+                                download.StartAsync().Wait();
+                            }
+                            toStop = false;
+                        }
+
                     };
                     download.StartAsync().Wait();
-                    ClientDownload.log = "当前已下载:" + DownloadCount + ",总计:" + AllCount;
+
                 }
 
-                DownloadCount++;
+
                 //  if (name % 100 == 0)
 
                 //downloader.DownloadFileTaskAsync(url, dir).Wait();
@@ -121,7 +155,7 @@ namespace NCLCore
                 cancellationsOccurrenceCount++;
                 error = error + "下载" + dir + "时出现错误\n下载地址:" + uri + "\n错误信息:不存在下载地址" + "\n";
             }
-
+          
             nowthreadnum--;
 
 
