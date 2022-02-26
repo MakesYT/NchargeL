@@ -65,7 +65,8 @@ namespace NCLCore
                 download.StartAsync().Wait();
                 Count++;
                 //  if (name % 100 == 0)
-                sDK.info = new Info("还有" + (All - Count).ToString() + "个库文件未下载", "info");
+                sDK.pro = new Info(Count / All * 100, "下载Libs" + Count + "/" + All);
+                //sDK.info = new Info("还有" + (All - Count).ToString() + "个库文件未下载", "info");
                 //downloader.DownloadFileTaskAsync(url, dir).Wait();
 
             }

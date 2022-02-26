@@ -70,8 +70,10 @@ namespace NCLCore
                 download.StartAsync().Wait();
                 nowthreadnum--;
                 Count++;
-                if (Count % 16 == 0)
-                    sDK.info = new Info("还有" + (All - Count).ToString() + "个资源文件未下载", "info");
+
+                sDK.pro = new Info(Count/All*100, "下载Assets"+Count+"/"+All);
+               // if (Count % 16 == 0)
+               //     sDK.info = new Info("还有" + (All - Count).ToString() + "个资源文件未下载", "info");
             }
             catch (Exception ex)
             {

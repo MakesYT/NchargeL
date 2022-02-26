@@ -64,7 +64,7 @@
               <!--  <TextBox VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" IsReadOnly="True" x:Name="logs"  FontSize="20"  FontFamily="/NchargeL;component/Resources/#HarmonyOS Sans" FontWeight="Bold" Foreground="{DynamicResource TextColor}" Cursor="IBeam" Height="170" Background="{DynamicResource BodyColorWith50Opacity}" IsTabStop="False"></TextBox>
             -->
             
-            <Run x:Name="logs" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Visible" Foreground="{DynamicResource TextColor}" Background="{DynamicResource BodyColorWith50Opacity}" FontSize="20"  FontFamily="/NchargeL;component/Resources/#HarmonyOS Sans" FontWeight="Bold"></Run>
+            <Run x:Name="logs" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.HorizontalScrollBarVisibility="Visible" Foreground="{DynamicResource TextColor}" Background="{DynamicResource BodyColorWith50Opacity}" FontSize="20"  FontFamily="/NchargeL;component/Resources/#HarmonyOS Sans" FontWeight="Bold" Language="zh-cn"></Run>
            
             
         </GroupBox>

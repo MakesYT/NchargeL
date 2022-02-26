@@ -4,9 +4,13 @@ using NchargeL.Info;
 using NCLCore;
 using Notification.Wpf;
 using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Animation;
 
 namespace NchargeL
@@ -128,8 +132,11 @@ namespace NchargeL
         public NCLcore newNCLcore(string ds, string dir)
         {
             NCLcore nCLCore = new NCLcore(ds, dir);
+            // List<> list = new List();
+           // List<T> ListOfT = new List<T>();
             nCLCore.sDK.PropertyChanged += (oo, ee) =>
             {
+                
                 // Console.WriteLine("值变了，新值是：" + (oo as NCLCore.Info).A);
                 switch ((oo as SDK).info.TYPE)
                 {
@@ -231,6 +238,19 @@ namespace NchargeL
             ErrorDialog error = new ErrorDialog("", "（1）发生了一个错误！请联系腐竹！" + Environment.NewLine
                                 + "这个还没有完成敬请期待");
             error.ShowDialog();
+            var progress=notificationManager.ShowProgressBar("下载客户端",true,true, "WindowArea",false,1,null,false,true, 
+                new SolidColorBrush(Properties.Settings.Default.BodyColorS), 
+              new SolidColorBrush( Properties.Settings.Default.ForegroundColor));
+            for (var i = 0; i <= 10000; i++)
+            {
+                progress.Cancel.ThrowIfCancellationRequested();
+                progress.Report((i/100, "2", null, null));
+               // progress.WaitingTimer.BaseWaitingMessage = i is > 30 and < 70 ? null : "Calculation time";
+             //  Thread.Sleep(10);
+                 Task.Delay(TimeSpan.FromSeconds(0.03), progress.Cancel);
+            }
+            progress.CancelSource.Cancel();
+
         }
 
         private void DownloadUiButton(object sender, RoutedEventArgs e)

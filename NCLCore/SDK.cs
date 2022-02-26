@@ -23,9 +23,7 @@ namespace NCLCore
                 _info = value;
                 this.OnWorkStateChanged(new EventArgs());
             }
-        }
-
-        public event EventHandler PropertyChanged;
+        }public event EventHandler PropertyChanged;
         public void OnWorkStateChanged(EventArgs eventArgs)
         {
             if (this.PropertyChanged != null)//判断事件是否有处理函数
@@ -34,6 +32,26 @@ namespace NCLCore
             }
 
         }
+        private Info _pro = new(1, "info");
+        public Info pro
+        {
+            get { return _pro; }
+            set
+            {
+                _pro = value;
+                this.OnProWorkStateChanged(new EventArgs());
+            }
+        }
+        public event EventHandler ProPropertyChanged;
+        public void OnProWorkStateChanged(EventArgs eventArgs)
+        {
+            if (this.PropertyChanged != null)//判断事件是否有处理函数
+            {
+                this.PropertyChanged(this, eventArgs);
+            }
+
+        }
+
         private readonly ILog log = LogManager.GetLogger("SDK");
         public enum DownloadSource
         {
@@ -435,22 +453,27 @@ namespace NCLCore
             launcher_profiles.CopyTo(clt.rootdir + "\\launcher_profiles.json", true);
             FileInfo server_data = new FileInfo(Directory.GetCurrentDirectory() + "\\Resources\\servers.dat");
             server_data.CopyTo(clt.dir + "\\servers.dat", true);
-            info = new Info("正在检测令牌是否失效", "info");
-            if (!CheckToken(token))
+            log.Info("1");
+           // pro = new Info(1, "正在检测令牌是否失效");
+            log.Info("1");
+            //info = new Info("正在检测令牌是否失效", "info");
+            //   if (!CheckToken(token))
             {
-                return 2;
+               // return 2;
             }
-            info = new Info("游戏令牌通过检测", "success");
-            info = new Info("正在验证Assets", "info");
+            pro = new Info(10, "游戏令牌通过检测");
+            //info = new Info("游戏令牌通过检测", "success");
+            pro = new Info(15, "正在验证Assets");
+           // info = new Info("正在验证Assets", "info");
 
             checkAssets(clt.rootdir, clt.rootdir + "\\assets\\indexes\\" + clt.assets + ".json", clt.assets, clt.rootdir + "\\versions\\" + clt.McVer + "\\" + clt.McVer + ".json");
+            pro = new Info(80, "验证Assets完成,正在获取Libs");
 
 
-
-            info = new Info("验证Assets完成", "success");
+           // info = new Info("验证Assets完成", "success");
 
             string libstr = null;
-            info = new Info("正在获取Libs", "info");
+           // info = new Info("正在获取Libs", "info");
             if (clt.Forge)
             {
                 Libs libs2 = GetLibs(clt.rootdir, clt.rootdir + "\\versions\\" + clt.Name, clt.rootdir + "\\versions\\" + clt.McVer + "\\" + clt.McVer + ".json");
@@ -478,7 +501,8 @@ namespace NCLCore
                 }
                 libstr = libstr + clt.dir + "\\" + clt.Name + ".jar";
             }
-            info = new Info("Libs获取成功", "success");
+            // info = new Info("Libs获取成功", "success");
+            pro = new Info(90, "Libs获取成功");
             FileInfo fileInfo = new FileInfo(clt.dir + "\\" + clt.Name + ".json");
             string mainClass;
 
@@ -509,6 +533,7 @@ namespace NCLCore
                 all = all + " --tweakClass net.minecraftforge.fml.common.launcher.FMLTweaker";
             }
             //return 
+            pro = new Info(100, "正在启动游戏");
             info = new Info("正在启动游戏", "info");
             ExecuteInCmd(all, clt.rootdir + "\\versions\\" + clt.Name);
             return 1;

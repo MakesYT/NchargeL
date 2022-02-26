@@ -4,6 +4,7 @@ using NchargeL.Info;
 using NCLCore;
 using Newtonsoft.Json.Linq;
 using Notification.Wpf;
+using Notification.Wpf.Classes;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,6 +12,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace NchargeL
 {
@@ -47,7 +49,7 @@ namespace NchargeL
             info.Text = "当前选择的客户端:\n" + ((Client)((ListBox)e.OriginalSource).SelectedItem).Name;
             // (ListBoxItem)((ListBox)e.Source).
         }
-
+        
         private async void Button_Click_1(object sender, System.Windows.RoutedEventArgs e)
         {
             // notificationManager.Show(NotificationContentSDK.notificationSuccess( "",logs.Result), "WindowArea");
@@ -112,8 +114,25 @@ namespace NchargeL
 
             SDK sDK = NCLCore.sDK;
 
+            var progress = notificationManager.ShowProgressBar("启动游戏", true, true, "WindowArea", false, 1, null, false, true,
+                new SolidColorBrush(Properties.Settings.Default.BodyColorS),
+              new SolidColorBrush(Properties.Settings.Default.ForegroundColor));
+
+            sDK.ProPropertyChanged += (oo, ee) =>
+            {
+
+                Application.Current.Dispatcher.Invoke(new Action(delegate
+                            {
+                               progress.Cancel.ThrowIfCancellationRequested();
+                            progress.Report(((oo as SDK).info.process, (oo as SDK).info.msg,null, null));
+                            if((oo as SDK).info.process == 100) { progress.CancelSource.Cancel(); }
+                            }));
+                          
+                           // (oo as SDK).info
+              
 
 
+            };
 
             bool flag = true;
             while (flag)
@@ -153,6 +172,7 @@ namespace NchargeL
                             log.Debug(jObject.ToString());
                             Data.users[0]._token = jObject["accessToken"].ToString();
                             Properties.Settings.Default.User = XmlUtil.Serializer(typeof(User), Data.users[0]);
+                            
                         }
                         catch (Exception ex)
                         {
