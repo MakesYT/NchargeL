@@ -1,5 +1,5 @@
 ﻿using log4net;
-using NchargeL.Info;
+using NchargeL;
 using NCLCore;
 using Newtonsoft.Json.Linq;
 using Notification.Wpf;

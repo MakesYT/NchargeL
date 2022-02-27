@@ -45,9 +45,9 @@ namespace NCLCore
         public event EventHandler ProPropertyChanged;
         public void OnProWorkStateChanged(EventArgs eventArgs)
         {
-            if (this.PropertyChanged != null)//判断事件是否有处理函数
+            if (this.ProPropertyChanged != null)//判断事件是否有处理函数
             {
-                this.PropertyChanged(this, eventArgs);
+                this.ProPropertyChanged(this, eventArgs);
             }
 
         }
@@ -124,7 +124,7 @@ namespace NCLCore
                                                         {
                                                             JObject jObject1 = (JObject)JToken.ReadFrom(reader1);
                                                             client.assets = jObject1["assets"].ToString();
-                                                            log.Debug("asdwdwd" + client.assets);
+                                                         //   log.Debug("asdwdwd" + client.assets);
                                                         }
                                                     }
                                                 }
@@ -196,8 +196,8 @@ namespace NCLCore
                     using (JsonTextReader reader = new JsonTextReader(jsonfile))
                     {
                         JObject jObject = (JObject)JToken.ReadFrom(reader);
-                        info = new Info(DownloadSoureURL, "info");
-                        info = new Info(jObject["assetIndex"]["url"].ToString().Replace("https://launchermeta.mojang.com/", DownloadSoureURL), "info");
+                        //info = new Info(DownloadSoureURL, "info");
+                     //   info = new Info(jObject["assetIndex"]["url"].ToString().Replace("https://launchermeta.mojang.com/", DownloadSoureURL), "info");
                         //downloader.DownloadFileTaskAsync(jObject["assetIndex"]["url"].ToString().Replace("https://launchermeta.mojang.com/", DownloadSoureURL), dir).Wait();
                         DownloadBuilder.New()
                         .WithUrl(jObject["assetIndex"]["url"].ToString().Replace("https://launchermeta.mojang.com/", DownloadSoureURL))
@@ -454,12 +454,12 @@ namespace NCLCore
             FileInfo server_data = new FileInfo(Directory.GetCurrentDirectory() + "\\Resources\\servers.dat");
             server_data.CopyTo(clt.dir + "\\servers.dat", true);
             log.Info("1");
-           // pro = new Info(1, "正在检测令牌是否失效");
+            pro = new Info(1, "正在检测令牌是否失效");
             log.Info("1");
-            //info = new Info("正在检测令牌是否失效", "info");
-            //   if (!CheckToken(token))
+            // info = new Info("正在检测令牌是否失效", "info");
+               if (!CheckToken(token))
             {
-               // return 2;
+                 return 2;
             }
             pro = new Info(10, "游戏令牌通过检测");
             //info = new Info("游戏令牌通过检测", "success");
@@ -502,7 +502,7 @@ namespace NCLCore
                 libstr = libstr + clt.dir + "\\" + clt.Name + ".jar";
             }
             // info = new Info("Libs获取成功", "success");
-            pro = new Info(90, "Libs获取成功");
+           // pro = new Info(90, "Libs获取成功");
             FileInfo fileInfo = new FileInfo(clt.dir + "\\" + clt.Name + ".json");
             string mainClass;
 
@@ -520,12 +520,12 @@ namespace NCLCore
                 " -XX:+UseG1GC -XX:-UseAdaptiveSizePolicy -XX:-OmitStackTraceInFastThrow -Dfml.ignoreInvalidMinecraftCertificates=True -Dfml.ignorePatchDiscrepancies=True -XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump -Xmn256m -Xmx" + RAM + "m \"-Djava.library.path=" + clt.dir + "\\natives\"" + " -cp \"" + libstr + "\"" + " " + mainClass +
         " --username " + name + " --version " + clt.Name + " --gameDir \"" + clt.dir + "\" --assetsDir \"" + clt.rootdir + "\\assets\" --assetIndex " + clt.assets + " --versionType NCL" +
         " --uuid " + uuid + " --accessToken " + token + " --userType mojang --width 854 --height 480";
-            info.msg = all;
+           // info.msg = all;
             all = all.Replace("\\", "/");
             all = all.Replace("//", "/");
             all = all.Replace("/", "\\");
             all = all.Replace("{api}", "\"https://www.ncserver.top:666/api/yggdrasil\"");
-            info.msg = all;
+           // info.msg = all;
             // info.isWorking = false;
             //return 
             if (clt.Forge)
@@ -533,9 +533,10 @@ namespace NCLCore
                 all = all + " --tweakClass net.minecraftforge.fml.common.launcher.FMLTweaker";
             }
             //return 
-            pro = new Info(100, "正在启动游戏");
-            info = new Info("正在启动游戏", "info");
+            pro = new Info(99.99, "游戏已启动等待窗口");
+            //info = new Info("正在启动游戏", "info");
             ExecuteInCmd(all, clt.rootdir + "\\versions\\" + clt.Name);
+            pro = new Info(100, "游戏已启动等待窗口");
             return 1;
 
         }

@@ -1,7 +1,7 @@
 ﻿using Notification.Wpf;
 using System.Windows.Media;
 
-namespace NchargeL.Info
+namespace NchargeL
 {
     public class NotificationContentSDK
     {

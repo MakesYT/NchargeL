@@ -71,7 +71,7 @@ namespace NCLCore
                 nowthreadnum--;
                 Count++;
 
-                sDK.pro = new Info(Count/All*100, "下载Assets"+Count+"/"+All);
+                sDK.pro = new Info((double)(Count-1) * 1.0f / All * 100, "下载Assets"+Count+"/"+All);
                // if (Count % 16 == 0)
                //     sDK.info = new Info("还有" + (All - Count).ToString() + "个资源文件未下载", "info");
             }

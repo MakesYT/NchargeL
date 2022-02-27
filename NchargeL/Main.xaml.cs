@@ -1,6 +1,6 @@
 ﻿using log4net;
 using Microsoft.WindowsAPICodePack.Dialogs;
-using NchargeL.Info;
+using NchargeL;
 using NCLCore;
 using Notification.Wpf;
 using System;
