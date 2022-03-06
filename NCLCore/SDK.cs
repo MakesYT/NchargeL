@@ -23,7 +23,8 @@ namespace NCLCore
                 _info = value;
                 this.OnWorkStateChanged(new EventArgs());
             }
-        }public event EventHandler PropertyChanged;
+        }
+        public event EventHandler PropertyChanged;
         public void OnWorkStateChanged(EventArgs eventArgs)
         {
             if (this.PropertyChanged != null)//判断事件是否有处理函数
@@ -124,7 +125,7 @@ namespace NCLCore
                                                         {
                                                             JObject jObject1 = (JObject)JToken.ReadFrom(reader1);
                                                             client.assets = jObject1["assets"].ToString();
-                                                         //   log.Debug("asdwdwd" + client.assets);
+                                                            //   log.Debug("asdwdwd" + client.assets);
                                                         }
                                                     }
                                                 }
@@ -197,7 +198,7 @@ namespace NCLCore
                     {
                         JObject jObject = (JObject)JToken.ReadFrom(reader);
                         //info = new Info(DownloadSoureURL, "info");
-                     //   info = new Info(jObject["assetIndex"]["url"].ToString().Replace("https://launchermeta.mojang.com/", DownloadSoureURL), "info");
+                        //   info = new Info(jObject["assetIndex"]["url"].ToString().Replace("https://launchermeta.mojang.com/", DownloadSoureURL), "info");
                         //downloader.DownloadFileTaskAsync(jObject["assetIndex"]["url"].ToString().Replace("https://launchermeta.mojang.com/", DownloadSoureURL), dir).Wait();
                         DownloadBuilder.New()
                         .WithUrl(jObject["assetIndex"]["url"].ToString().Replace("https://launchermeta.mojang.com/", DownloadSoureURL))
@@ -259,6 +260,8 @@ namespace NCLCore
         }
         public Libs GetLibs(string rootdir, string ver, string dir)
         {
+           // bool forgeintall = false;
+            
             DownloadManager downloadManager = new DownloadManager();
             downloadManager.sDK = this;
             Libs libs = new Libs();
@@ -373,15 +376,9 @@ namespace NCLCore
                                             }
                                             else
                                             {
-                                                info = new Info("Forge状态异常,正在重新安装", "warn");
-                                                lib.url = DownloadSoureURL + "maven/" + lib.path.Replace(".jar", "-installer.jar");
-                                                string jardir = (rootdir + "\\libraries\\" + lib.path.Replace("/", "\\")).Replace(".jar", "-installer.jar");
-                                                DownloadBuilder.New()
-                                                .WithUrl(lib.url)
-                                                .WithFileLocation(jardir).Build().StartAsync().Wait();
-                                                (new FastZip()).ExtractZip(jardir, jardir[..jardir.LastIndexOf("\\")], jardir.Substring(jardir.LastIndexOf("\\") + 1).Replace("-installer.jar", ".jar"));
-                                                FileInfo fileInfo2 = new FileInfo(jardir[..jardir.LastIndexOf("\\")] + "\\maven\\" + lib.path.Replace("/", "\\"));
-                                                fileInfo2.CopyTo(jardir.Replace("-installer.jar", ".jar"));
+                                                info = new Info("Forge状态异常,需要重新安装", "warn");
+                                                forgeintall = true;
+                                                forgelib = lib;
                                             }
 
                                         }
@@ -397,14 +394,8 @@ namespace NCLCore
                                             else
                                             {
                                                 info = new Info("Forge sha1校验未通过,正在重新安装", "warn");
-                                                lib.url = DownloadSoureURL + "maven/" + lib.path.Replace(".jar", "-installer.jar");
-                                                string jardir = (rootdir + "\\libraries\\" + lib.path.Replace("/", "\\")).Replace(".jar", "-installer.jar");
-                                                DownloadBuilder.New()
-                                                .WithUrl(lib.url)
-                                                .WithFileLocation(jardir).Build().StartAsync().Wait();
-                                                (new FastZip()).ExtractZip(jardir, jardir[..jardir.LastIndexOf("\\")], jardir.Substring(jardir.LastIndexOf("\\") + 1).Replace("-installer.jar", ".jar"));
-                                                FileInfo fileInfo2 = new FileInfo(jardir[..jardir.LastIndexOf("\\")] + "\\maven\\" + lib.path.Replace("/", "\\"));
-                                                fileInfo2.CopyTo(jardir.Replace("-installer.jar", ".jar"), true);
+                                                forgeintall = true;
+                                                forgelib = lib;
                                             }
                                         }
                                         else log.Debug("库文件存在" + rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"));
@@ -424,6 +415,7 @@ namespace NCLCore
             }
             catch (Exception ex) { }
             downloadManager.Start(50);
+            
             libs.Normallibs = Normallibs;
             libs.Nativelibs = Nativelibs;
             foreach (Lib lib in Nativelibs)
@@ -436,6 +428,8 @@ namespace NCLCore
             }
             return libs;
         }
+        Lib forgelib = null;
+        bool forgeintall = false;
         /// <summary>
         /// 正常启动 返回代码1
         /// 令牌无效 返回代码2
@@ -446,7 +440,7 @@ namespace NCLCore
         /// <param name="uuid"></param>
         /// <param name="token"></param>
         /// <returns></returns>
-        public async Task<int> StartClient(Client clt, string name, string uuid, string token, string java, int RAM)
+        public int StartClient(Client clt, string name, string uuid, string token, string java, int RAM)
         {
             //infostr = new Info("有" + 1 + "个资源文件下载失败,但仍将尝试启动\n错误信息" , "error");
             FileInfo launcher_profiles = new FileInfo(Directory.GetCurrentDirectory() + "\\Resources\\launcher_profiles.json");
@@ -457,29 +451,34 @@ namespace NCLCore
             pro = new Info(1, "正在检测令牌是否失效");
             log.Info("1");
             // info = new Info("正在检测令牌是否失效", "info");
-               if (!CheckToken(token))
+            if (!CheckToken(token))
             {
-                 return 2;
+                return 2;
             }
             pro = new Info(10, "游戏令牌通过检测");
             //info = new Info("游戏令牌通过检测", "success");
             pro = new Info(15, "正在验证Assets");
-           // info = new Info("正在验证Assets", "info");
+            // info = new Info("正在验证Assets", "info");
 
             checkAssets(clt.rootdir, clt.rootdir + "\\assets\\indexes\\" + clt.assets + ".json", clt.assets, clt.rootdir + "\\versions\\" + clt.McVer + "\\" + clt.McVer + ".json");
             pro = new Info(80, "验证Assets完成,正在获取Libs");
 
 
-           // info = new Info("验证Assets完成", "success");
+            // info = new Info("验证Assets完成", "success");
 
             string libstr = null;
-           // info = new Info("正在获取Libs", "info");
+            List<string> log4jbugs = new List<string>();
+            //string log4jbug=null;
+            // info = new Info("正在获取Libs", "info");
             if (clt.Forge)
             {
                 Libs libs2 = GetLibs(clt.rootdir, clt.rootdir + "\\versions\\" + clt.Name, clt.rootdir + "\\versions\\" + clt.McVer + "\\" + clt.McVer + ".json");
                 // throw new NCLException("");
                 foreach (Lib lib in libs2.Normallibs)
                 {
+                    if (lib.path.Contains("org/apache/logging/log4j/"))
+                       log4jbugs.Add( clt.rootdir + "\\libraries\\" + lib.path + ";");
+                    //  { log.Info("1"); }
                     libstr = libstr + clt.rootdir + "\\libraries\\" + lib.path + ";";
                 }
 
@@ -487,9 +486,11 @@ namespace NCLCore
                 //libstr = libstr + "\"";
                 foreach (Lib lib in libs.Normallibs)
                 {
+                    if (lib.path.Contains("org/apache/logging/log4j/"))
+                        log4jbugs.Add(clt.rootdir + "\\libraries\\" + lib.path + ";");
                     libstr = libstr + clt.rootdir + "\\libraries\\" + lib.path + ";";
                 }
-                libstr = libstr + clt.rootdir + "\\versions\\" + clt.McVer + "\\" + clt.McVer + ".jar";
+                libstr = libstr + clt.rootdir + "\\versions\\" + clt.Name + "\\" + clt.Name + ".jar";
             }
             else
             {
@@ -501,42 +502,89 @@ namespace NCLCore
                 }
                 libstr = libstr + clt.dir + "\\" + clt.Name + ".jar";
             }
+
+            if (forgeintall)
+            {
+                log.Debug("forge安装");
+                forgelib.url = DownloadSoureURL + "maven/" + forgelib.path.Replace(".jar", "-installer.jar");
+                string jardir = (clt.rootdir + "\\libraries\\" + forgelib.path.Replace("/", "\\")).Replace(".jar", "-installer.jar");
+                DownloadBuilder.New()
+                .WithUrl(forgelib.url)
+                .WithFileLocation(jardir).Build().StartAsync().Wait();
+                //string forgeInstallerName = jardir.Substring(jardir.LastIndexOf("\\")+1);
+                FileInfo forge_bootstrapper = new FileInfo(Directory.GetCurrentDirectory() + "\\Resources\\forge-install-bootstrapper.jar");
+                forge_bootstrapper.CopyTo(clt.rootdir + "\\forge-install-bootstrapper.jar", true);
+                log.Debug(java + " -cp \"forge-install-bootstrapper.jar;" + jardir + "\" com.bangbang93.ForgeInstaller " + "\"" + clt.rootdir + "\"");
+                ExecuteInCmd(java+ " -cp \"forge-install-bootstrapper.jar;"+ jardir + "\" com.bangbang93.ForgeInstaller "+"\""+ clt.rootdir + "\"", clt.rootdir );
+            }
             // info = new Info("Libs获取成功", "success");
-           // pro = new Info(90, "Libs获取成功");
+            // pro = new Info(90, "Libs获取成功");
             FileInfo fileInfo = new FileInfo(clt.dir + "\\" + clt.Name + ".json");
             string mainClass;
-
+            string args = null;
+          
             using (System.IO.StreamReader jsonfile = System.IO.File.OpenText(fileInfo.FullName))
             {
                 using (JsonTextReader reader = new JsonTextReader(jsonfile))
                 {
                     JObject jObject = (JObject)JToken.ReadFrom(reader);
                     mainClass = jObject["mainClass"].ToString();
+                    if(clt.Forge)
+                    if (jObject.Property("arguments") != null)
+                    {
 
+                        foreach (string keys in jObject["arguments"]["jvm"].ToArray())
+                        {
+                            args = args + " " + keys;
+                        }
+                        foreach (string keys in jObject["arguments"]["game"].ToArray())
+                        {
+                            args = args + " " + keys;
+                        }
+                    }
                 }
             }
             string all = "\"" + java + "\"" + " -javaagent:\"" + Directory.GetCurrentDirectory() + "\\Resources\\authlib-injector.jar\"={api} " +
                 // "-Dauthlibinjector.side=client -Dauthlibinjector.yggdrasil.prefetched=eyJtZXRhIjp7InNlcnZlck5hbWUiOiJOY2hhcmdlIE1DXHU1OTE2XHU3ZjZlXHU3NjdiXHU1ZjU1IiwiaW1wbGVtZW50YXRpb25OYW1lIjoiWWdnZHJhc2lsIEFQSSBmb3IgQmxlc3NpbmcgU2tpbiIsImltcGxlbWVudGF0aW9uVmVyc2lvbiI6IjUuMS41IiwibGlua3MiOnsiaG9tZXBhZ2UiOiJodHRwczpcL1wvd3d3Lm5jc2VydmVyLnRvcDo2NjYiLCJyZWdpc3RlciI6Imh0dHBzOlwvXC93d3cubmNzZXJ2ZXIudG9wOjY2NlwvYXV0aFwvcmVnaXN0ZXIifSwiZmVhdHVyZS5ub25fZW1haWxfbG9naW4iOnRydWV9LCJza2luRG9tYWlucyI6WyJ3d3cubmNzZXJ2ZXIudG9wIl0sInNpZ25hdHVyZVB1YmxpY2tleSI6Ii0tLS0tQkVHSU4gUFVCTElDIEtFWS0tLS0tXG5NSUlDSWpBTkJna3Foa2lHOXcwQkFRRUZBQU9DQWc4QU1JSUNDZ0tDQWdFQXlmcjY0R09icXZkRENFcjhFT1JBXG5QaTg5VkxiUDVOV3JSaG9BbDcyZ2pLbTRvUmppblp2WFMrRzZnRCtaTGJvdnlMVmg3SktKSUc1QlI5SHJWTGNLXG5Jb3ArMFNuN0lQUUo4XC9YMkt1UkhqYnNiVEFTREtLV1RkTHNCcDMzcTR5SEIwMFJpNzFTbkxhK2tQdFZ4UE5kcFxuelE0Tnk0czU0c2JCejdOWmM0OHJXdWh4RG1rZTh5anIycWxXQ0FwS1ZHVngxYUJrNVYxb3loeFwveFFnVUtaUmRcbndYeDVhVmtkY2NDd045eWc2STlMY0hPa2d1Y1NCUHY4NTZSU2ZTTnZHbHVYV1N0VlFXTVhLNVVcL25YU2pYUTdHXG45bFdiNUJ4T1JqY3h0TDFIWXBnYm9RanVVNW9oTWUrdmRMRytmUmp4TE1mVDdLUlgzTzZRelkyOGdlT096d1l6XG5MSGwyV0xISEhlTXdiRDJtYng5MlZCY0tsZkwwUDR1eGVxeG9mYWplOURyWVVIY1VvN2ZGbUF2VHN0UU00VDNIXG5GXC85YTZ1emxHRHV1MHp4RjljWkJ6Z3JyXC92MDRROGZ4Tkh0TjlZRjl2MGZSazk0b0c4QVcrSU5CQmFnTWFTbkNcblQ4XC9XYUtaOUtSRStBMk5YWFhvZ1E1NWppOU12dFB6NlJNalBQNWtlR0hNZW8xbXNWN2VPTExXZGRaYStxWE5OXG5aZ0ZUcXlpc3pYRnhRTWZRVTRDREcyZEVsdUZ6MndTemsxY0xVN3pYemUwVk9ldVorQnJvVm5pWmZ1enpSTFBTXG5PbENTSUJYQys1dGVnd3lXWTVCaU1zSldhWmdveUhpVmppWHpFaVJ4aW9xelJGbkorc1FJSFpYWnI2UVpyVXBqXG5MalBvQUtBOWs5QkZ3d0Fhbkl5ajF6a0NBd0VBQVE9PVxuLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0tXG4ifQ==" +
-                " -XX:+UseG1GC -XX:-UseAdaptiveSizePolicy -XX:-OmitStackTraceInFastThrow -Dfml.ignoreInvalidMinecraftCertificates=True -Dfml.ignorePatchDiscrepancies=True -XX:HeapDumpPath=MojangTricksIntelDriversForPerformance_javaw.exe_minecraft.exe.heapdump -Xmn256m -Xmx" + RAM + "m \"-Djava.library.path=" + clt.dir + "\\natives\"" + " -cp \"" + libstr + "\"" + " " + mainClass +
+                " -XX:+UseG1GC -XX:-UseAdaptiveSizePolicy -XX:-OmitStackTraceInFastThrow -Xmn256m -Xmx" + RAM + "m \"-Djava.library.path=" + clt.dir + "\\natives\"" + " -cp \"" + libstr + "\"" + " " + mainClass +
         " --username " + name + " --version " + clt.Name + " --gameDir \"" + clt.dir + "\" --assetsDir \"" + clt.rootdir + "\\assets\" --assetIndex " + clt.assets + " --versionType NCL" +
         " --uuid " + uuid + " --accessToken " + token + " --userType mojang --width 854 --height 480";
-           // info.msg = all;
-            all = all.Replace("\\", "/");
+            // info.msg = all;
             all = all.Replace("//", "/");
             all = all.Replace("/", "\\");
             all = all.Replace("{api}", "\"https://www.ncserver.top:666/api/yggdrasil\"");
-           // info.msg = all;
+
+            // info.msg = all;
             // info.isWorking = false;
             //return 
+            int index = 0;
+            int count = 0;
+            while ((index = all.IndexOf("\\org\\apache\\logging\\log4j\\", index)) != -1)
+            {
+                count++;
+               
+                index = index + "\\org\\apache\\logging\\log4j\\".Length;
+            }
+            log.Info(log4jbugs.Count);
+            if(log4jbugs.Count>2)
+            {
+
+                all = all.Replace(log4jbugs[0].Replace("/", "\\"), "");
+                all = all.Replace(log4jbugs[1].Replace("/", "\\"), "");
+            }
             if (clt.Forge)
             {
-                all = all + " --tweakClass net.minecraftforge.fml.common.launcher.FMLTweaker";
+                if (args.Length > 0)
+                    all = all + args;
+                else
+                    all = all + " --tweakClass net.minecraftforge.fml.common.launcher.FMLTweaker";
             }
             //return 
             pro = new Info(99.99, "游戏已启动等待窗口");
             //info = new Info("正在启动游戏", "info");
             ExecuteInCmd(all, clt.rootdir + "\\versions\\" + clt.Name);
             pro = new Info(100, "游戏已启动等待窗口");
+
             return 1;
 
         }
@@ -623,8 +671,7 @@ namespace NCLCore
             }
             catch (Exception ex)
             {
-                log.Debug(ex.ToString());
-                log.Debug(ex.Message);
+                return false;
 
 
             }

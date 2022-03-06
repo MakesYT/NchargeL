@@ -1,11 +1,9 @@
-﻿using log4net;
+﻿using Enterwell.Clients.Wpf.Notifications;
+using log4net;
 using Microsoft.WindowsAPICodePack.Dialogs;
-using NchargeL;
 using NCLCore;
 using Notification.Wpf;
 using System;
-using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -32,12 +30,13 @@ namespace NchargeL
         public Launcher launcher = new Launcher();
         public AboutNCL aboutNCL = new AboutNCL();
         public DownloadUI downloadUI = new DownloadUI();
-
+        public INotificationMessageManager Manager { get; } = new NotificationMessageManager();
         public Main()
         {
             InitializeComponent();
             Data.init();//初始化列表
-                        //  Properties.Settings.Default.DownloadSource = "https://bmclapi2.bangbang93.com/";
+            this.DataContext = this;
+            //  Properties.Settings.Default.DownloadSource = "https://bmclapi2.bangbang93.com/";
             notificationManager.Show(NotificationContentSDK.notificationInformation("弹窗测试", ""), "WindowArea");
             notificationManager.Show(NotificationContentSDK.notificationWarning("弹窗测试", ""), "WindowArea");
             main = this;
@@ -47,6 +46,28 @@ namespace NchargeL
             if (Data.users.Count > 0)
             {
                 Data.users[0].reloadUser();
+            }
+            if (Data.users.Count > 0)
+            {//当前有账号登录
+                if (Properties.Settings.Default.GameDir != "")
+                {
+                    NCLcore nCLCore = newNCLcore(Properties.Settings.Default.DownloadSource, Properties.Settings.Default.GameDir);
+                    Data.clients = nCLCore.Clients;
+
+                    //notificationManager.Show(NotificationContentSDK.notificationSuccess("客户端列表已更新", ""), "WindowArea");
+                    if (Data.clients.Count > 0)
+                    {
+                        launcher = new Launcher();
+                        launcher.NCLCore = nCLCore;
+                        FrameWork.Content = launcher;
+                    }
+                }
+
+                else FrameWork.Content = downloadUI;
+            }
+            else//无账号跳转登录界面
+            {
+                FrameWork.Content = LoginUi;
             }
         }
         public void InfoDialogShow(string infostr, string str)
@@ -127,16 +148,18 @@ namespace NchargeL
 
         private void Setting(object sender, RoutedEventArgs e)
         {
+
+            // Manager.Dismiss(msg);
             FrameWork.Content = settingUi;
         }
         public NCLcore newNCLcore(string ds, string dir)
         {
             NCLcore nCLCore = new NCLcore(ds, dir);
             // List<> list = new List();
-           // List<T> ListOfT = new List<T>();
+            // List<T> ListOfT = new List<T>();
             nCLCore.sDK.PropertyChanged += (oo, ee) =>
             {
-                
+
                 // Console.WriteLine("值变了，新值是：" + (oo as NCLCore.Info).A);
                 switch ((oo as SDK).info.TYPE)
                 {
@@ -177,15 +200,13 @@ namespace NchargeL
             };
             return nCLCore;
         }
-
-        private async void LauncherButton(object sender, RoutedEventArgs e)//启动游戏按钮
+        public void loadLauncher()
         {
-            //launcher=new Launcher();
-            //Properties.Settings.Default.GameDir = @"D:\\IDEAJava\\6th\\V6\\out\\artifacts\\V6_jar\\.minecraft";
             if (Properties.Settings.Default.GameDir != "")
             {
                 NCLcore nCLCore = newNCLcore(Properties.Settings.Default.DownloadSource, Properties.Settings.Default.GameDir);
                 Data.clients = nCLCore.Clients;
+
                 notificationManager.Show(NotificationContentSDK.notificationSuccess("客户端列表已更新", ""), "WindowArea");
                 launcher = new Launcher();
                 launcher.NCLCore = nCLCore;
@@ -219,7 +240,13 @@ namespace NchargeL
                 }
 
             }
+        }
+        private async void LauncherButton(object sender, RoutedEventArgs e)//启动游戏按钮
+        {
+            //launcher=new Launcher();
+            //Properties.Settings.Default.GameDir = @"D:\\IDEAJava\\6th\\V6\\out\\artifacts\\V6_jar\\.minecraft";
 
+            loadLauncher();
         }
 
         private void Minimze(object sender, RoutedEventArgs e)
@@ -238,16 +265,16 @@ namespace NchargeL
             ErrorDialog error = new ErrorDialog("", "（1）发生了一个错误！请联系腐竹！" + Environment.NewLine
                                 + "这个还没有完成敬请期待");
             error.ShowDialog();
-            var progress=notificationManager.ShowProgressBar("下载客户端",true,true, "WindowArea",false,1,null,false,true, 
-                new SolidColorBrush(Properties.Settings.Default.BodyColorS), 
-              new SolidColorBrush( Properties.Settings.Default.ForegroundColor));
+            var progress = notificationManager.ShowProgressBar("下载客户端", true, true, "WindowArea", false, 1, null, false, true,
+                new SolidColorBrush(Properties.Settings.Default.BodyColorS),
+              new SolidColorBrush(Properties.Settings.Default.ForegroundColor));
             for (var i = 0; i <= 10000; i++)
             {
                 progress.Cancel.ThrowIfCancellationRequested();
-                progress.Report((i/100, "2", null, null));
-               // progress.WaitingTimer.BaseWaitingMessage = i is > 30 and < 70 ? null : "Calculation time";
-             //  Thread.Sleep(10);
-                 Task.Delay(TimeSpan.FromSeconds(0.03), progress.Cancel);
+                progress.Report((i / 100, "2", null, null));
+                // progress.WaitingTimer.BaseWaitingMessage = i is > 30 and < 70 ? null : "Calculation time";
+                //  Thread.Sleep(10);
+                Task.Delay(TimeSpan.FromSeconds(0.03), progress.Cancel);
             }
             progress.CancelSource.Cancel();
 

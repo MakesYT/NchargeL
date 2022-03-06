@@ -23,7 +23,8 @@ namespace NCLCore
         {
             All = Hashs.Count;
             log.Debug(Hashs.Count);
-            while (Hashs.Count != 0 || nowthreadnum != 0) {
+            while (Hashs.Count != 0 || nowthreadnum != 0)
+            {
                 Thread.Sleep(500);
                 while (nowthreadnum < thread)
                 {
@@ -40,7 +41,8 @@ namespace NCLCore
 
                     }
                     else if (nowthreadnum == 0) break;
-                }}
+                }
+            }
             if (cancellationsOccurrenceCount != 0)
                 sDK.info = new Info("有" + cancellationsOccurrenceCount + "个资源文件下载失败,但仍将尝试启动\n错误信息" + error, "errorDia");
         }
@@ -71,9 +73,9 @@ namespace NCLCore
                 nowthreadnum--;
                 Count++;
 
-                sDK.pro = new Info((double)(Count-1) * 1.0f / All * 100, "下载Assets"+Count+"/"+All);
-               // if (Count % 16 == 0)
-               //     sDK.info = new Info("还有" + (All - Count).ToString() + "个资源文件未下载", "info");
+                sDK.pro = new Info((double)(Count - 1) * 1.0f / All * 100, "下载Assets" + Count + "/" + All);
+                // if (Count % 16 == 0)
+                //     sDK.info = new Info("还有" + (All - Count).ToString() + "个资源文件未下载", "info");
             }
             catch (Exception ex)
             {

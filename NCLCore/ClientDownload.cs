@@ -41,7 +41,7 @@ namespace NCLCore
         }
         public void DownloadNchargeClient(NchargeClient nchargeClient)
         {
-            
+
             log = "开始下载客户端:" + nchargeClient.name + "(" + nchargeClient.Cname + ")";
             log = "开始下载原版" + nchargeClient.version + "客户端";
             NchargeClientDownload downloadManager = new NchargeClientDownload();

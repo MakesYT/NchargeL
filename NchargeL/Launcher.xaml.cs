@@ -1,6 +1,5 @@
 ﻿using log4net;
 using Microsoft.WindowsAPICodePack.Dialogs;
-using NchargeL;
 using NCLCore;
 using Newtonsoft.Json.Linq;
 using Notification.Wpf;
@@ -32,17 +31,6 @@ namespace NchargeL
             //this.list.DisplayMemberPath = "Name";//路径
         }
 
-        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            Client client = new Client();
-            client.Id = Data.clients.Count + 1;
-            client.Name = "rrrr";
-            Data.clients.Add(client);
-            //this.list.ItemsSource = Data.clients;//数据源
-            //this.list.DisplayMemberPath = "Name";//路径
-
-        }
-
         private void list_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             info.Text = "当前选择的客户端:\n" + ((Client)((ListBox)e.OriginalSource).SelectedItem).Name;
@@ -57,14 +45,14 @@ namespace NchargeL
                 if (list.SelectedIndex >= 0)
                 {
                     ((Button)sender).IsEnabled = false;
-                    notificationManager.Show(NotificationContentSDK.notificationInformation("正在检查Java合理性", ""), "WindowArea");
+                    // notificationManager.Show(NotificationContentSDK.notificationInformation("正在检查Java合理性", ""), "WindowArea");
                     SDK sDK = new SDK();
                     int javaVer = sDK.JavaCheck(Properties.Settings.Default.Java, Data.clients[list.SelectedIndex].McVer);
                     switch (javaVer)
                     {
                         case 0:
                             {
-                                notificationManager.Show(NotificationContentSDK.notificationInformation("正在启动客户端", ""), "WindowArea");
+                                //notificationManager.Show(NotificationContentSDK.notificationInformation("正在启动客户端", ""), "WindowArea");
 
                                 Thread thread = new Thread(new ParameterizedThreadStart(StartClient));
                                 thread.Start(Data.clients[list.SelectedIndex]);
@@ -114,27 +102,38 @@ namespace NchargeL
             SDK sDK = NCLCore.sDK;
             Application.Current.Dispatcher.BeginInvoke(new Action(delegate
                                        {
-                                           var progress = notificationManager.ShowProgressBar("启动游戏", true, true, "WindowArea", false, 1, null, false, true,
-                                    new SolidColorBrush(Properties.Settings.Default.BodyColorS),
-                                  new SolidColorBrush(Properties.Settings.Default.ForegroundColor));
-                                           double nowProgress = 0;
-                                           sDK.ProPropertyChanged += (oo, ee) =>
-                                {
-                                    Info info = (oo as SDK).pro;
-                                    log.Debug(info.process+" "+info.msg);
-                                   // if (info.process > nowProgress)
+                                           //try
+                                           {
+                                               var progress = notificationManager.ShowProgressBar("启动游戏", true, true, "WindowArea", false, 1, null, false, true,
+                                         new SolidColorBrush(Properties.Settings.Default.BodyColorS),
+                                       new SolidColorBrush(Properties.Settings.Default.ForegroundColor));
+                                               //   double nowProgress = 0;
+                                               sDK.ProPropertyChanged += (oo, ee) =>
                                     {
-                                        nowProgress = info.process;
-                                        progress.Cancel.ThrowIfCancellationRequested();
-                                        progress.Report((info.process, info.msg, null, null));
-                                        if (info.process == 100)
-                                        { progress.CancelSource.Cancel(); }
-                                    }
+                                        Info info = (oo as SDK).pro;
+                                        log.Debug(info.process + " " + info.msg);
+                                        // if (info.process > nowProgress)
+                                        {
+                                            // nowProgress = info.process;
+
+                                            //progress.Cancel.ThrowIfCancellationRequested();
+
+
+                                            if (info.process == 100)
+                                            {
+                                                progress.Dispose();
+                                            }
+                                            else
+                                                progress.Report((info.process, info.msg, null, null));
+
+                                        }
 
 
 
 
-                                };
+                                    };
+                                           }
+                                           //catch (Exception ex) { log.Error(ex); }
                                        })).Wait();
             bool flag = true;
             while (flag)
@@ -142,10 +141,10 @@ namespace NchargeL
 
                 // Task<int> task = Task.Factory.StartNew<int>(() => DownloadString("http://ww.linqpad.net"));
                 var re = sDK.StartClient((Client)clt, Data.users[0]._name, Data.users[0]._useruuid, Data.users[0]._token, Properties.Settings.Default.Java, Properties.Settings.Default.RAM);
-                log.Debug(re.Result);
+                log.Debug(re);
 
                 //StartClient(clt).GetAwaiter().GetResult().GetAwaiter().GetResult();
-                if (re.Result == 1)
+                if (re == 1)
                 {
                     notificationManager.Show(NotificationContentSDK.notificationInformation("", "客户端已退出"), "WindowArea");
                     flag = false;
@@ -154,7 +153,7 @@ namespace NchargeL
                         launch.IsEnabled = true;
                     })).Wait();
                 }
-                if (re.Result == 2)
+                if (re == 2)
                 {
                     if (Data.users[0]._password != null)
                     {
@@ -178,6 +177,18 @@ namespace NchargeL
                         }
                         catch (Exception ex)
                         {
+                            Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+                            {
+                                WarnDialog warn = new WarnDialog(Data.users[0]._password, "因账号密码已更改,用户令牌无法重新获取,请重新登录");
+                                warn.ShowDialog();
+                                Main.main.FrameWork.Content = LoginUi;
+                            })).Wait();
+                            Data.users.Clear();
+                            Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+                            {
+                                launch.IsEnabled = true;
+                            })).Wait();
+                            flag = false;
                             log.Debug(ex.ToString());
                             log.Debug(ex.Message);
                         }
@@ -203,7 +214,30 @@ namespace NchargeL
 
             }
 
+            Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+            {
+                var progress = notificationManager.ShowProgressBar("启动游戏", true, true, "WindowArea", false, 1, null, false, true,
+         new SolidColorBrush(Properties.Settings.Default.BodyColorS),
+       new SolidColorBrush(Properties.Settings.Default.ForegroundColor));
+                double nowProgress = 0;
+                sDK.ProPropertyChanged -= (oo, ee) =>
+                 {
+                     Info info = (oo as SDK).pro;
+                     log.Debug(info.process + " " + info.msg);
+                     // if (info.process > nowProgress)
+                     {
+                         nowProgress = info.process;
+                         progress.Cancel.ThrowIfCancellationRequested();
+                         progress.Report((info.process, info.msg, null, null));
+                         if (info.process == 100)
+                         { progress.CancelSource.Cancel(); }
+                     }
 
+
+
+
+                 };
+            })).Wait();
         }
 
         private void logs_Click(object sender, RoutedEventArgs e)

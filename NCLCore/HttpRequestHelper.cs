@@ -50,14 +50,9 @@ namespace NCLCore
                     }
                 }
                 string[] values = request.Headers.GetValues("Content-Type");
-                try
-                {
-                    return request.GetResponse() as HttpWebResponse;
-                }
-                catch (WebException we)
-                {
-                    // return (HttpWebResponse)we.Response;
-                }
+
+                return request.GetResponse() as HttpWebResponse;
+
             }
             return null;
 

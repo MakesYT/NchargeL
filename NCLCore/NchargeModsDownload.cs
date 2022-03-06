@@ -30,7 +30,8 @@ namespace NCLCore
 
             log.Debug(jArray.Count);
             AllCount = jArray.Count;
-            while (modJsons.Count != 0 || nowthreadnum != 0) {
+            while (modJsons.Count != 0 || nowthreadnum != 0)
+            {
                 Thread.Sleep(500);
                 while (nowthreadnum < thread)
                 {
@@ -46,7 +47,8 @@ namespace NCLCore
                         }
                     }
                     else if (nowthreadnum == 0) break;
-                }}
+                }
+            }
             if (cancellationsOccurrenceCount != 0)
                 ClientDownload.log = "有" + cancellationsOccurrenceCount + "个文件下载失败\n错误信息" + error;
         }
@@ -95,7 +97,7 @@ namespace NCLCore
                 if (!flag)
                 {
                     int cout = 0;
-                    bool toStop=false;
+                    bool toStop = false;
                     IDownload download = DownloadBuilder.New()
                     .WithUrl(uri)
                     .WithFileLocation(dir)
@@ -118,22 +120,22 @@ namespace NCLCore
                     };
                     download.DownloadProgressChanged += (s, e) =>
                     {
-                        if (e.BytesPerSecondSpeed < 1024*2)
+                        if (e.BytesPerSecondSpeed < 1024 * 2)
                         {
                             cout++;
                             //ClientDownload.log = "下载速度" + e.BytesPerSecondSpeed + dir.Substring(dir.LastIndexOf("\\") + 1);
                         }
                         else cout = 0;
                         if (cout >= 1500) { toStop = true; }
-                            if (toStop)
-                            {
+                        if (toStop)
+                        {
                             toStop = false;
                             cout = 0;
                             ClientDownload.log = "重新开始下载" + dir.Substring(dir.LastIndexOf("\\") + 1) + "";
                             download.Stop();
                             if (download.Status == DownloadStatus.Stopped)
                             {
-                             
+
                                 download.StartAsync().Wait();
                             }
                             toStop = false;
@@ -155,7 +157,7 @@ namespace NCLCore
                 cancellationsOccurrenceCount++;
                 error = error + "下载" + dir + "时出现错误\n下载地址:" + uri + "\n错误信息:不存在下载地址" + "\n";
             }
-          
+
             nowthreadnum--;
 
 

@@ -32,20 +32,20 @@ namespace NchargeL
 
         void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
-           // Current.Dispatcher.BeginInvoke(new Action(delegate
-           // {
-             
+            // Current.Dispatcher.BeginInvoke(new Action(delegate
+            // {
 
-                ErrorDialog error = new ErrorDialog("", "（1）发生了一个错误！请联系腐竹！" + Environment.NewLine
-                                + e.ExceptionObject.ToString());
-                error.ShowDialog();
-           // }));
+
+            ErrorDialog error = new ErrorDialog("", "（1）发生了一个错误！请联系腐竹！" + Environment.NewLine
+                            + e.ExceptionObject.ToString());
+            error.ShowDialog();
+            // }));
 
         }
         private void App_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
             e.Handled = true;
-           Exprint(e);
+            Exprint(e);
 
         }
         private void Exprint(System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)

@@ -14,7 +14,7 @@ namespace NCLCore
             this.TYPE = TYPE;
             log.Debug("[" + TYPE + "]" + msg);
         }
-        public Info(double process,string msg)
+        public Info(double process, string msg)
         {
             this.process = process;
             this.msg = msg;

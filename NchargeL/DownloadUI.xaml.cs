@@ -1,5 +1,4 @@
 ﻿using Microsoft.WindowsAPICodePack.Dialogs;
-using NchargeL;
 using NCLCore;
 using Newtonsoft.Json.Linq;
 using Notification.Wpf;
@@ -21,7 +20,7 @@ namespace NchargeL
         public DownloadUI()
         {
             InitializeComponent();
-           // logs.UndoLimit = 0;
+            // logs.UndoLimit = 0;
             GetAllCients();
             string cpu = "";
             UInt64 rom = 0;
@@ -75,7 +74,7 @@ namespace NchargeL
                         }
                         logs.Text += logtmp + "\n";
                         //logs.Select(logs.Text.Length, 0);
-                       // logs.ScrollToEnd();
+                        // logs.ScrollToEnd();
                     })).Wait();
 
 
@@ -109,8 +108,8 @@ namespace NchargeL
                             {
                                 if (logs.Text.Length > 4096) logs.Text = "";
                                 logs.Text += (oo as ClientDownload).log + "\n";
-                            //logs.Select(logs.Text.Length, 0);
-                           // logs.ScrollToEnd();
+                                //logs.Select(logs.Text.Length, 0);
+                                // logs.ScrollToEnd();
                             })).Wait();
 
 

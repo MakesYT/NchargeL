@@ -15,7 +15,7 @@ namespace Ncharge
     public partial class MainWindow : Window
     {
         private static readonly ILog log = LogManager.GetLogger("Init");
-        private string ver = "1.1.4";
+        private string ver = "1.1.5";
 
         private void check64()
         {
@@ -37,7 +37,7 @@ namespace Ncharge
                 Application.Current.Dispatcher.BeginInvoke(new Action(delegate
                 {
 
-                    InfoDialog warn = new InfoDialog("", "当前版本:"+ver+"与服务器版本匹配,是最新版本");
+                    InfoDialog warn = new InfoDialog("", "当前版本:" + ver + "与服务器版本匹配,是最新版本");
                     warn.ShowDialog();
                 })).Wait();
             }
@@ -46,7 +46,7 @@ namespace Ncharge
                 Application.Current.Dispatcher.BeginInvoke(new Action(delegate
                 {
 
-                    InfoDialog warn = new InfoDialog("", "当前版本:" + ver + "与服务器版本不匹配\n最新版本:"+ jObject["ver"].ToString()+ "请在http://download.ncserver.top:9000/选择启动按钮手动进行更新");
+                    InfoDialog warn = new InfoDialog("", "当前版本:" + ver + "与服务器版本不匹配\n最新版本:" + jObject["ver"].ToString() + "请在http://download.ncserver.top:9000/选择启动按钮手动进行更新");
                     warn.ShowDialog();
                 })).Wait();
                 Environment.Exit(0);
@@ -99,8 +99,8 @@ namespace Ncharge
                             "\n2022年\n全体玩家、全体管理员，以及我们辛勤的腐竹大人，在这近3年的时间里，我们共同见证了服务器一点一点的改进，一点一点的优化，在千难万险后最终取得了现在非凡的成就！" +
                             "\n本服务器一直秉持着不收一分钱纯公益服的理念，尽力为大家创造了一个优良的游戏环境。但时间流逝，每月仅服务器电费就高达100元。而且腐竹投入的大量时间与精力也并无回报。尽管有时会有一些玩家热心捐赠，但也远远无法补足这巨大的支出。服务器从最开始就一直处于只出不进的情况。" +
                             "\n说了那么多，最后还是要感谢大家对我们的支持和鼓励，也希望有更多的玩家能在某些方面去支持我们！谢谢！", 3);
-                // warn.time = 5;
-                warn.ShowDialog();
+                        // warn.time = 5;
+                        warn.ShowDialog();
                     })).Wait();
                 NchargeL.Properties.Settings.Default.First = false;
             }
