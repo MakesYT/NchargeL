@@ -284,5 +284,11 @@ namespace NchargeL
         {
             FrameWork.Content = downloadUI;
         }
+        
+        private void ColorZone_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton.ToString().Equals("Pressed"))
+                DragMove();
+        }
     }
 }
