@@ -37,11 +37,23 @@ namespace NchargeL
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Process proc = new System.Diagnostics.Process();
+            Process process = new System.Diagnostics.Process();
 
-            proc.StartInfo.FileName = "https://www.ncserver.top:666/auth/register";
+            process.StartInfo.FileName = "cmd.exe";
+            //process.StartInfo.FileName = "cmd.exe";
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.RedirectStandardInput = true;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.RedirectStandardError = false;
+            // process.StartInfo.
+            process.StartInfo.CreateNoWindow = true;
 
-            proc.Start();
+            process.Start();
+            process.StandardInput.WriteLine("start https://www.ncserver.top:666/auth/register" + "&exit");
+            process.StandardInput.Close();
+            process.WaitForExit();
+            process.Close();
+            //proc.Start();
         }
         private void LoginThread()
         {

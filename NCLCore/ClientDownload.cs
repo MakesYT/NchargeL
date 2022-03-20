@@ -51,9 +51,9 @@ namespace NCLCore
             downloadManager.Add(new DownloadItem(DownloadSoureURL + "version/" + nchargeClient.version + "/json", minecraftDir + "\\versions\\" + nchargeClient.version + "\\" + nchargeClient.version + ".json"));
             downloadManager.Start(2);
             log = "下载原版" + nchargeClient.version + "客户端完成";
-            log = "开始下载" + nchargeClient.forgeVersion + "Forge";
-            ForgeInstaller.installForge(DownloadSoureURL, nchargeClient.name, minecraftDir, nchargeClient.forgeVersion, this);
-            log = "安装Forge" + nchargeClient.forgeVersion + "完成";
+            //log = "开始下载Forge" + nchargeClient.forgeVersion + "";
+            //ForgeInstaller.installForge(DownloadSoureURL, nchargeClient.name, minecraftDir, nchargeClient.forgeVersion, this);
+           // log = "安装Forge" + nchargeClient.forgeVersion + "完成";
             log = "开始下载" + nchargeClient.name + "覆盖包";
             DownloadBuilder.New()
             .WithUrl("http://download.ncserver.top:8000/NCL/" + nchargeClient.name + ".zip")
@@ -63,7 +63,7 @@ namespace NCLCore
             NchargeModsDownload modsdownload = new NchargeModsDownload();
             modsdownload.ClientDownload = this;
             modsdownload.toDir = minecraftDir + "\\versions\\" + nchargeClient.name + "\\mods\\";
-            modsdownload.Start(50, nchargeClient.mods);
+            modsdownload.Start(80, nchargeClient.mods);
             log = "下载" + nchargeClient.name + "客户端完成";
         }
     }

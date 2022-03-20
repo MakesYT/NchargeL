@@ -13,8 +13,14 @@ namespace NCLCore
             DownloadBuilder.New()
             .WithUrl(DownloadS + "maven/net/minecraftforge/forge/" + installerVer + "/forge-" + installerVer + "-installer.jar")
             .WithFileLocation(tempdir + "\\" + installerVer + "-installer.jar").Build().StartAsync().Wait();
+            string jardir = tempdir + "\\" + installerVer + "-installer.jar";
             cd.log = "Forge下载成功";
             // log.Debug("111");
+            FileInfo forge_bootstrapper = new FileInfo(Directory.GetCurrentDirectory() + "\\Resources\\forge-install-bootstrapper.jar");
+            forge_bootstrapper.CopyTo(rootdir + "\\forge-install-bootstrapper.jar", true);
+         //   log.Debug(java + " -cp \"forge-install-bootstrapper.jar;" + jardir + "\" com.bangbang93.ForgeInstaller " + "\"" + clt.rootdir + "\"");
+           // ExecuteInCmd(java + " -cp \"forge-install-bootstrapper.jar;" + jardir + "\" com.bangbang93.ForgeInstaller " + "\"" + clt.rootdir + "\"", clt.rootdir);
+
             (new FastZip()).ExtractZip(tempdir + "\\" + installerVer + "-installer.jar", tempdir, "forge-" + installerVer + ".jar");
             (new FastZip()).ExtractZip(tempdir + "\\" + installerVer + "-installer.jar", tempdir, "version.json");
             cd.log = "解压文件完成";
