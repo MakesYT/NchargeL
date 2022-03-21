@@ -25,10 +25,10 @@ namespace NCLCore
             (new FastZip()).ExtractZip(tempdir + "\\" + installerVer + "-installer.jar", tempdir, "version.json");
             cd.log = "解压文件完成";
             // log.Debug("111");
-            DirectoryInfo dir = new DirectoryInfo(rootdir + "\\libraries\\net\\minecraftforge\\forge\\" + installerVer);
-            if (!dir.Exists) dir.Create();
-            FileInfo fileInfo = new FileInfo(tempdir + "\\maven\\net\\minecraftforge\\forge\\" + installerVer + "\\forge-" + installerVer + ".jar");
-            fileInfo.CopyTo(rootdir + "\\libraries\\net\\minecraftforge\\forge\\" + installerVer + "\\forge-" + installerVer + ".jar", true);
+            //DirectoryInfo dir = new DirectoryInfo(rootdir + "\\libraries\\net\\minecraftforge\\forge\\" + installerVer);
+           // if (!dir.Exists) dir.Create();
+           // FileInfo fileInfo = new FileInfo(tempdir + "\\maven\\net\\minecraftforge\\forge\\" + installerVer + "\\forge-" + installerVer + ".jar");
+           // fileInfo.CopyTo(rootdir + "\\libraries\\net\\minecraftforge\\forge\\" + installerVer + "\\forge-" + installerVer + ".jar", true);
             DirectoryInfo verDir = new DirectoryInfo(rootdir + "\\versions\\" + name);
             verDir.Create();
             FileInfo verfileInfo = new FileInfo(tempdir + "\\version.json");
