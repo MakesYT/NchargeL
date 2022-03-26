@@ -17,7 +17,11 @@ namespace NCLCore
         int cancellationsOccurrenceCount = 0;
         public string toDir;
         string error = "";
-
+        List<DownloadItem> listmods = new List<DownloadItem>();
+        public string getDir()
+        {
+            return toDir;
+        }
         int nowthreadnum = 0;
         public void Start(int thread, JArray jArray)
         {
@@ -74,6 +78,11 @@ namespace NCLCore
                 throw new NCLException("c");
             }
         }
+        public List<DownloadItem> getMODs()
+        {
+            return listmods;
+        }
+       
         private void DownloadTool(JObject hash)
         {
             try
@@ -87,7 +96,7 @@ namespace NCLCore
                 //string sha1 = jObject["hashes"][0]["value"].ToString();
                 if (uri != null && uri != "")
                 {
-                   // log.Debug(uri);
+                    // log.Debug(uri);
                     bool flag = false;
                     //log.Debug(Path.GetDirectoryName(hash.dir));
                     if (File.Exists(dir) && jObject["hashes"] != null && ((JArray)jObject["hashes"]).Count > 0)
@@ -97,74 +106,18 @@ namespace NCLCore
                             flag = true;
                             DownloadCount++;
                             ClientDownload.log = DownloadCount + "/" + AllCount + "文件" + dir.Substring(dir.LastIndexOf("\\") + 1) + "无需下载,sha1校验通过";
+                            nowthreadnum--;
                         }
                     }
                     if (!flag)
                     {
-                        ClientDownload.log = "开始下载" + jObject["fileName"].ToString();
-                        log.Debug("开始下载:" + jObject["downloadUrl"].ToString());
-                        int cout = 0;
-                        bool toStop = false;
-                        IDownload download = DownloadBuilder.New()
-                        .WithUrl(uri)
-                        .WithFileLocation(dir)
-                        // .WithConfiguration(new DownloadConfiguration() { Timeout = 5000, BufferBlockSize = 10240, ChunkCount = 4,ParallelDownload = true })
-                        .Build();
-                        download.DownloadFileCompleted += (s, e) =>
-                        {
-                            if (e.Error != null)
-                            {
-                                cancellationsOccurrenceCount++;
-                                log.Error("下载出现错误:" + e.Error.Message);
-                                error = error + "下载" + dir + "时出现错误\n下载地址:" + uri + "\n错误信息" + e.Error.Message + "\n";
-
-                            }
-                            if (e.Error == null)
-                            {
-                                DownloadCount++;
-                                ClientDownload.log = "当前已下载:" + DownloadCount + ",总计:" + AllCount;
-                            }
-                        };
-                        download.DownloadProgressChanged += (s, e) =>
-                        {
-                            if (e.BytesPerSecondSpeed < 1024 * 256)
-                            {
-                                cout++;
-                            //ClientDownload.log = "下载速度" + e.BytesPerSecondSpeed + dir.Substring(dir.LastIndexOf("\\") + 1);
-                        }
-                            else cout = 0;
-                            if (cout >= 1000) { toStop = true; }
-                            if (toStop)
-                            {
-                                toStop = false;
-                                cout = 0;
-                                log.Debug("重新开始下载" + dir.Substring(dir.LastIndexOf("\\") + 1) + "");
-                                ClientDownload.log = "重新开始下载" + dir.Substring(dir.LastIndexOf("\\") + 1) + "";
-                                download.Stop();
-                                download.StartAsync().Wait();
-                                
-                                toStop = false;
-                            }
-
-                        };
-                        download.StartAsync().Wait();
-
+                        ClientDownload.log = "需要下载" + jObject["fileName"].ToString();
+                        log.Debug("需要下载:" + jObject["downloadUrl"].ToString());
+                        DownloadItem downloadItem=new DownloadItem(uri, dir);
+                        listmods.Add(downloadItem);
+                        nowthreadnum--;
                     }
-
-
-                    //  if (name % 100 == 0)
-
-                    //downloader.DownloadFileTaskAsync(url, dir).Wait();
-
                 }
-                else
-                {
-                    cancellationsOccurrenceCount++;
-                    error = error + "下载" + dir + "时出现错误\n下载地址:" + uri + "\n错误信息:不存在下载地址" + "\n";
-                }
-
-                nowthreadnum--;
-
             }catch (Exception e)
             {
                 log.Debug("获取File失败重新获取," + hash["projectID"] + "/file/" + hash["fileID"]);

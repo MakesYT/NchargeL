@@ -1,5 +1,6 @@
 ﻿using Downloader;
 using ICSharpCode.SharpZipLib.Zip;
+using log4net;
 
 namespace NCLCore
 {
@@ -39,6 +40,12 @@ namespace NCLCore
             downloadManager.Add(new DownloadItem(DownloadSoureURL + "version/" + ver + "/json", minecraftDir + "\\versions\\" + ver + "\\" + ver + ".json"));
             downloadManager.Start(2);
         }
+        public int DownloadCount = 0;
+        public int AllCount = 0;
+        int cancellationsOccurrenceCount = 0;
+        public string toDir;
+        string error = "";
+        private static readonly ILog loger = LogManager.GetLogger("ClientDownload");
         public void DownloadNchargeClient(NchargeClient nchargeClient)
         {
 
@@ -63,8 +70,50 @@ namespace NCLCore
             NchargeModsDownload modsdownload = new NchargeModsDownload();
             modsdownload.ClientDownload = this;
             modsdownload.toDir = minecraftDir + "\\versions\\" + nchargeClient.name + "\\mods\\";
-            modsdownload.Start(80, nchargeClient.mods);
-            log = "下载" + nchargeClient.name + "客户端完成";
+            modsdownload.Start(250, nchargeClient.mods);
+            log = "解析MODS完成,共需下载" + modsdownload.getMODs().Count + "个文件";
+            if (modsdownload.getMODs().Count != 0)
+            {
+                
+                AllCount = modsdownload.getMODs().Count;
+                
+                DirectoryInfo directory = new DirectoryInfo(modsdownload.toDir);
+                foreach (DownloadItem item in modsdownload.getMODs())
+                {
+                    IDownload download = DownloadBuilder.New()
+                .WithUrl(item.uri)
+                .WithFileLocation(item.dir)
+                 .WithConfiguration(new DownloadConfiguration())
+                .Build();
+                    download.DownloadFileCompleted += (s, e) =>
+                    {
+                        if (e.Error != null)
+                        {
+                            cancellationsOccurrenceCount++;
+                            DownloadCount++;
+                            loger.Error("下载出现错误:" + e.Error.Message);
+                            error = error + "下载" + s + "时出现错误\n错误信息" + e.Error.Message + "\n";
+
+                        }
+                        if (e.Error == null)
+                        {
+                            DownloadCount++;
+                            log = "当前已下载:" + DownloadCount + ",总计:" + AllCount;
+                        }
+                        if (DownloadCount == AllCount)
+                        {
+                            log = "下载" + nchargeClient.name + "客户端完成";
+                            if (cancellationsOccurrenceCount != 0)
+                                log = "有" + cancellationsOccurrenceCount + "个文件下载失败\n错误信息" + error;
+
+                        }
+                    };
+                 //   downloader.DownloadFileTaskAsync(item.uri, item.dir);
+                 download.StartAsync();
+                }
+            }
+            else
+                log = "下载" + nchargeClient.name + "客户端完成";
         }
     }
 }
