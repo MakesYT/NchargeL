@@ -20,7 +20,7 @@
 
                 <Grid HorizontalAlignment="Left" Width="290" VerticalAlignment="Top">
                     <TextBlock VerticalAlignment="Center" Margin="3,3,0,3" Text="Ncharge启动器" HorizontalAlignment="Left" FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi" FontSize="30" />
-                    <Button FocusVisualStyle="{x:Null}" Height="Auto" Margin="0" HorizontalAlignment="Right" VerticalAlignment="Center" Padding="0" BorderBrush="{x:Null}" Background="{x:Null}" Foreground="{x:Null}" RenderTransformOrigin="1.553,-0.3" Click="Button_Click" Width="36">
+                    <Button FocusVisualStyle="{x:Null}" Height="Auto" Margin="0" HorizontalAlignment="Right" VerticalAlignment="Center" Padding="0" BorderBrush="{x:Null}" Background="{x:Null}" Foreground="{x:Null}" RenderTransformOrigin="1.553,-0.3" Click="Button_Click" Width="36" Cursor="Hand">
                         <materialDesign:PackIcon Kind="Close" Height="Auto" Width="Auto" Foreground="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" HorizontalAlignment="Right" RenderTransformOrigin="0.839,0.064" VerticalAlignment="Top" Margin="0,0,7,0" />
                     </Button>
                 </Grid>

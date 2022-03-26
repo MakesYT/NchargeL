@@ -15,7 +15,7 @@ namespace Ncharge
     public partial class MainWindow : Window
     {
         private static readonly ILog log = LogManager.GetLogger("Init");
-        private string ver = "1.1.5-4";
+        private string ver = "1.1.5-5";
 
         private void check64()
         {
@@ -81,6 +81,7 @@ namespace Ncharge
 
         public MainWindow()
         {
+          
             InitializeComponent();
             this.Show();
             //long timeStamp = DateTimeOffset.Now.ToUniversalTime().Ticks; 
@@ -117,8 +118,7 @@ namespace Ncharge
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            closeDialog close = new closeDialog();
-            close.ShowDialog();
+            Environment.Exit(0);
         }
 
 
