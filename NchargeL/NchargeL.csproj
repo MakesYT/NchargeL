@@ -27,6 +27,7 @@
     <None Remove="Resources\servers.dat" />
     <None Remove="Resources\SSZhiZunShuFaTi.ttf" />
     <None Remove="Resources\user.png" />
+    <None Remove="Resources\wget.exe" />
   </ItemGroup>
 
   <ItemGroup>
@@ -43,6 +44,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Resources\Javacheck.jar">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\wget.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Resource Include="Resources\8ee20a6fa281ace6499d14210a46c8e3.png">

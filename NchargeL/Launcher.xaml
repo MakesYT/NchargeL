@@ -75,7 +75,7 @@
                 </TextBox>
             </StackPanel>
         </GroupBox>
-        <TextBlock x:Name="info" Text="当前未选择客户端" Margin="560,242,20,93" Foreground="{DynamicResource ForegroundColor}" Background="{DynamicResource BodyColorWith50Opacity}" FontFamily="HarmonyOS Sans" FontSize="20"></TextBlock>
+        <TextBlock x:Name="info" Text="当前未选择客户端" Margin="560,215,20,93" Foreground="{DynamicResource ForegroundColor}" Background="{DynamicResource BodyColorWith50Opacity}" FontFamily="HarmonyOS Sans" FontSize="20"></TextBlock>
         <Button x:Name="logs" BorderBrush="{x:Null}" Foreground="{DynamicResource ForegroundColor}" Cursor="Hand"  IsDefault="True" Background="{DynamicResource BodyColorWith50Opacity}" FocusVisualStyle="{x:Null}"  Style="{StaticResource MaterialDesignOutlinedLightButton}" Content="打开logs目录" HorizontalAlignment="Left" Margin="597,336,0,0" VerticalAlignment="Top" Click="logs_Click"/>
 
         <Button x:Name="launch" BorderBrush="{x:Null}" Foreground="{DynamicResource ForegroundColor}" Cursor="Hand"  IsDefault="True" Background="{DynamicResource BodyColorWith50Opacity}" FocusVisualStyle="{x:Null}"  Style="{StaticResource MaterialDesignOutlinedLightButton}" Content="启动游戏" HorizontalAlignment="Left" Margin="611,292,0,0" VerticalAlignment="Top" Click="Button_Click_1"/>

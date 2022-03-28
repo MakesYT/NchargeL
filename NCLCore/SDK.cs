@@ -113,19 +113,23 @@ namespace NCLCore
                                                 {
                                                     client.assets = jObject["assets"].ToString();
                                                     client.McVer = jObject["id"].ToString();
+                                                    log.Debug("assets" + client.assets);
                                                 }
                                                 else if (jObject["inheritsFrom"] != null)
                                                 {
                                                     client.Forge = true;
                                                     client.McVer = jObject["inheritsFrom"].ToString();
                                                     string pa = fileInfo.FullName;
+                                                    log.Debug(pa.Replace(file.Name, jObject["inheritsFrom"].ToString()));
                                                     using (System.IO.StreamReader jsonfile1 = System.IO.File.OpenText(pa.Replace(file.Name, jObject["inheritsFrom"].ToString())))
                                                     {
                                                         using (JsonTextReader reader1 = new JsonTextReader(jsonfile1))
                                                         {
+                                                            
                                                             JObject jObject1 = (JObject)JToken.ReadFrom(reader1);
+                                                            log.Debug(jObject1.ToString());
                                                             client.assets = jObject1["assets"].ToString();
-                                                            //   log.Debug("asdwdwd" + client.assets);
+                                                               log.Debug("inheritsFrom" + client.assets);
                                                         }
                                                     }
                                                 }
@@ -515,7 +519,7 @@ namespace NCLCore
                 FileInfo forge_bootstrapper = new FileInfo(Directory.GetCurrentDirectory() + "\\Resources\\forge-install-bootstrapper.jar");
                 forge_bootstrapper.CopyTo(clt.rootdir + "\\forge-install-bootstrapper.jar", true);
                 log.Debug(java + " -cp \"forge-install-bootstrapper.jar;" + jardir + "\" com.bangbang93.ForgeInstaller " + "\"" + clt.rootdir + "\"");
-                ExecuteInCmd(java+ " -cp \"forge-install-bootstrapper.jar;"+ jardir + "\" com.bangbang93.ForgeInstaller "+"\""+ clt.rootdir + "\"", clt.rootdir );
+                ExecuteInCmd("\""+java+ "\"" + " -cp \"forge-install-bootstrapper.jar;" + jardir + "\" com.bangbang93.ForgeInstaller "+"\""+ clt.rootdir + "\"", clt.rootdir );
             }
             // info = new Info("Libs获取成功", "success");
             // pro = new Info(90, "Libs获取成功");

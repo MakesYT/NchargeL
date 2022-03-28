@@ -33,7 +33,8 @@ namespace NchargeL
 
         private void list_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            info.Text = "当前选择的客户端:\n" + ((Client)((ListBox)e.OriginalSource).SelectedItem).Name;
+            Client client = ((Client)((ListBox)e.OriginalSource).SelectedItem);
+            info.Text = "当前选择的客户端:\n" + client.Name+"\nAssets:"+client.assets;
             // (ListBoxItem)((ListBox)e.Source).
         }
 

@@ -18,7 +18,7 @@ namespace NCLCore
             // log.Debug("111");
             FileInfo forge_bootstrapper = new FileInfo(Directory.GetCurrentDirectory() + "\\Resources\\forge-install-bootstrapper.jar");
             forge_bootstrapper.CopyTo(rootdir + "\\forge-install-bootstrapper.jar", true);
-         //   log.Debug(java + " -cp \"forge-install-bootstrapper.jar;" + jardir + "\" com.bangbang93.ForgeInstaller " + "\"" + clt.rootdir + "\"");
+           //log.Debug(java + " -cp \"forge-install-bootstrapper.jar;" + jardir + "\" com.bangbang93.ForgeInstaller " + "\"" + clt.rootdir + "\"");
            // ExecuteInCmd(java + " -cp \"forge-install-bootstrapper.jar;" + jardir + "\" com.bangbang93.ForgeInstaller " + "\"" + clt.rootdir + "\"", clt.rootdir);
 
             (new FastZip()).ExtractZip(tempdir + "\\" + installerVer + "-installer.jar", tempdir, "forge-" + installerVer + ".jar");

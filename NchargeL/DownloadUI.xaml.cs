@@ -102,12 +102,19 @@ namespace NchargeL
                         NCLcore nCLCore = Main.main.newNCLcore(Properties.Settings.Default.DownloadSource, Properties.Settings.Default.GameDir);
                         ClientDownload clientDownload = nCLCore.clientDownload;
                         clientDownload.init();
+                        int line = 0;
                         clientDownload.PropertyChanged += (oo, ee) =>
                         {
+                            string logtmp = (oo as ClientDownload).log;
                             Application.Current.Dispatcher.BeginInvoke(new Action(delegate
                             {
-                                if (logs.Text.Length > 4096) logs.Text = "";
-                                logs.Text += (oo as ClientDownload).log + "\n";
+                                line++;
+                                if (line > 5)
+                                {
+                                    line = 0;
+                                    logs.Text = "";
+                                }
+                                logs.Text += logtmp + "\n";
                                 //logs.Select(logs.Text.Length, 0);
                                 // logs.ScrollToEnd();
                             })).Wait();

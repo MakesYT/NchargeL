@@ -15,7 +15,7 @@ namespace Ncharge
     public partial class MainWindow : Window
     {
         private static readonly ILog log = LogManager.GetLogger("Init");
-        private string ver = "1.1.5-5";
+        private string ver = "1.1.6-66";
 
         private void check64()
         {

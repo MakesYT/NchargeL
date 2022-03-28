@@ -1,6 +1,7 @@
 ﻿using Downloader;
 using ICSharpCode.SharpZipLib.Zip;
 using log4net;
+using System.Diagnostics;
 
 namespace NCLCore
 {
@@ -78,42 +79,28 @@ namespace NCLCore
                 AllCount = modsdownload.getMODs().Count;
                 
                 DirectoryInfo directory = new DirectoryInfo(modsdownload.toDir);
-                foreach (DownloadItem item in modsdownload.getMODs())
+                if (!directory.Exists)
                 {
-                    IDownload download = DownloadBuilder.New()
-                .WithUrl(item.uri)
-                .WithFileLocation(item.dir)
-                 .WithConfiguration(new DownloadConfiguration())
-                .Build();
-                    download.DownloadFileCompleted += (s, e) =>
-                    {
-                        if (e.Error != null)
-                        {
-                            cancellationsOccurrenceCount++;
-                            DownloadCount++;
-                            loger.Error("下载出现错误:" + e.Error.Message);
-                            error = error + "下载" + s + "时出现错误\n错误信息" + e.Error.Message + "\n";
-
-                        }
-                        if (e.Error == null)
-                        {
-                            DownloadCount++;
-                            log = "当前已下载:" + DownloadCount + ",总计:" + AllCount;
-                        }
-                        if (DownloadCount == AllCount)
-                        {
-                            log = "下载" + nchargeClient.name + "客户端完成";
-                            if (cancellationsOccurrenceCount != 0)
-                                log = "有" + cancellationsOccurrenceCount + "个文件下载失败\n错误信息" + error;
-
-                        }
-                    };
-                 //   downloader.DownloadFileTaskAsync(item.uri, item.dir);
-                 download.StartAsync();
+                    directory.Create();
                 }
+                string uri = null;
+               
+                FileInfo forge_bootstrapper = new FileInfo(Directory.GetCurrentDirectory() + "\\Resources\\wget.exe");
+                forge_bootstrapper.CopyTo(minecraftDir + "\\wget.exe", true);
+                List<DownloadItem> downloads = modsdownload.getMODs();
+                NchargeModDownload mod = new NchargeModDownload();
+                mod.ClientDownload = this;
+                mod.setList(modsdownload.getMODs());
+                mod.toDir = modsdownload.toDir;
+                mod.minecraftDir=minecraftDir;
+                mod.Start(50);
+               
+
             }
             else
                 log = "下载" + nchargeClient.name + "客户端完成";
         }
+       
+
     }
 }
