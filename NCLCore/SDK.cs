@@ -120,14 +120,14 @@ namespace NCLCore
                                                     client.Forge = true;
                                                     client.McVer = jObject["inheritsFrom"].ToString();
                                                     string pa = fileInfo.FullName;
-                                                    log.Debug(pa.Replace(file.Name, jObject["inheritsFrom"].ToString()));
+                                                    //log.Debug(pa.Replace(file.Name, jObject["inheritsFrom"].ToString()));
                                                     using (System.IO.StreamReader jsonfile1 = System.IO.File.OpenText(pa.Replace(file.Name, jObject["inheritsFrom"].ToString())))
                                                     {
                                                         using (JsonTextReader reader1 = new JsonTextReader(jsonfile1))
                                                         {
                                                             
                                                             JObject jObject1 = (JObject)JToken.ReadFrom(reader1);
-                                                            log.Debug(jObject1.ToString());
+                                                            //log.Debug(jObject1.ToString());
                                                             client.assets = jObject1["assets"].ToString();
                                                                log.Debug("inheritsFrom" + client.assets);
                                                         }
