@@ -4,6 +4,9 @@
     {
         public string assets { get; set; }
         public bool Forge { get; set; }
+        /// <summary>
+        /// .minecraft文件夹目录
+        /// </summary>
         public string rootdir { get; set; }
         /// <summary>
         /// 我的世界客户端名称

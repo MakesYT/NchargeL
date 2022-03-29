@@ -6,13 +6,13 @@ namespace NCLCore
     {
         public string msg;
         public double process;
-        public string TYPE = "info";
+        public InfoType TYPE = InfoType.error;
         private readonly ILog log = LogManager.GetLogger("Info");
-        public Info(string msg, string TYPE)
+        public Info(string msg, InfoType TYPE)
         {
             this.msg = msg;
             this.TYPE = TYPE;
-            log.Debug("[" + TYPE + "]" + msg);
+            log.Debug("[" + GetStringType(TYPE) + "]" + msg);
         }
         public Info(double process, string msg)
         {
@@ -22,16 +22,20 @@ namespace NCLCore
             log.Debug("[进度条]" + msg);
         }
 
+        static string GetStringType(InfoType infoType)
+        {
+            return infoType switch
+            {
+                InfoType.error => "错误",
+                InfoType.info => "提示",
+                InfoType.warn => "警告",
+                InfoType.success => "成功",
+                InfoType.errorDia => "错误弹窗",
+                InfoType.successDia => "成功弹窗",
+                _ => "未知",
+            };
+        }
+    }
 
-    }
-    
-    public enum InfoType
-    {
-        info,
-        error,
-        warn,
-        success,
-        errorDia,
-        successDia
-    }
+
 }

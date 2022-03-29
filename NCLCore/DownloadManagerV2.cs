@@ -9,19 +9,22 @@ using System.Threading.Tasks;
 namespace NCLCore
 {
     
-    internal class DownloadManagerV2
+    public class DownloadManagerV2
     {
         private static readonly ILog log = LogManager.GetLogger("DownloadManagerV2");
-        List<DownloadItem> Hashs = new List<DownloadItem>();
-        public ClientDownload ClientDownload { get; set; }
-        public int DownloadCount = 0;
-        public int AllCount = 0;
-        int cancellationsOccurrenceCount = 0;
-        public string minecraftDir;
-        public string toDir;
-        string error = "";
-        int nowthreadnum = 0;
-        public void Start(List<DownloadItem> list,int thread)
+        private List<DownloadItem> Hashs = new List<DownloadItem>();
+        private List<DownloadItem> cancellationsOccurrenceLists = new List<DownloadItem>();
+        private int DownloadCount = 0;
+        private int AllCount = 0;
+        private int cancellationsOccurrenceCount = 0;
+        private string error = "";
+        private int nowthreadnum = 0;
+        private InfoManager infoManager=null;
+        public void setInfoManager(InfoManager infoManager)
+        {
+            this.infoManager = infoManager;
+        }
+        public DownloadReslut Start(List<DownloadItem> list,int thread)
         {
             Hashs = list;
             log.Debug(Hashs.Count);
@@ -36,22 +39,23 @@ namespace NCLCore
                         nowthreadnum++;
                         DownloadItem hash = Hashs.First();
                         Hashs.Remove(hash);
-                        Task.Factory.StartNew(() => ExecuteInCmd(minecraftDir + "\\wget.exe \"" + hash.uri + "\" -O \"" + hash.dir + "\"", toDir));
-
-
-
+                        Task.Factory.StartNew(() => ExecuteInCmd(hash ));
                     }
                     else if (nowthreadnum == 0) break;
                 }
-            ClientDownload.log = "下载" + "客户端完成";
+            //infoManager.Info( new Info("下载" + "客户端完成",InfoType.success));
             if (cancellationsOccurrenceCount != 0)
             {
-                ClientDownload.log = "有" + cancellationsOccurrenceCount + "个文件下载失败\n错误信息" + error;
-                log.Debug(ClientDownload.log);
+                //infoManager.Info(new Info("有" + cancellationsOccurrenceCount + "个文件下载失败\n错误信息" + error, InfoType.errorDia));
+                //infoManager.log = "有" + cancellationsOccurrenceCount + "个文件下载失败\n错误信息" + error;
+                log.Debug("有" + cancellationsOccurrenceCount + "个文件下载失败\n错误信息" + error);
+                return new DownloadReslut(false,cancellationsOccurrenceLists);
             }
+            else
+                return new DownloadReslut(true);
 
         }
-        public string ExecuteInCmd(string cmdline, string dir)
+        private string ExecuteInCmd(DownloadItem hash)
         {
             bool finnsh = false;
             using (var process = new Process())
@@ -67,8 +71,7 @@ namespace NCLCore
 
                 process.Start();
                 // process.StandardInput.AutoFlush = true;
-                process.StandardInput.WriteLine("cd /d " + dir);
-                process.StandardInput.WriteLine(cmdline + "&exit");
+                process.StandardInput.WriteLine("\"" + Directory.GetCurrentDirectory() + "\\Resources\\wget.exe\"" + hash.uri + "\" -O \"" + hash.fullname + "\"" + "&exit");
                 process.StandardInput.Close();
                 string line;
                 string allline = "";
@@ -83,20 +86,20 @@ namespace NCLCore
                         finnsh = true;
                     }
                 }
-                //获取cmd窗口的输出信息  
-                // string output = process.StandardOutput.ReadToEnd();
-                // process.StandardOutput.
                 process.WaitForExit();
                 process.Close();
                 if (!finnsh)
                 {
                     cancellationsOccurrenceCount++;
                     error = error + allline;
+                    cancellationsOccurrenceLists.Add(hash);
                 }
                 nowthreadnum--;
                 //AllCount--;
                 DownloadCount++;
-                ClientDownload.log = DownloadCount + "/" + (AllCount);
+                if(infoManager !=null)
+                infoManager.Info(new Info(DownloadCount.ToString(), InfoType.info));
+                //ClientDownload.log = DownloadCount + "/" + (AllCount);
                 return "";
             }
         }

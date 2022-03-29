@@ -3,13 +3,19 @@
     public class DownloadItem
     {
         public string uri;
-        public string dir;
+        
+        public string fullname;
 
-        public DownloadItem(string uri, string dir)
+        public DownloadItem(string uri, string dir,string name)
         {
             this.uri = uri;
-            this.dir = dir;
+            this.fullname = dir+"\\"+name;
 
+        }
+        public DownloadItem(string uri,string fullname)
+        {
+            this.uri = uri;
+            this.fullname = fullname;
         }
     }
 }

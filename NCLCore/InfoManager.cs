@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 namespace NCLCore
 {
 
-    internal class InfoManager
+    public class InfoManager
     {
-        public InfoType type{get;set;}
-        private Info _info = new("1", "info");
+       // public InfoType type{get;set;}
+        private Info _info = new("1",InfoType.success);
         public Info info
         {
             get { return _info; }
@@ -20,7 +20,7 @@ namespace NCLCore
                 this.OnWorkStateChanged(new EventArgs());
             }
         }
-        public event EventHandler PropertyChanged;
+        public event EventHandler? PropertyChanged;
         public void OnWorkStateChanged(EventArgs eventArgs)
         {
             if (this.PropertyChanged != null)//判断事件是否有处理函数
@@ -28,6 +28,10 @@ namespace NCLCore
                 this.PropertyChanged(this, eventArgs);
             }
 
+        }
+        public void Info(Info info)
+        {
+            _info = info;
         }
     }
 }

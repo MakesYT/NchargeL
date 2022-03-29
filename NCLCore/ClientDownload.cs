@@ -1,45 +1,21 @@
-﻿using Downloader;
+﻿
 using ICSharpCode.SharpZipLib.Zip;
 using log4net;
-using System.Diagnostics;
 
 namespace NCLCore
 {
 
     public class ClientDownload
     {
-        public string? DownloadSoureURL;
-        public string? minecraftDir;
-        public string _log = "";
-        public string log
+        InfoManager infoManager;
+        public ClientDownload(InfoManager infoManager) { this.infoManager = infoManager; }
+        public void DownloadOfficialClient(string ver, string DownloadSoureURL, string rootdir)
         {
-            get { return _log; }
-            set
-            {
-                _log = value;
-                this.OnWorkStateChanged(new EventArgs());
-            }
-        }
-        public event EventHandler PropertyChanged;
-        public void OnWorkStateChanged(EventArgs eventArgs)
-        {
-            if (this.PropertyChanged != null)//判断事件是否有处理函数
-            {
-                this.PropertyChanged(this, eventArgs);
-            }
-
-        }
-        public static ClientDownload cd;
-        public void init()
-        {
-            cd = this;
-        }
-        public void DownloadOfficialClient(string ver)
-        {
-            DownloadManager downloadManager = new DownloadManager();
-            downloadManager.Add(new DownloadItem(DownloadSoureURL + "version/" + ver + "/client", minecraftDir + "\\versions\\" + ver + "\\" + ver + ".jar"));
-            downloadManager.Add(new DownloadItem(DownloadSoureURL + "version/" + ver + "/json", minecraftDir + "\\versions\\" + ver + "\\" + ver + ".json"));
-            downloadManager.Start(2);
+            DownloadManagerV2 downloadManager = new DownloadManagerV2();
+            List<DownloadItem> downloadItems = new List<DownloadItem>();
+            downloadItems.Add(new DownloadItem(DownloadSoureURL + "version/" + ver + "/client", rootdir + "\\versions\\" + ver + "\\" + ver + ".jar"));
+            downloadItems.Add(new DownloadItem(DownloadSoureURL + "version/" + ver + "/json", rootdir + "\\versions\\" + ver + "\\" + ver + ".json"));
+            downloadManager.Start(downloadItems, 2);
         }
         public int DownloadCount = 0;
         public int AllCount = 0;
@@ -47,60 +23,61 @@ namespace NCLCore
         public string toDir;
         string error = "";
         private static readonly ILog loger = LogManager.GetLogger("ClientDownload");
-        public void DownloadNchargeClient(NchargeClient nchargeClient)
+        public void DownloadNchargeClient(NchargeClient nchargeClient,string DownloadSoureURL, string rootdir)
         {
+            infoManager.info = new Info("开始下载客户端:" + nchargeClient.name + "(" + nchargeClient.Cname + ")", InfoType.info);
+            infoManager.info = new Info("开始下载原版" + nchargeClient.version + "客户端", InfoType.info);
 
-            log = "开始下载客户端:" + nchargeClient.name + "(" + nchargeClient.Cname + ")";
-            log = "开始下载原版" + nchargeClient.version + "客户端";
-            NchargeClientDownload downloadManager = new NchargeClientDownload();
+            DownloadManagerV2 downloadManager = new DownloadManagerV2();
+            List<DownloadItem> downloadItems = new List<DownloadItem>();
+            downloadManager.setInfoManager(infoManager);
+            downloadItems.Add(new DownloadItem(DownloadSoureURL + "version/" + nchargeClient.version + "/client", rootdir + "\\versions\\" + nchargeClient.version + "\\" + nchargeClient.version + ".jar"));
+            downloadItems.Add(new DownloadItem(DownloadSoureURL + "version/" + nchargeClient.version + "/json", rootdir + "\\versions\\" + nchargeClient.version + "\\" + nchargeClient.version + ".json"));
+            downloadManager.Start(downloadItems, 2);
+            infoManager.info = new Info("下载原版" + nchargeClient.version + "客户端完成", InfoType.info);
+            infoManager.info = new Info("开始下载Forge" + nchargeClient.forgeVersion, InfoType.info);
 
-            downloadManager.ClientDownload = this;
-            downloadManager.Add(new DownloadItem(DownloadSoureURL + "version/" + nchargeClient.version + "/client", minecraftDir + "\\versions\\" + nchargeClient.version + "\\" + nchargeClient.version + ".jar"));
-            downloadManager.Add(new DownloadItem(DownloadSoureURL + "version/" + nchargeClient.version + "/json", minecraftDir + "\\versions\\" + nchargeClient.version + "\\" + nchargeClient.version + ".json"));
-            downloadManager.Start(2);
-            log = "下载原版" + nchargeClient.version + "客户端完成";
-            log = "开始下载Forge" + nchargeClient.forgeVersion + "";
-            ForgeInstaller.installForge(DownloadSoureURL, nchargeClient.name, minecraftDir, nchargeClient.forgeVersion, this);
-            log = "安装Forge" + nchargeClient.forgeVersion + "完成";
-            log = "开始下载" + nchargeClient.name + "覆盖包";
-            DownloadBuilder.New()
-            .WithUrl("http://download.ncserver.top:8000/NCL/" + nchargeClient.name + ".zip")
-            .WithFileLocation(minecraftDir + "\\temp\\" + nchargeClient.name + ".zip").Build().StartAsync().Wait();
-            (new FastZip()).ExtractZip(minecraftDir + "\\temp\\" + nchargeClient.name + ".zip", minecraftDir + "\\versions\\" + nchargeClient.name, "");
-            log = "下载" + nchargeClient.name + "覆盖包完成";
-            NchargeModsDownload modsdownload = new NchargeModsDownload();
+            ForgeInstaller.installForge(DownloadSoureURL, nchargeClient.name, rootdir, nchargeClient.forgeVersion, infoManager);
+            infoManager.info = new Info("安装Forge" + nchargeClient.forgeVersion + "完成", InfoType.info);
+            infoManager.info = new Info("开始下载" + nchargeClient.name + "覆盖包", InfoType.info);
+            downloadItems.Clear();
+            downloadItems.Add(new DownloadItem("http://download.ncserver.top:8000/NCL/" + nchargeClient.name + ".zip",rootdir + "\\temp\\" + nchargeClient.name + ".zip"));
+            downloadManager.Start(downloadItems, 1);
+            (new FastZip()).ExtractZip(rootdir + "\\temp\\" + nchargeClient.name + ".zip", rootdir + "\\versions\\" + nchargeClient.name, "");
+
+            infoManager.info = new Info("下载" + nchargeClient.name + "覆盖包完成", InfoType.info);
+            NchargeModsDownload modsdownload = new NchargeModsDownload(infoManager);
             modsdownload.ClientDownload = this;
-            modsdownload.toDir = minecraftDir + "\\versions\\" + nchargeClient.name + "\\mods\\";
+            modsdownload.toDir = rootdir + "\\versions\\" + nchargeClient.name + "\\mods\\";
             modsdownload.Start(250, nchargeClient.mods);
-            log = "解析MODS完成,共需下载" + modsdownload.getMODs().Count + "个文件";
+
+            infoManager.info = new Info("解析MODS完成,共需下载" + modsdownload.getMODs().Count + "个文件", InfoType.info);
             if (modsdownload.getMODs().Count != 0)
             {
-                
+
                 AllCount = modsdownload.getMODs().Count;
-                
+
                 DirectoryInfo directory = new DirectoryInfo(modsdownload.toDir);
                 if (!directory.Exists)
                 {
                     directory.Create();
                 }
                 string uri = null;
-               
+
                 FileInfo forge_bootstrapper = new FileInfo(Directory.GetCurrentDirectory() + "\\Resources\\wget.exe");
-                forge_bootstrapper.CopyTo(minecraftDir + "\\wget.exe", true);
+                forge_bootstrapper.CopyTo(rootdir + "\\wget.exe", true);
                 List<DownloadItem> downloads = modsdownload.getMODs();
-                NchargeModDownload mod = new NchargeModDownload();
-                mod.ClientDownload = this;
-                mod.setList(modsdownload.getMODs());
-                mod.toDir = modsdownload.toDir;
-                mod.minecraftDir=minecraftDir;
-                mod.Start(50);
-               
+                DownloadManagerV2 mod = new DownloadManagerV2();
+                mod.setInfoManager(infoManager);
+                mod.Start(downloads,50);
+
 
             }
             else
-                log = "下载" + nchargeClient.name + "客户端完成";
+
+                infoManager.info = new Info("下载" + nchargeClient.name + "客户端完成", InfoType.info);
         }
-       
+
 
     }
 }

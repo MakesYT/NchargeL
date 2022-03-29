@@ -1,4 +1,4 @@
-﻿using Downloader;
+﻿
 using log4net;
 using Newtonsoft.Json.Linq;
 using System.Net;
@@ -9,6 +9,8 @@ namespace NCLCore
 {
     internal class NchargeModsDownload
     {
+        InfoManager infoManager;
+        public NchargeModsDownload(InfoManager infoManager) { this.infoManager = infoManager; }
         private static readonly ILog log = LogManager.GetLogger("NchargeModsDownload");
         List<JObject> modJsons = new List<JObject>();
         public ClientDownload ClientDownload { get; set; }
@@ -25,8 +27,7 @@ namespace NCLCore
         int nowthreadnum = 0;
         public void Start(int thread, JArray jArray)
         {
-            ClientDownload.log = "开始解析MODS列表";
-
+            infoManager.info = new Info("开始解析MODS列表", InfoType.info);
             foreach (JObject mod in jArray)
             {
                 modJsons.Add(mod);
@@ -55,7 +56,7 @@ namespace NCLCore
                 }
             }
             if (cancellationsOccurrenceCount != 0)
-                ClientDownload.log = "有" + cancellationsOccurrenceCount + "个文件下载失败\n错误信息" + error;
+                infoManager.info = new Info("有" + cancellationsOccurrenceCount + "个文件下载失败\n错误信息" + error, InfoType.errorDia);
         }
         string GetSHA1(string s)
         {
@@ -105,13 +106,15 @@ namespace NCLCore
                         {
                             flag = true;
                             DownloadCount++;
-                            ClientDownload.log = DownloadCount + "/" + AllCount + "文件" + dir.Substring(dir.LastIndexOf("\\") + 1) + "无需下载,sha1校验通过";
+                            infoManager.info = new Info(DownloadCount + "/" + AllCount + "文件" + dir.Substring(dir.LastIndexOf("\\") + 1) + "无需下载,sha1校验通过", InfoType.info);
+                            
                             nowthreadnum--;
                         }
                     }
                     if (!flag)
                     {
-                        ClientDownload.log = "需要下载" + jObject["fileName"].ToString();
+                        infoManager.info = new Info( "需要下载" + jObject["fileName"].ToString(), InfoType.info);
+                       
                         log.Debug("需要下载:" + jObject["downloadUrl"].ToString());
                         DownloadItem downloadItem=new DownloadItem(uri, dir);
                         listmods.Add(downloadItem);
@@ -121,7 +124,8 @@ namespace NCLCore
             }catch (Exception e)
             {
                 log.Debug("获取File失败重新获取," + hash["projectID"] + "/file/" + hash["fileID"]);
-                ClientDownload.log = "获取File失败重新获取,"+ hash["projectID"] + "/file/" + hash["fileID"];
+                infoManager.info = new Info("获取File失败重新获取,"+ hash["projectID"] + "/file/" + hash["fileID"], InfoType.error);
+                
                 Task.Factory.StartNew(() => DownloadTool(hash));
 
             }
