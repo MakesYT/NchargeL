@@ -6,10 +6,11 @@ using System.Net;
 
 namespace NCLCore
 {
-    internal class LauncherClient
+    public class LauncherClient
     {
         private readonly ILog log = LogManager.GetLogger("LauncherClient");
-        InfoManager infoManager = new InfoManager();
+       // public InfoManager infoManager;
+        public LauncherClient() {  }
         /// <summary>
         /// 正常启动 返回代码1
         /// 令牌无效 返回代码2
@@ -20,7 +21,7 @@ namespace NCLCore
         /// <param name="uuid"></param>
         /// <param name="token"></param>
         /// <returns></returns>
-        public int StartClient(Client clt, string DownloadSoureURL, string name, string uuid, string token, string java, int RAM)
+        public int StartClient(InfoManager infoManager, Client clt, string DownloadSoureURL, string name, string uuid, string token, string java, int RAM)
         {
             //infostr = new Info("有" + 1 + "个资源文件下载失败,但仍将尝试启动\n错误信息" , "error");
             FileInfo launcher_profiles = new FileInfo(Directory.GetCurrentDirectory() + "\\Resources\\launcher_profiles.json");

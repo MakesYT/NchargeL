@@ -23,23 +23,23 @@ namespace NCLCore
             {
                 infoManager.info = new Info("Assets-Index文件不存在,正在下载", InfoType.info);
 
-                FileInfo AssetsFileInfo = new FileInfo(client.rootdir + "\\versions\\" + client.McVer);
+                FileInfo AssetsFileInfo = new FileInfo(client.rootdir + "\\versions\\" + client.McVer+"\\"+client.McVer+".json");
                 using (System.IO.StreamReader jsonfile = System.IO.File.OpenText(AssetsFileInfo.FullName))
                 {
                     using (JsonTextReader reader = new JsonTextReader(jsonfile))
                     {
                         JObject jObject = (JObject)JToken.ReadFrom(reader);
-                        DownloadManagerV2 downloadManagerV2 = new DownloadManagerV2();
-                        downloadManagerV2.setInfoManager(infoManager);
+                        DownloadManagerV2 downloadManagerV2 = new DownloadManagerV2(infoManager);
+                        //downloadManagerV2.setInfoManager(infoManager);
                         List<DownloadItem> downloadItems = new List<DownloadItem>();
-                        downloadItems.Add(new DownloadItem(jObject["assetIndex"]["url"].ToString().Replace("https://launchermeta.mojang.com/", DownloadSoureURL), AssetsFileInfo.FullName));
-                        downloadManagerV2.Start(downloadItems, 1);
+                        downloadItems.Add(new DownloadItem(jObject["assetIndex"]["url"].ToString().Replace("https://launchermeta.mojang.com/", DownloadSoureURL), assetsIndexInfo.FullName));
+                        downloadManagerV2.Start( downloadItems, 1);
 
                     }
                 }
             }
-            DownloadManagerV2 downloadManager = new DownloadManagerV2();
-            downloadManager.setInfoManager(infoManager);
+            DownloadManagerV2 downloadManager = new DownloadManagerV2(infoManager);
+            //downloadManager.setInfoManager(infoManager);
             List<DownloadItem> assetsDownloadItems = new List<DownloadItem>();
             using (System.IO.StreamReader jsonfile = System.IO.File.OpenText(assetsIndexInfo.FullName))
             {
@@ -62,7 +62,7 @@ namespace NCLCore
                     }
                 }
             }
-            downloadManager.Start(assetsDownloadItems, 300);
+            downloadManager.Start( assetsDownloadItems, 300);
         }
         /// <summary>
         /// return 0 java正确
@@ -73,7 +73,7 @@ namespace NCLCore
         /// <param name="mcVer"></param>
         /// <returns></returns>
         /// </summary>
-        public int JavaCheck(string java, Client client)
+        public static int JavaCheck(string java, Client client)
         {
             using (var process = new Process())
             {
@@ -238,8 +238,8 @@ namespace NCLCore
             log.Debug("forge安装");
             forgelib.url = DownloadSoureURL + "maven/" + forgelib.path.Replace(".jar", "-installer.jar");
             string jardir = (clt.rootdir + "\\libraries\\" + forgelib.path.Replace("/", "\\")).Replace(".jar", "-installer.jar");
-            DownloadManagerV2 downloadManagerV2 = new DownloadManagerV2();
-            downloadManagerV2.setInfoManager(infoManager);
+            DownloadManagerV2 downloadManagerV2 = new DownloadManagerV2(infoManager);
+            //downloadManagerV2.setInfoManager(infoManager);
             List<DownloadItem> downloadItems = new List<DownloadItem>();
             downloadItems.Add(new DownloadItem(forgelib.url, jardir));
             downloadManagerV2.Start(downloadItems, 1);
@@ -251,8 +251,8 @@ namespace NCLCore
         }
         public Libs GetLibs(Client client, string DownloadSoureURL)
         {
-            DownloadManagerV2 downloadManager = new DownloadManagerV2();
-            downloadManager.setInfoManager(infoManager);
+            DownloadManagerV2 downloadManager = new DownloadManagerV2(infoManager);
+            //downloadManager.setInfoManager(infoManager);
             List<DownloadItem> items = new List<DownloadItem>();
             Libs libs = new Libs();
             List<Lib> Normallibs = new List<Lib>();
@@ -394,18 +394,11 @@ namespace NCLCore
                 }
             }
             catch (Exception ex) { }
-            downloadManager.Start(items, 50);
+            downloadManager.Start( items, 50);
 
             libs.Normallibs = Normallibs;
             libs.Nativelibs = Nativelibs;
-            foreach (Lib lib in Nativelibs)
-            {
-                DirectoryInfo nativedir = new DirectoryInfo(client.rootdir + "\\versions\\" + client.Name + "\\natives");
-                if (!nativedir.Exists)
-                    nativedir.Create();
-                log.Debug(nativedir.FullName);
-                (new FastZip()).ExtractZip(client.rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"), client.rootdir + "\\versions\\" + client.McVer + "\\natives\\", "");
-            }
+            
             return libs;
         }
 
@@ -420,6 +413,15 @@ namespace NCLCore
                     libstr = libstr + clt.rootdir + "\\libraries\\" + lib.path + ";";
                 }
                 libstr = libstr + clt.dir + "\\" + clt.Name + ".jar";
+            DirectoryInfo nativedir = new DirectoryInfo(clt.rootdir + "\\versions\\" + clt.Name + "\\natives");
+            if (!nativedir.Exists)
+                nativedir.Create();
+            log.Debug(nativedir.FullName);
+            foreach (Lib lib in libs.Nativelibs)
+            {
+
+                (new FastZip()).ExtractZip(clt.rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"), clt.rootdir + "\\versions\\" + clt.McVer + "\\natives\\", "");
+            }
             return libstr;
         }
         public string GetLibsCommandstr(Client clt,Client ver, string DownloadSoureURL,string java)
@@ -437,8 +439,16 @@ namespace NCLCore
                     //  { log.Info("1"); }
                     allLibs.Add(lib);
                 }
+            DirectoryInfo nativedir = new DirectoryInfo(clt.rootdir + "\\versions\\" + clt.Name + "\\natives");
+            if (!nativedir.Exists)
+                nativedir.Create();
+            log.Debug(nativedir.FullName);
+            foreach (Lib lib in libs2.Nativelibs)
+            {
 
-                Libs libs = GetLibs(clt,DownloadSoureURL);
+                (new FastZip()).ExtractZip(clt.rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"), clt.rootdir + "\\versions\\" + clt.Name + "\\natives\\", "");
+            }
+            Libs libs = GetLibs(clt,DownloadSoureURL);
             if (libs.forgeintall) installForge(clt, DownloadSoureURL, libs.forgelib, java);
                 //libstr = libstr + "\"";
                 foreach (Lib lib in libs.Normallibs)
@@ -453,11 +463,13 @@ namespace NCLCore
                 allLibs.Remove(log4jbugs[0]);
                 allLibs.Remove(log4jbugs[1]);
             }
-            foreach (Lib lib in libs2.Normallibs)
+            foreach (Lib lib in allLibs)
             {
                 libstr = libstr + clt.rootdir + "\\libraries\\" + lib.path + ";";
             }
-            libstr = libstr + clt.rootdir + "\\versions\\" + clt.Name + "\\" + clt.Name + ".jar";
+            libstr = libstr + clt.rootdir + "\\versions\\" + clt.McVer + "\\" + clt.McVer + ".jar";
+
+            
             return libstr.Replace("/", "\\");
         }
 

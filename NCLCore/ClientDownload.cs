@@ -8,14 +8,14 @@ namespace NCLCore
     public class ClientDownload
     {
         InfoManager infoManager;
-        public ClientDownload(InfoManager infoManager) { this.infoManager = infoManager; }
+        //public ClientDownload(InfoManager infoManager) { this.infoManager = infoManager; }
         public void DownloadOfficialClient(string ver, string DownloadSoureURL, string rootdir)
         {
-            DownloadManagerV2 downloadManager = new DownloadManagerV2();
+            DownloadManagerV2 downloadManager = new DownloadManagerV2(infoManager);
             List<DownloadItem> downloadItems = new List<DownloadItem>();
             downloadItems.Add(new DownloadItem(DownloadSoureURL + "version/" + ver + "/client", rootdir + "\\versions\\" + ver + "\\" + ver + ".jar"));
             downloadItems.Add(new DownloadItem(DownloadSoureURL + "version/" + ver + "/json", rootdir + "\\versions\\" + ver + "\\" + ver + ".json"));
-            downloadManager.Start(downloadItems, 2);
+            downloadManager.Start( downloadItems, 2);
         }
         public int DownloadCount = 0;
         public int AllCount = 0;
@@ -23,17 +23,17 @@ namespace NCLCore
         public string toDir;
         string error = "";
         private static readonly ILog loger = LogManager.GetLogger("ClientDownload");
-        public void DownloadNchargeClient(NchargeClient nchargeClient,string DownloadSoureURL, string rootdir)
+        public void DownloadNchargeClient(InfoManager infoManager,NchargeClient nchargeClient,string DownloadSoureURL, string rootdir)
         {
             infoManager.info = new Info("开始下载客户端:" + nchargeClient.name + "(" + nchargeClient.Cname + ")", InfoType.info);
             infoManager.info = new Info("开始下载原版" + nchargeClient.version + "客户端", InfoType.info);
 
-            DownloadManagerV2 downloadManager = new DownloadManagerV2();
+            DownloadManagerV2 downloadManager = new DownloadManagerV2(infoManager);
             List<DownloadItem> downloadItems = new List<DownloadItem>();
-            downloadManager.setInfoManager(infoManager);
+            //downloadManager.setInfoManager(infoManager);
             downloadItems.Add(new DownloadItem(DownloadSoureURL + "version/" + nchargeClient.version + "/client", rootdir + "\\versions\\" + nchargeClient.version + "\\" + nchargeClient.version + ".jar"));
             downloadItems.Add(new DownloadItem(DownloadSoureURL + "version/" + nchargeClient.version + "/json", rootdir + "\\versions\\" + nchargeClient.version + "\\" + nchargeClient.version + ".json"));
-            downloadManager.Start(downloadItems, 2);
+            downloadManager.Start( downloadItems, 2);
             infoManager.info = new Info("下载原版" + nchargeClient.version + "客户端完成", InfoType.info);
             infoManager.info = new Info("开始下载Forge" + nchargeClient.forgeVersion, InfoType.info);
 
@@ -42,12 +42,12 @@ namespace NCLCore
             infoManager.info = new Info("开始下载" + nchargeClient.name + "覆盖包", InfoType.info);
             downloadItems.Clear();
             downloadItems.Add(new DownloadItem("http://download.ncserver.top:8000/NCL/" + nchargeClient.name + ".zip",rootdir + "\\temp\\" + nchargeClient.name + ".zip"));
-            downloadManager.Start(downloadItems, 1);
+            downloadManager.Start( downloadItems, 1);
             (new FastZip()).ExtractZip(rootdir + "\\temp\\" + nchargeClient.name + ".zip", rootdir + "\\versions\\" + nchargeClient.name, "");
 
             infoManager.info = new Info("下载" + nchargeClient.name + "覆盖包完成", InfoType.info);
             NchargeModsDownload modsdownload = new NchargeModsDownload(infoManager);
-            modsdownload.ClientDownload = this;
+           // modsdownload.ClientDownload = this;
             modsdownload.toDir = rootdir + "\\versions\\" + nchargeClient.name + "\\mods\\";
             modsdownload.Start(250, nchargeClient.mods);
 
@@ -67,10 +67,9 @@ namespace NCLCore
                 FileInfo forge_bootstrapper = new FileInfo(Directory.GetCurrentDirectory() + "\\Resources\\wget.exe");
                 forge_bootstrapper.CopyTo(rootdir + "\\wget.exe", true);
                 List<DownloadItem> downloads = modsdownload.getMODs();
-                DownloadManagerV2 mod = new DownloadManagerV2();
-                mod.setInfoManager(infoManager);
+                DownloadManagerV2 mod = new DownloadManagerV2(infoManager);
                 mod.Start(downloads,50);
-
+                infoManager.info = new Info("下载" + nchargeClient.name + "客户端完成", InfoType.info);
 
             }
             else

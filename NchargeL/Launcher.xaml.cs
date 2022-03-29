@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 using Notification.Wpf;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -21,7 +22,7 @@ namespace NchargeL
     {
         public LoginUi LoginUi = new LoginUi();
         NotificationManager notificationManager = new NotificationManager();
-        public NCLcore NCLCore;
+        
         private static readonly ILog log = LogManager.GetLogger("Launcher");
         public Launcher()
         {
@@ -47,8 +48,8 @@ namespace NchargeL
                 {
                     ((Button)sender).IsEnabled = false;
                     // notificationManager.Show(NotificationContentSDK.notificationInformation("正在检查Java合理性", ""), "WindowArea");
-                    SDK sDK = new SDK();
-                    int javaVer = sDK.JavaCheck(Properties.Settings.Default.Java, Data.clients[list.SelectedIndex].McVer);
+                    
+                    int javaVer = ClientTools.JavaCheck(Properties.Settings.Default.Java, Data.clients[list.SelectedIndex]);
                     switch (javaVer)
                     {
                         case 0:
@@ -100,7 +101,7 @@ namespace NchargeL
         public void StartClient(object clt)
         {
 
-            SDK sDK = NCLCore.sDK;
+            LauncherClient launchc = new LauncherClient();
             Application.Current.Dispatcher.BeginInvoke(new Action(delegate
                                        {
                                            //try
@@ -109,9 +110,9 @@ namespace NchargeL
                                          new SolidColorBrush(Properties.Settings.Default.BodyColorS),
                                        new SolidColorBrush(Properties.Settings.Default.ForegroundColor));
                                                //   double nowProgress = 0;
-                                               sDK.ProPropertyChanged += (oo, ee) =>
+                                               Main.main.infoManager.PropertyChanged += (oo, ee) =>
                                     {
-                                        Info info = (oo as SDK).pro;
+                                        Info info = (oo as InfoManager).info;
                                         log.Debug(info.process + " " + info.msg);
                                         // if (info.process > nowProgress)
                                         {
@@ -141,7 +142,7 @@ namespace NchargeL
             {
 
                 // Task<int> task = Task.Factory.StartNew<int>(() => DownloadString("http://ww.linqpad.net"));
-                var re = sDK.StartClient((Client)clt, Data.users[0]._name, Data.users[0]._useruuid, Data.users[0]._token, Properties.Settings.Default.Java, Properties.Settings.Default.RAM);
+                var re = launchc.StartClient(Main.main.infoManager, (Client)clt, Properties.Settings.Default.DownloadSource, Data.users[0]._name, Data.users[0]._useruuid, Data.users[0]._token, Properties.Settings.Default.Java, Properties.Settings.Default.RAM);
                 log.Debug(re);
 
                 //StartClient(clt).GetAwaiter().GetResult().GetAwaiter().GetResult();
@@ -221,9 +222,9 @@ namespace NchargeL
          new SolidColorBrush(Properties.Settings.Default.BodyColorS),
        new SolidColorBrush(Properties.Settings.Default.ForegroundColor));
                 double nowProgress = 0;
-                sDK.ProPropertyChanged -= (oo, ee) =>
+                Main.main.infoManager.PropertyChanged -= (oo, ee) =>
                  {
-                     Info info = (oo as SDK).pro;
+                     Info info = (oo as InfoManager).info;
                      log.Debug(info.process + " " + info.msg);
                      // if (info.process > nowProgress)
                      {
@@ -243,11 +244,42 @@ namespace NchargeL
 
         private void logs_Click(object sender, RoutedEventArgs e)
         {
-            SDK sDK = new SDK();
-            sDK.ExecuteInCmd("start " + Directory.GetCurrentDirectory() + "\\logs", "");
+            
+            ExecuteInCmd("start " + Directory.GetCurrentDirectory() + "\\logs", "");
             // System.Diagnostics.Process.Start(Directory.GetCurrentDirectory() );
         }
+        public string ExecuteInCmd(string cmdline, string dir)
+        {
 
+            using (var process = new Process())
+            {
+                process.StartInfo.FileName = "cmd.exe";
+                process.StartInfo.UseShellExecute = false;
+                process.StartInfo.RedirectStandardInput = true;
+                process.StartInfo.RedirectStandardOutput = true;
+                process.StartInfo.RedirectStandardError = false;
+                // process.StartInfo.
+                process.StartInfo.CreateNoWindow = true;
+
+                process.Start();
+                // process.StandardInput.AutoFlush = true;
+                process.StandardInput.WriteLine("cd /d " + dir);
+                process.StandardInput.WriteLine(cmdline + "&exit");
+                process.StandardInput.Close();
+                string line;
+                while ((line = process.StandardOutput.ReadLine()) != null)
+                {
+                    log.Debug(line);
+                }
+                //获取cmd窗口的输出信息  
+                // string output = process.StandardOutput.ReadToEnd();
+                // process.StandardOutput.
+                process.WaitForExit();
+                process.Close();
+
+                return "";
+            }
+        }
         private void GameDir(object sender, RoutedEventArgs e)
         {
             var dlg = new CommonOpenFileDialog();
@@ -259,11 +291,11 @@ namespace NchargeL
                 if (dlg.FileName.EndsWith(".minecraft"))
                 {
                     Properties.Settings.Default.GameDir = dlg.FileName;
-                    NCLcore nCLCore = Main.main.newNCLcore(Properties.Settings.Default.DownloadSource, dlg.FileName);
-                    Data.clients = nCLCore.Clients;
+                    //NCLcore nCLCore = Main.main.newNCLcore(Properties.Settings.Default.DownloadSource, );
+                    Data.clients = ClientTools.GetALLClient(dlg.FileName);
                     notificationManager.Show(NotificationContentSDK.notificationSuccess("客户端列表已更新", ""), "WindowArea");
                     Main.main.launcher = new Launcher();
-                    Main.main.launcher.NCLCore = nCLCore;
+                    //Main.main.launcher.NCLCore = nCLCore;
                     Main.main.FrameWork.Content = Main.main.launcher;
                     break;
                 }

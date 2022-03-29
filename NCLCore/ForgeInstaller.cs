@@ -10,10 +10,11 @@ namespace NCLCore
         public static void installForge(string DownloadS, string name, string rootdir, string installerVer, InfoManager infoManager)
         {
             string tempdir = rootdir + "\\temp";
-            DownloadManagerV2 downloadManager = new DownloadManagerV2();
+            if (!Directory.Exists(tempdir)) Directory.CreateDirectory(tempdir);
+            DownloadManagerV2 downloadManager = new DownloadManagerV2(infoManager);
             List<DownloadItem> downloadItems = new List<DownloadItem>();
             downloadItems.Add(new DownloadItem(DownloadS + "maven/net/minecraftforge/forge/" + installerVer + "/forge-" + installerVer + "-installer.jar", tempdir + "\\" + installerVer + "-installer.jar"));
-            downloadManager.Start(downloadItems, 1);
+            downloadManager.Start( downloadItems, 1);
             string jardir = tempdir + "\\" + installerVer + "-installer.jar";
             infoManager.info = new Info("Forge下载成功", InfoType.info);
             // log.Debug("111");

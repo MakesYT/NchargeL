@@ -57,13 +57,13 @@ namespace NchargeL
         {
             if (Properties.Settings.Default.GameDir != "")
             {
-                NCLcore nCLCore = Main.main.newNCLcore(Properties.Settings.Default.DownloadSource, Properties.Settings.Default.GameDir);
-                ClientDownload clientDownload = nCLCore.clientDownload;
-                clientDownload.init();
+                
+                ClientDownload clientDownload = new ClientDownload();
+                
                 int line = 0;
-                clientDownload.PropertyChanged += (oo, ee) =>
+                Main.main.infoManager.PropertyChanged += (oo, ee) =>
                 {
-                    string logtmp = (oo as ClientDownload).log;
+                    Info logtmp = (oo as InfoManager).info;
                     Application.Current.Dispatcher.BeginInvoke(new Action(delegate
                     {
                         line++;
@@ -72,7 +72,7 @@ namespace NchargeL
                             line = 0;
                             logs.Text = "";
                         }
-                        logs.Text += logtmp + "\n";
+                        logs.Text += logtmp.msg + "\n";
                         //logs.Select(logs.Text.Length, 0);
                         // logs.ScrollToEnd();
                     })).Wait();
@@ -84,7 +84,7 @@ namespace NchargeL
                     NchargeClient nchargeClient = (NchargeClient)list.SelectedItem;
 
                     Task.Factory.StartNew(() =>
-                        clientDownload.DownloadNchargeClient(nchargeClient));
+                        clientDownload.DownloadNchargeClient(Main.main.infoManager, nchargeClient, Properties.Settings.Default.DownloadSource, Properties.Settings.Default.GameDir));
                 }
                 else notificationManager.Show(NotificationContentSDK.notificationError("请先选择客户端", ""), "WindowArea");
             }
@@ -99,13 +99,13 @@ namespace NchargeL
                     if (dlg.FileName.EndsWith(".minecraft"))
                     {
                         Properties.Settings.Default.GameDir = dlg.FileName;
-                        NCLcore nCLCore = Main.main.newNCLcore(Properties.Settings.Default.DownloadSource, Properties.Settings.Default.GameDir);
-                        ClientDownload clientDownload = nCLCore.clientDownload;
-                        clientDownload.init();
+                        //NCLcore nCLCore = Main.main.newNCLcore(Properties.Settings.Default.DownloadSource, Properties.Settings.Default.GameDir);
+                        ClientDownload clientDownload = new ClientDownload();
+                        //clientDownload.init();
                         int line = 0;
-                        clientDownload.PropertyChanged += (oo, ee) =>
+                        Main.main.infoManager.PropertyChanged += (oo, ee) =>
                         {
-                            string logtmp = (oo as ClientDownload).log;
+                            Info logtmp = (oo as InfoManager).info;
                             Application.Current.Dispatcher.BeginInvoke(new Action(delegate
                             {
                                 line++;
@@ -126,7 +126,7 @@ namespace NchargeL
                             NchargeClient nchargeClient = (NchargeClient)list.SelectedItem;
 
                             Task.Factory.StartNew(() =>
-                                clientDownload.DownloadNchargeClient(nchargeClient));
+                                clientDownload.DownloadNchargeClient(Main.main.infoManager, nchargeClient, Properties.Settings.Default.DownloadSource, Properties.Settings.Default.GameDir));
                         }
                         else notificationManager.Show(NotificationContentSDK.notificationError("请先选择客户端", ""), "WindowArea");
 

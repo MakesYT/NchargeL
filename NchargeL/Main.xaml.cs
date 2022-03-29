@@ -51,14 +51,14 @@ namespace NchargeL
             {//当前有账号登录
                 if (Properties.Settings.Default.GameDir != "")
                 {
-                    NCLcore nCLCore = newNCLcore(Properties.Settings.Default.DownloadSource, Properties.Settings.Default.GameDir);
-                    Data.clients = nCLCore.Clients;
+                   // NCLcore nCLCore = newNCLcore(Properties.Settings.Default.DownloadSource, Properties.Settings.Default.GameDir);
+                    Data.clients = ClientTools.GetALLClient(Properties.Settings.Default.GameDir); 
 
                     //notificationManager.Show(NotificationContentSDK.notificationSuccess("客户端列表已更新", ""), "WindowArea");
                     if (Data.clients.Count > 0)
                     {
                         launcher = new Launcher();
-                        launcher.NCLCore = nCLCore;
+                        //launcher.NCLCore = nCLCore;
                         FrameWork.Content = launcher;
                     }
                 }
@@ -152,64 +152,18 @@ namespace NchargeL
             // Manager.Dismiss(msg);
             FrameWork.Content = settingUi;
         }
-        public NCLcore newNCLcore(string ds, string dir)
-        {
-            NCLcore nCLCore = new NCLcore(ds, dir);
-            // List<> list = new List();
-            // List<T> ListOfT = new List<T>();
-            nCLCore.sDK.PropertyChanged += (oo, ee) =>
-            {
-
-                // Console.WriteLine("值变了，新值是：" + (oo as NCLCore.Info).A);
-                switch ((oo as SDK).info.TYPE)
-                {
-                    case "info":
-                        {
-                            notificationManager.Show(NotificationContentSDK.notificationInformation((oo as SDK).info.msg, ""), "WindowArea");
-                            break;
-                        }
-                    case "error":
-                        {
-                            notificationManager.Show(NotificationContentSDK.notificationError((oo as SDK).info.msg, ""), "WindowArea");
-                            break;
-                        }
-                    case "warn":
-                        {
-
-                            notificationManager.Show(NotificationContentSDK.notificationWarning((oo as SDK).info.msg, ""), "WindowArea");
-                            break;
-                        }
-                    case "success":
-                        {
-                            notificationManager.Show(NotificationContentSDK.notificationSuccess((oo as SDK).info.msg, ""), "WindowArea");
-                            break;
-                        }
-                    case "errorDia":
-                        {
-                            Application.Current.Dispatcher.BeginInvoke(new Action(delegate
-                            {
-                                ErrorDialog warn = new ErrorDialog("", (oo as SDK).info.msg);
-                                warn.Show();
-
-                            })).Wait();
-
-                            break;
-                        }
-                }
-
-            };
-            return nCLCore;
-        }
+        public InfoManager infoManager=new InfoManager();
+        
         public void loadLauncher()
         {
             if (Properties.Settings.Default.GameDir != "")
             {
-                NCLcore nCLCore = newNCLcore(Properties.Settings.Default.DownloadSource, Properties.Settings.Default.GameDir);
-                Data.clients = nCLCore.Clients;
+               //CLcore nCLCore = newNCLcore(Properties.Settings.Default.DownloadSource,);
+                Data.clients =ClientTools.GetALLClient( Properties.Settings.Default.GameDir);
 
                 notificationManager.Show(NotificationContentSDK.notificationSuccess("客户端列表已更新", ""), "WindowArea");
                 launcher = new Launcher();
-                launcher.NCLCore = nCLCore;
+               // launcher.NCLCore = nCLCore;
                 FrameWork.Content = launcher;
             }
             else
@@ -223,11 +177,11 @@ namespace NchargeL
                     if (dlg.FileName.EndsWith(".minecraft"))
                     {
                         Properties.Settings.Default.GameDir = dlg.FileName;
-                        NCLcore nCLCore = newNCLcore(Properties.Settings.Default.DownloadSource, dlg.FileName);
-                        Data.clients = nCLCore.Clients;
+                       // NCLcore nCLCore = newNCLcore(Properties.Settings.Default.DownloadSource, dlg.FileName);
+                        Data.clients = ClientTools.GetALLClient(Properties.Settings.Default.GameDir);
                         notificationManager.Show(NotificationContentSDK.notificationSuccess("客户端列表已更新", ""), "WindowArea");
                         launcher = new Launcher();
-                        launcher.NCLCore = nCLCore;
+                        //launcher.NCLCore = nCLCore;
                         FrameWork.Content = launcher;
                         break;
                     }
