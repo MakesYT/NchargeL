@@ -133,11 +133,12 @@ namespace NCLCore
                         foreach (DirectoryInfo file in root.GetDirectories())
                         {
                             Client client = new Client();
-                            client.dir = file.FullName;
-                            client.rootdir = dir;
+                            
                             FileInfo jsonFile = new FileInfo(file.FullName + "\\" + file.Name + ".json");
                             if (jsonFile.Exists)
                             {
+                                client.dir = file.FullName;
+                                client.rootdir = dir;
                                 client.Name = file.Name;
                                 try
                                 {
@@ -157,8 +158,8 @@ namespace NCLCore
                                                 client.Forge = true;
                                                 client.McVer = jObject["inheritsFrom"].ToString();
                                                 string pa = jsonFile.FullName;
-                                                //log.Debug(pa.Replace(file.Name, jObject["inheritsFrom"].ToString()));
-                                                using (System.IO.StreamReader jsonfile1 = System.IO.File.OpenText(pa.Replace(file.Name, jObject["inheritsFrom"].ToString())))
+                                                log.Debug(dir + "\\versions\\" + client.McVer + "\\" + client.McVer + ".json");
+                                                using (System.IO.StreamReader jsonfile1 = System.IO.File.OpenText(dir + "\\versions\\"+ client.McVer+"\\"+ client.McVer+".json"))
                                                 {
                                                     using (JsonTextReader reader1 = new JsonTextReader(jsonfile1))
                                                     {
@@ -178,7 +179,7 @@ namespace NCLCore
                                         }
                                     }
                                 }
-                                catch (Exception ex) { }
+                                catch (Exception ex) { log.Error(ex); }
                             }
                             FileInfo nchargeFile = new FileInfo(file.FullName + "\\" + file.Name + ".ncharge");
                             if (nchargeFile.Exists)
@@ -201,7 +202,7 @@ namespace NCLCore
                                 }
                                 catch (Exception ex) { }
                             }
-                            if (client.McVer != "")
+                            if (client.isNotNull())
                             {
                                 client.Id = clients.Count + 1;
                                 clients.Add(client);
