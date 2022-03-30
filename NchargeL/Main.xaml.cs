@@ -4,11 +4,9 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 using NCLCore;
 using Notification.Wpf;
 using System;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Animation;
 
 namespace NchargeL
@@ -51,8 +49,8 @@ namespace NchargeL
             {//当前有账号登录
                 if (Properties.Settings.Default.GameDir != "")
                 {
-                   // NCLcore nCLCore = newNCLcore(Properties.Settings.Default.DownloadSource, Properties.Settings.Default.GameDir);
-                    Data.clients = ClientTools.GetALLClient(Properties.Settings.Default.GameDir); 
+                    // NCLcore nCLCore = newNCLcore(Properties.Settings.Default.DownloadSource, Properties.Settings.Default.GameDir);
+                    Data.clients = ClientTools.GetALLClient(Properties.Settings.Default.GameDir);
 
                     //notificationManager.Show(NotificationContentSDK.notificationSuccess("客户端列表已更新", ""), "WindowArea");
                     if (Data.clients.Count > 0)
@@ -152,18 +150,18 @@ namespace NchargeL
             // Manager.Dismiss(msg);
             FrameWork.Content = settingUi;
         }
-        public InfoManager infoManager=new InfoManager();
-        
+        public InfoManager infoManager = new InfoManager();
+
         public void loadLauncher()
         {
             if (Properties.Settings.Default.GameDir != "")
             {
-               //CLcore nCLCore = newNCLcore(Properties.Settings.Default.DownloadSource,);
-                Data.clients =ClientTools.GetALLClient( Properties.Settings.Default.GameDir);
+                //CLcore nCLCore = newNCLcore(Properties.Settings.Default.DownloadSource,);
+                Data.clients = ClientTools.GetALLClient(Properties.Settings.Default.GameDir);
 
                 notificationManager.Show(NotificationContentSDK.notificationSuccess("客户端列表已更新", ""), "WindowArea");
                 launcher = new Launcher();
-               // launcher.NCLCore = nCLCore;
+                // launcher.NCLCore = nCLCore;
                 FrameWork.Content = launcher;
             }
             else
@@ -177,7 +175,7 @@ namespace NchargeL
                     if (dlg.FileName.EndsWith(".minecraft"))
                     {
                         Properties.Settings.Default.GameDir = dlg.FileName;
-                       // NCLcore nCLCore = newNCLcore(Properties.Settings.Default.DownloadSource, dlg.FileName);
+                        // NCLcore nCLCore = newNCLcore(Properties.Settings.Default.DownloadSource, dlg.FileName);
                         Data.clients = ClientTools.GetALLClient(Properties.Settings.Default.GameDir);
                         notificationManager.Show(NotificationContentSDK.notificationSuccess("客户端列表已更新", ""), "WindowArea");
                         launcher = new Launcher();
@@ -216,21 +214,18 @@ namespace NchargeL
 
         private void ManageClient(object sender, RoutedEventArgs e)
         {
-            ErrorDialog error = new ErrorDialog("", "（1）发生了一个错误！请联系腐竹！" + Environment.NewLine
-                                + "这个还没有完成敬请期待");
-            error.ShowDialog();
-            var progress = notificationManager.ShowProgressBar("下载客户端", true, true, "WindowArea", false, 1, null, false, true,
-                new SolidColorBrush(Properties.Settings.Default.BodyColorS),
-              new SolidColorBrush(Properties.Settings.Default.ForegroundColor));
-            for (var i = 0; i <= 10000; i++)
-            {
-                progress.Cancel.ThrowIfCancellationRequested();
-                progress.Report((i / 100, "2", null, null));
-                // progress.WaitingTimer.BaseWaitingMessage = i is > 30 and < 70 ? null : "Calculation time";
-                //  Thread.Sleep(10);
-                Task.Delay(TimeSpan.FromSeconds(0.03), progress.Cancel);
-            }
-            progress.CancelSource.Cancel();
+            var msg = Manager.CreateMessage()
+        .Accent(Properties.Settings.Default.BodyColorS.ToString())
+        .Background(Properties.Settings.Default.BackgroundColor.ToString())
+        .Foreground(Properties.Settings.Default.TextColor.ToString())
+        .HasBadge("Info")
+        .HasMessage("这个还没有完成敬请期待")
+        .Animates(true)
+     .AnimationInDuration(0.75)
+     .AnimationOutDuration(2)
+        .Queue();
+            Manager.Dismiss(msg);
+
 
         }
 
@@ -238,7 +233,7 @@ namespace NchargeL
         {
             FrameWork.Content = downloadUI;
         }
-        
+
         private void ColorZone_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton.ToString().Equals("Pressed"))

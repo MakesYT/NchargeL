@@ -5,7 +5,7 @@ namespace NCLCore
     public class Info
     {
         public string msg;
-        public double process;
+        public double? process = null;
         public InfoType TYPE = InfoType.error;
         private readonly ILog log = LogManager.GetLogger("Info");
         public Info(string msg, InfoType TYPE)

@@ -43,8 +43,8 @@ namespace NchargeL
                     if (item.ProcessName.Contains(processName.Replace(".exe", "")))
                     {
                         item.Kill();
-                        log.Info("已杀死"+item.Id);
-                       // break;
+                        log.Info("已杀死" + item.Id);
+                        // break;
                     }
                 }
             }

@@ -9,6 +9,8 @@ namespace NCLCore
 
         InfoManager infoManager;
         public DownloadManagerV2(InfoManager infoManager) { this.infoManager = infoManager; }
+        public DownloadManagerV2(InfoManager infoManager, bool a) { this.infoManager = infoManager; this.returnProcess = a; }
+        private bool returnProcess = false;
         private static readonly ILog log = LogManager.GetLogger("DownloadManagerV2");
         private List<DownloadItem> Hashs = new List<DownloadItem>();
         private List<DownloadItem> cancellationsOccurrenceLists = new List<DownloadItem>();
@@ -18,12 +20,12 @@ namespace NCLCore
         private string error = "";
         private int nowthreadnum = 0;
         //private InfoManager infoManager = null;
-        
+
         public DownloadReslut Start(List<DownloadItem> list, int thread)
         {
             Hashs = list;
-            infoManager.Info(new Info("共需下载"+Hashs.Count, InfoType.info));
-            
+            infoManager.Info(new Info("共需下载" + Hashs.Count, InfoType.info));
+
             log.Debug(Hashs.Count);
             AllCount = Hashs.Count;
             while (Hashs.Count != 0 || nowthreadnum != 0)
@@ -36,7 +38,7 @@ namespace NCLCore
                         nowthreadnum++;
                         DownloadItem hash = Hashs.First();
                         Hashs.Remove(hash);
-                        Task.Factory.StartNew(() => ExecuteInCmd( hash));
+                        Task.Factory.StartNew(() => ExecuteInCmd(hash));
                     }
                     else if (nowthreadnum == 0) break;
                 }
@@ -107,8 +109,10 @@ namespace NCLCore
                 //AllCount--;
                 DownloadCount++;
                 //if (infoManager != null)
-                    infoManager.Info(new Info(DownloadCount.ToString(), InfoType.info));
-                //ClientDownload.log = DownloadCount + "/" + (AllCount);
+                if (!returnProcess)
+                    infoManager.Info(new Info(DownloadCount + "/" + (AllCount), InfoType.info));
+                else infoManager.Info(new Info(0, DownloadCount + "/" + (AllCount)));
+                //ClientDownload.log = DownloadCount ;
                 return "";
             }
         }

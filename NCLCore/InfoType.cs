@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace NCLCore
+﻿namespace NCLCore
 {
     public enum InfoType
     {
@@ -15,5 +9,5 @@ namespace NCLCore
         errorDia,
         successDia
     }
-    
+
 }

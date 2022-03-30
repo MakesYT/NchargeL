@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace NCLCore
+﻿namespace NCLCore
 {
 
     public class DownloadReslut
     {
-        bool allSuccess=false;
-        List<DownloadItem> downloadItems=new List<DownloadItem>();
+        bool allSuccess = false;
+        List<DownloadItem> downloadItems = new List<DownloadItem>();
 
         public DownloadReslut(bool allSuccess, List<DownloadItem> downloadItems)
         {

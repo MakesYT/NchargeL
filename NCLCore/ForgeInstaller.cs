@@ -14,9 +14,9 @@ namespace NCLCore
             DownloadManagerV2 downloadManager = new DownloadManagerV2(infoManager);
             List<DownloadItem> downloadItems = new List<DownloadItem>();
             downloadItems.Add(new DownloadItem(DownloadS + "maven/net/minecraftforge/forge/" + installerVer + "/forge-" + installerVer + "-installer.jar", tempdir + "\\" + installerVer + "-installer.jar"));
-            downloadManager.Start( downloadItems, 1);
+            downloadManager.Start(downloadItems, 1);
             string jardir = tempdir + "\\" + installerVer + "-installer.jar";
-            infoManager.info = new Info("Forge下载成功", InfoType.info);
+            infoManager.Info(new Info("Forge下载成功", InfoType.info));
             // log.Debug("111");
             FileInfo forge_bootstrapper = new FileInfo(Directory.GetCurrentDirectory() + "\\Resources\\forge-install-bootstrapper.jar");
             forge_bootstrapper.CopyTo(rootdir + "\\forge-install-bootstrapper.jar", true);
@@ -24,7 +24,7 @@ namespace NCLCore
             // ExecuteInCmd(java + " -cp \"forge-install-bootstrapper.jar;" + jardir + "\" com.bangbang93.ForgeInstaller " + "\"" + clt.rootdir + "\"", clt.rootdir);
             (new FastZip()).ExtractZip(tempdir + "\\" + installerVer + "-installer.jar", tempdir, "forge-" + installerVer + ".jar");
             (new FastZip()).ExtractZip(tempdir + "\\" + installerVer + "-installer.jar", tempdir, "version.json");
-            infoManager.info = new Info("解压文件完成", InfoType.info);
+            infoManager.Info(new Info("解压文件完成", InfoType.info));
             // log.Debug("111");
             //DirectoryInfo dir = new DirectoryInfo(rootdir + "\\libraries\\net\\minecraftforge\\forge\\" + installerVer);
             // if (!dir.Exists) dir.Create();
@@ -36,7 +36,7 @@ namespace NCLCore
             verfileInfo.CopyTo(rootdir + "\\versions\\" + name + "\\" + name + ".json", true);
             DirectoryInfo directoryInfo = new DirectoryInfo(tempdir);
             directoryInfo.Delete(true);
-            infoManager.info = new Info("缓存清理完成", InfoType.info);
+            infoManager.Info(new Info("缓存清理完成", InfoType.info));
         }
     }
 }

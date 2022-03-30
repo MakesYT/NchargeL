@@ -27,7 +27,7 @@ namespace NCLCore
         int nowthreadnum = 0;
         public void Start(int thread, JArray jArray)
         {
-            infoManager.info = new Info("开始解析MODS列表", InfoType.info);
+            infoManager.Info(new Info("开始解析MODS列表", InfoType.info));
             foreach (JObject mod in jArray)
             {
                 modJsons.Add(mod);
@@ -56,7 +56,7 @@ namespace NCLCore
                 }
             }
             if (cancellationsOccurrenceCount != 0)
-                infoManager.info = new Info("有" + cancellationsOccurrenceCount + "个文件下载失败\n错误信息" + error, InfoType.errorDia);
+                infoManager.Info(new Info("有" + cancellationsOccurrenceCount + "个文件下载失败\n错误信息" + error, InfoType.errorDia));
         }
         string GetSHA1(string s)
         {
@@ -83,7 +83,7 @@ namespace NCLCore
         {
             return listmods;
         }
-       
+
         private void DownloadTool(JObject hash)
         {
             try
@@ -106,26 +106,27 @@ namespace NCLCore
                         {
                             flag = true;
                             DownloadCount++;
-                            infoManager.info = new Info(DownloadCount + "/" + AllCount + "文件" + dir.Substring(dir.LastIndexOf("\\") + 1) + "无需下载,sha1校验通过", InfoType.info);
-                            
+                            infoManager.Info(new Info(DownloadCount + "/" + AllCount + "文件" + dir.Substring(dir.LastIndexOf("\\") + 1) + "无需下载,sha1校验通过", InfoType.info));
+
                             nowthreadnum--;
                         }
                     }
                     if (!flag)
                     {
-                        infoManager.info = new Info( "需要下载" + jObject["fileName"].ToString(), InfoType.info);
-                       
+                        infoManager.Info(new Info("需要下载" + jObject["fileName"].ToString(), InfoType.info));
+
                         log.Debug("需要下载:" + jObject["downloadUrl"].ToString());
-                        DownloadItem downloadItem=new DownloadItem(uri, dir);
+                        DownloadItem downloadItem = new DownloadItem(uri, dir);
                         listmods.Add(downloadItem);
                         nowthreadnum--;
                     }
                 }
-            }catch (Exception e)
+            }
+            catch (Exception e)
             {
                 log.Debug("获取File失败重新获取," + hash["projectID"] + "/file/" + hash["fileID"]);
-                infoManager.info = new Info("获取File失败重新获取,"+ hash["projectID"] + "/file/" + hash["fileID"], InfoType.error);
-                
+                infoManager.Info(new Info("获取File失败重新获取," + hash["projectID"] + "/file/" + hash["fileID"], InfoType.error));
+
                 Task.Factory.StartNew(() => DownloadTool(hash));
 
             }

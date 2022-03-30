@@ -1,4 +1,5 @@
-﻿using log4net;
+﻿using Enterwell.Clients.Wpf.Notifications;
+using log4net;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using NCLCore;
 using Newtonsoft.Json.Linq;
@@ -22,7 +23,7 @@ namespace NchargeL
     {
         public LoginUi LoginUi = new LoginUi();
         NotificationManager notificationManager = new NotificationManager();
-        
+
         private static readonly ILog log = LogManager.GetLogger("Launcher");
         public Launcher()
         {
@@ -35,7 +36,7 @@ namespace NchargeL
         private void list_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Client client = ((Client)((ListBox)e.OriginalSource).SelectedItem);
-            info.Text = "当前选择的客户端:\n" + client.Name+"\nAssets:"+client.assets;
+            info.Text = "当前选择的客户端:\n" + client.Name + "\nAssets:" + client.assets;
             // (ListBoxItem)((ListBox)e.Source).
         }
 
@@ -48,7 +49,7 @@ namespace NchargeL
                 {
                     ((Button)sender).IsEnabled = false;
                     // notificationManager.Show(NotificationContentSDK.notificationInformation("正在检查Java合理性", ""), "WindowArea");
-                    
+
                     int javaVer = ClientTools.JavaCheck(Properties.Settings.Default.Java, Data.clients[list.SelectedIndex]);
                     switch (javaVer)
                     {
@@ -100,48 +101,49 @@ namespace NchargeL
         }
         public void StartClient(object clt)
         {
-
+            INotificationMessage msg = null;
             LauncherClient launchc = new LauncherClient();
             Application.Current.Dispatcher.BeginInvoke(new Action(delegate
-                                       {
-                                           //try
-                                           {
-                                               var progress = notificationManager.ShowProgressBar("启动游戏", true, true, "WindowArea", false, 1, null, false, true,
-                                         new SolidColorBrush(Properties.Settings.Default.BodyColorS),
-                                       new SolidColorBrush(Properties.Settings.Default.ForegroundColor));
-                                               //   double nowProgress = 0;
-                                               Main.main.infoManager.PropertyChanged += (oo, ee) =>
-                                    {
-                                        Info info = (oo as InfoManager).info;
-                                        log.Debug(info.process + " " + info.msg);
-                                        // if (info.process > nowProgress)
-                                        {
-                                            // nowProgress = info.process;
+                           {
+                               var progress = new ProgressBar
+                               {
+                                   VerticalAlignment = VerticalAlignment.Bottom,
+                                   HorizontalAlignment = HorizontalAlignment.Stretch,
+                                   Height = 3,
+                                   BorderThickness = new Thickness(0),
+                                   Foreground = new SolidColorBrush(Color.FromArgb(128, 255, 255, 255)),
+                                   Background = Brushes.Transparent,
+                                   IsIndeterminate = true,
+                                   IsHitTestVisible = false,
+                                   Value = 10
+                               };
+                               progress.Value = 10;
+                               msg = Main.main.Manager.CreateMessage()
+                               .Accent("#F15B19")
+                               .Background("#F15B19")
+                               .HasHeader("")
+                               .HasMessage("游戏启动中.......")
+                               .WithOverlay(progress)
+                               .Queue();
+                               Main.main.infoManager.PropertyChanged += (oo, ee) =>
+                           {
+                               if ((oo as InfoManager).info.process != null)
+                               {
 
-                                            //progress.Cancel.ThrowIfCancellationRequested();
-
-
-                                            if (info.process == 100)
-                                            {
-                                                progress.Dispose();
-                                            }
-                                            else
-                                                progress.Report((info.process, info.msg, null, null));
-
-                                        }
-
-
-
-
-                                    };
-                                           }
-                                           //catch (Exception ex) { log.Error(ex); }
-                                       })).Wait();
+                                   Info logtmp = (oo as InfoManager).info;
+                                   log.Debug("消息反馈" + logtmp.msg + " " + logtmp.process);
+                                   Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+                                   {
+                                       progress.Value = (double)logtmp.process;
+                                       // stringinfo 
+                                       msg.Header = logtmp.msg;
+                                   })).Wait();
+                               }
+                           };
+                           })).Wait();
             bool flag = true;
             while (flag)
             {
-
-                // Task<int> task = Task.Factory.StartNew<int>(() => DownloadString("http://ww.linqpad.net"));
                 var re = launchc.StartClient(Main.main.infoManager, (Client)clt, Properties.Settings.Default.DownloadSource, Data.users[0]._name, Data.users[0]._useruuid, Data.users[0]._token, Properties.Settings.Default.Java, Properties.Settings.Default.RAM);
                 log.Debug(re);
 
@@ -218,33 +220,13 @@ namespace NchargeL
 
             Application.Current.Dispatcher.BeginInvoke(new Action(delegate
             {
-                var progress = notificationManager.ShowProgressBar("启动游戏", true, true, "WindowArea", false, 1, null, false, true,
-         new SolidColorBrush(Properties.Settings.Default.BodyColorS),
-       new SolidColorBrush(Properties.Settings.Default.ForegroundColor));
-                double nowProgress = 0;
-                Main.main.infoManager.PropertyChanged -= (oo, ee) =>
-                 {
-                     Info info = (oo as InfoManager).info;
-                     log.Debug(info.process + " " + info.msg);
-                     // if (info.process > nowProgress)
-                     {
-                         nowProgress = info.process;
-                         progress.Cancel.ThrowIfCancellationRequested();
-                         progress.Report((info.process, info.msg, null, null));
-                         if (info.process == 100)
-                         { progress.CancelSource.Cancel(); }
-                     }
-
-
-
-
-                 };
+                Main.main.Manager.Dismiss(msg);
             })).Wait();
         }
 
         private void logs_Click(object sender, RoutedEventArgs e)
         {
-            
+
             ExecuteInCmd("start " + Directory.GetCurrentDirectory() + "\\logs", "");
             // System.Diagnostics.Process.Start(Directory.GetCurrentDirectory() );
         }

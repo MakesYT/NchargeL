@@ -81,7 +81,7 @@ namespace Ncharge
 
         public MainWindow()
         {
-          
+
             InitializeComponent();
             this.Show();
             //long timeStamp = DateTimeOffset.Now.ToUniversalTime().Ticks; 

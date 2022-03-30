@@ -9,8 +9,8 @@ namespace NCLCore
     public class LauncherClient
     {
         private readonly ILog log = LogManager.GetLogger("LauncherClient");
-       // public InfoManager infoManager;
-        public LauncherClient() {  }
+        // public InfoManager infoManager;
+        public LauncherClient() { }
         /// <summary>
         /// 正常启动 返回代码1
         /// 令牌无效 返回代码2

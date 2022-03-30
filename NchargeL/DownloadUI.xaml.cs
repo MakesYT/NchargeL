@@ -1,4 +1,5 @@
-﻿using Microsoft.WindowsAPICodePack.Dialogs;
+﻿using log4net;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using NCLCore;
 using Newtonsoft.Json.Linq;
 using Notification.Wpf;
@@ -16,6 +17,7 @@ namespace NchargeL
     /// </summary>
     public partial class DownloadUI : Page
     {
+        private static readonly ILog log = LogManager.GetLogger("DownloadUI");
         NotificationManager notificationManager = new NotificationManager();
         public DownloadUI()
         {
@@ -55,12 +57,13 @@ namespace NchargeL
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
+            int line = 0;
             if (Properties.Settings.Default.GameDir != "")
             {
-                
-                ClientDownload clientDownload = new ClientDownload();
-                
-                int line = 0;
+
+                ClientDownload clientDownload = new ClientDownload(Main.main.infoManager);
+
+
                 Main.main.infoManager.PropertyChanged += (oo, ee) =>
                 {
                     Info logtmp = (oo as InfoManager).info;
@@ -72,6 +75,7 @@ namespace NchargeL
                             line = 0;
                             logs.Text = "";
                         }
+                        log.Info("消息通知记录:" + logtmp.msg);
                         logs.Text += logtmp.msg + "\n";
                         //logs.Select(logs.Text.Length, 0);
                         // logs.ScrollToEnd();
@@ -84,7 +88,7 @@ namespace NchargeL
                     NchargeClient nchargeClient = (NchargeClient)list.SelectedItem;
 
                     Task.Factory.StartNew(() =>
-                        clientDownload.DownloadNchargeClient(Main.main.infoManager, nchargeClient, Properties.Settings.Default.DownloadSource, Properties.Settings.Default.GameDir));
+                        clientDownload.DownloadNchargeClient(nchargeClient, Properties.Settings.Default.DownloadSource, Properties.Settings.Default.GameDir));
                 }
                 else notificationManager.Show(NotificationContentSDK.notificationError("请先选择客户端", ""), "WindowArea");
             }
@@ -100,9 +104,9 @@ namespace NchargeL
                     {
                         Properties.Settings.Default.GameDir = dlg.FileName;
                         //NCLcore nCLCore = Main.main.newNCLcore(Properties.Settings.Default.DownloadSource, Properties.Settings.Default.GameDir);
-                        ClientDownload clientDownload = new ClientDownload();
+                        ClientDownload clientDownload = new ClientDownload(Main.main.infoManager);
                         //clientDownload.init();
-                        int line = 0;
+                        //int line = 0;
                         Main.main.infoManager.PropertyChanged += (oo, ee) =>
                         {
                             Info logtmp = (oo as InfoManager).info;
@@ -114,7 +118,8 @@ namespace NchargeL
                                     line = 0;
                                     logs.Text = "";
                                 }
-                                logs.Text += logtmp + "\n";
+                                log.Info("消息通知记录:" + logtmp.msg);
+                                logs.Text += logtmp.msg + "\n";
                                 //logs.Select(logs.Text.Length, 0);
                                 // logs.ScrollToEnd();
                             })).Wait();
@@ -126,7 +131,7 @@ namespace NchargeL
                             NchargeClient nchargeClient = (NchargeClient)list.SelectedItem;
 
                             Task.Factory.StartNew(() =>
-                                clientDownload.DownloadNchargeClient(Main.main.infoManager, nchargeClient, Properties.Settings.Default.DownloadSource, Properties.Settings.Default.GameDir));
+                                clientDownload.DownloadNchargeClient(nchargeClient, Properties.Settings.Default.DownloadSource, Properties.Settings.Default.GameDir));
                         }
                         else notificationManager.Show(NotificationContentSDK.notificationError("请先选择客户端", ""), "WindowArea");
 
@@ -143,7 +148,25 @@ namespace NchargeL
                 }
             }
 
+            Main.main.infoManager.PropertyChanged -= (oo, ee) =>
+            {
+                Info logtmp = (oo as InfoManager).info;
+                Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+                {
+                    line++;
+                    if (line > 5)
+                    {
+                        line = 0;
+                        logs.Text = "";
+                    }
+                    log.Info("消息通知记录:" + logtmp.msg);
+                    logs.Text += logtmp.msg + "\n";
+                    //logs.Select(logs.Text.Length, 0);
+                    // logs.ScrollToEnd();
+                })).Wait();
 
+
+            };
         }
         void GetAllCients()
         {

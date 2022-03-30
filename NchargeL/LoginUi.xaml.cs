@@ -47,7 +47,7 @@ namespace NchargeL
             process.StartInfo.RedirectStandardError = false;
             // process.StartInfo.
             process.StartInfo.CreateNoWindow = true;
-           
+
             process.Start();
             process.StandardInput.WriteLine("start https://www.ncserver.top:666/auth/register" + "&exit");
             process.StandardInput.Close();
