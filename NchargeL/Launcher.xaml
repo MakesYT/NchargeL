@@ -10,7 +10,7 @@
       Width="750" Height="380"
       Title="Launcher">
     <Page.Resources>
-        
+
         <local:Data x:Key="t"></local:Data>
         <Style x:Key="color" TargetType="{x:Type ListBoxItem}" >
             <Setter Property="Foreground" Value="{DynamicResource TextColor}" />
@@ -30,9 +30,14 @@
     </Page.Resources>
     <Grid>
         <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}"
-  ToolTip="修改客户端位置"
+  ToolTip="修改客户端目录"
    Margin="180,292,500,0" Panel.ZIndex="1" Cursor="Hand" Width="48" Height="48" Background="{DynamicResource BodyColorWith50Opacity}" BorderBrush="{DynamicResource BodyColor}" Foreground="{DynamicResource ForegroundColor}" Click="GameDir">
             <materialDesign:PackIcon Kind="FolderEditOutline" Cursor="Hand" Width="28" Height="28" />
+        </Button>
+        <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}"
+  ToolTip="打开客户端目录"
+   Margin="10,312,692,20" Panel.ZIndex="1" Cursor="Hand" Width="48" Height="48" Background="{DynamicResource BodyColorWith50Opacity}" BorderBrush="{DynamicResource BodyColor}" Foreground="{DynamicResource ForegroundColor}" Click="GameDir_Click">
+            <materialDesign:PackIcon Kind="FolderOpenOutline" Cursor="Hand" Width="28" Height="28" />
         </Button>
         <GroupBox Margin="0,5,0,0" materialDesign:ColorZoneAssist.Mode="Custom"
             materialDesign:ColorZoneAssist.Background="{DynamicResource BodyColor}"
@@ -75,9 +80,10 @@
                 </TextBox>
             </StackPanel>
         </GroupBox>
-        <TextBlock x:Name="info" Text="当前未选择客户端" Margin="560,215,20,93" Foreground="{DynamicResource ForegroundColor}" Background="{DynamicResource BodyColorWith50Opacity}" FontFamily="HarmonyOS Sans" FontSize="20"></TextBlock>
-        <Button x:Name="logs" BorderBrush="{x:Null}" Foreground="{DynamicResource ForegroundColor}" Cursor="Hand"  IsDefault="True" Background="{DynamicResource BodyColorWith50Opacity}" FocusVisualStyle="{x:Null}"  Style="{StaticResource MaterialDesignOutlinedLightButton}" Content="打开logs目录" HorizontalAlignment="Left" Margin="597,336,0,0" VerticalAlignment="Top" Click="logs_Click"/>
+        <TextBox IsReadOnly="True" HorizontalContentAlignment="Center" x:Name="info" Text="当前未选择客户端" Margin="556,156,10,120" Foreground="{DynamicResource ForegroundColor}" Background="{DynamicResource BodyColorWith50Opacity}" FontFamily="HarmonyOS Sans" FontSize="20" Cursor="IBeam"></TextBox>
+        <Button x:Name="logs" BorderBrush="{x:Null}" Foreground="{DynamicResource ForegroundColor}" Cursor="Hand"  IsDefault="True" Background="{DynamicResource BodyColorWith50Opacity}" FocusVisualStyle="{x:Null}"  Style="{StaticResource MaterialDesignOutlinedLightButton}" Content="打开logs目录" HorizontalAlignment="Left" Margin="597,304,0,0" VerticalAlignment="Top" Click="logs_Click"/>
 
-        <Button x:Name="launch" BorderBrush="{x:Null}" Foreground="{DynamicResource ForegroundColor}" Cursor="Hand"  IsDefault="True" Background="{DynamicResource BodyColorWith50Opacity}" FocusVisualStyle="{x:Null}"  Style="{StaticResource MaterialDesignOutlinedLightButton}" Content="启动游戏" HorizontalAlignment="Left" Margin="611,292,0,0" VerticalAlignment="Top" Click="Button_Click_1"/>
+        <Button x:Name="launch" BorderBrush="{x:Null}" Foreground="{DynamicResource ForegroundColor}" Cursor="Hand"  IsDefault="True" Background="{DynamicResource BodyColorWith50Opacity}" FocusVisualStyle="{x:Null}"  Style="{StaticResource MaterialDesignOutlinedLightButton}" Content="启动游戏" HorizontalAlignment="Left" Margin="611,265,0,0" VerticalAlignment="Top" Click="Button_Click_1"/>
+        <Button x:Name="mods" BorderBrush="{x:Null}" Foreground="{DynamicResource ForegroundColor}" Cursor="Hand"  IsDefault="True" Background="{DynamicResource BodyColorWith50Opacity}" FocusVisualStyle="{x:Null}"  Style="{StaticResource MaterialDesignOutlinedLightButton}" Content="打开mods目录" HorizontalAlignment="Left" Margin="592,341,0,0" VerticalAlignment="Top" Click="mods_Click"/>
     </Grid>
 </Page>

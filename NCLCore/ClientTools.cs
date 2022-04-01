@@ -69,6 +69,7 @@ namespace NCLCore
         /// return 0 java正确
         /// return 1 java版本错误
         /// return -1 java为32位
+        /// return -2 无java
         /// return 其它 建议java版本
         /// <param name="java"></param>
         /// <param name="mcVer"></param>
@@ -92,14 +93,18 @@ namespace NCLCore
                 process.StandardInput.Close();
                 string line = "";
                 string linetemp;
+                
                 while (true)
                 {
                     if ((linetemp = process.StandardOutput.ReadLine()) != null)
                         line = linetemp;
                     else break;
                 }
+                process.WaitForExit();
+                process.Close();
                 if (line == "false") return -1;
-                else
+
+                else if (line == "true")
                     switch (client.McVer)
                     {
                         case "1.16.5":
@@ -113,8 +118,8 @@ namespace NCLCore
                                 else return 1;
                             }
                     }
-                process.WaitForExit();
-                process.Close();
+                else return -2;
+                
             }
         }
         public static ObservableCollection<Client> GetALLClient(string dir)

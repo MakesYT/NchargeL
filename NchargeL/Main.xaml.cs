@@ -28,6 +28,7 @@ namespace NchargeL
         public Launcher launcher = new Launcher();
         public AboutNCL aboutNCL = new AboutNCL();
         public DownloadUI downloadUI = new DownloadUI();
+        public Manager ManagerUi = new Manager();
         public INotificationMessageManager Manager { get; } = new NotificationMessageManager();
         public Main()
         {
@@ -214,17 +215,44 @@ namespace NchargeL
 
         private void ManageClient(object sender, RoutedEventArgs e)
         {
-            var msg = Manager.CreateMessage()
-        .Accent(Properties.Settings.Default.BodyColorS.ToString())
-        .Background(Properties.Settings.Default.BackgroundColor.ToString())
-        .Foreground(Properties.Settings.Default.TextColor.ToString())
-        .HasBadge("Info")
-        .HasMessage("这个还没有完成敬请期待")
-        .Animates(true)
-     .AnimationInDuration(0.75)
-     .AnimationOutDuration(2)
-        .Queue();
-            Manager.Dismiss(msg);
+            if (Properties.Settings.Default.GameDir != "")
+            {
+                //CLcore nCLCore = newNCLcore(Properties.Settings.Default.DownloadSource,);
+                Data.clients = ClientTools.GetALLClient(Properties.Settings.Default.GameDir);
+
+                notificationManager.Show(NotificationContentSDK.notificationSuccess("客户端列表已更新", ""), "WindowArea");
+                ManagerUi = new NchargeL.Manager();
+                // launcher.NCLCore = nCLCore;
+                FrameWork.Content = ManagerUi;
+            }
+            else
+            {
+                var dlg = new CommonOpenFileDialog();
+                dlg.IsFolderPicker = true;
+                //dlg.InitialDirectory = currentDirectory;
+                dlg.Title = "选择\".minecraft\"游戏目录";
+                while (dlg.ShowDialog() == CommonFileDialogResult.Ok)
+                {
+                    if (dlg.FileName.EndsWith(".minecraft"))
+                    {
+                        Properties.Settings.Default.GameDir = dlg.FileName;
+                        // NCLcore nCLCore = newNCLcore(Properties.Settings.Default.DownloadSource, dlg.FileName);
+                        Data.clients = ClientTools.GetALLClient(Properties.Settings.Default.GameDir);
+                        notificationManager.Show(NotificationContentSDK.notificationSuccess("客户端列表已更新", ""), "WindowArea");
+                        ManagerUi = new NchargeL.Manager();
+                        //launcher.NCLCore = nCLCore;
+                        FrameWork.Content = ManagerUi;
+                        break;
+                    }
+                    else
+                    {
+                        InfoDialog info = new InfoDialog("选择游戏目录", "您需要选择以.minecraft命名的文件夹");
+                        info.ShowDialog();
+                    }
+
+                }
+
+            }
 
 
         }

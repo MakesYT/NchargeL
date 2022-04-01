@@ -111,4 +111,11 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <Page Update="Manager.xaml">
+      <XamlRuntime>$(DefaultXamlRuntime)</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+
 </Project>

@@ -1,6 +1,7 @@
 ﻿
 using ICSharpCode.SharpZipLib.Zip;
 using log4net;
+using Newtonsoft.Json.Linq;
 
 namespace NCLCore
 {
@@ -26,6 +27,8 @@ namespace NCLCore
         public void DownloadNchargeClient(NchargeClient nchargeClient, string DownloadSoureURL, string rootdir)
         {
             infoManager.Info(new Info("开始下载客户端:" + nchargeClient.name + "(" + nchargeClient.Cname + ")", InfoType.info));
+
+
             infoManager.Info(new Info("开始下载原版" + nchargeClient.version + "客户端", InfoType.info));
 
             DownloadManagerV2 downloadManager = new DownloadManagerV2(infoManager);
@@ -45,7 +48,15 @@ namespace NCLCore
             downloadManager.Start(downloadItems, 1);
             (new FastZip()).ExtractZip(rootdir + "\\temp\\" + nchargeClient.name + ".zip", rootdir + "\\versions\\" + nchargeClient.name, "");
 
+            JObject jObject1 = new JObject();
+            jObject1.Add("ver", nchargeClient.NchargeVersion);
+            string output = Newtonsoft.Json.JsonConvert.SerializeObject(jObject1, Newtonsoft.Json.Formatting.Indented);
+            if (File.Exists(rootdir + "\\versions\\" + nchargeClient.name + "\\" + nchargeClient.name + ".ncharge"))
+                File.Delete(rootdir + "\\versions\\" + nchargeClient.name + "\\" + nchargeClient.name + ".ncharge");
+            File.WriteAllText(rootdir + "\\versions\\" + nchargeClient.name + "\\" + nchargeClient.name + ".ncharge", output);
             infoManager.Info(new Info("下载" + nchargeClient.name + "覆盖包完成", InfoType.info));
+
+
             NchargeModsDownload modsdownload = new NchargeModsDownload(infoManager);
             // modsdownload.ClientDownload = this;
             modsdownload.toDir = rootdir + "\\versions\\" + nchargeClient.name + "\\mods\\";

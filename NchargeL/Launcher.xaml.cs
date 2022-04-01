@@ -36,7 +36,9 @@ namespace NchargeL
         private void list_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Client client = ((Client)((ListBox)e.OriginalSource).SelectedItem);
-            info.Text = "当前选择的客户端:\n" + client.Name + "\nAssets:" + client.assets;
+            info.Text = "当前选择的客户端:\n" + client.Name ;
+            if (client.NchargeVer != null) info.Text += "\nNcharge版本:\n" + client.NchargeVer;
+            else info.Text += "\nNcharge版本:\n非Ncharge客户端" ;
             // (ListBoxItem)((ListBox)e.Source).
         }
 
@@ -64,6 +66,12 @@ namespace NchargeL
                         case -1:
                             {
                                 notificationManager.Show(NotificationContentSDK.notificationError("Java版本为32位,停止启动", ""), "WindowArea");
+                                launch.IsEnabled = true;
+                                break;
+                            }
+                        case -2:
+                            {
+                                notificationManager.Show(NotificationContentSDK.notificationError("Java不存在,请选择正确的文件", ""), "WindowArea");
                                 launch.IsEnabled = true;
                                 break;
                             }
@@ -227,7 +235,23 @@ namespace NchargeL
         private void logs_Click(object sender, RoutedEventArgs e)
         {
 
-            ExecuteInCmd("start " + Directory.GetCurrentDirectory() + "\\logs", "");
+            ExecuteInCmd("start \"\" \"" + Directory.GetCurrentDirectory() + "\\logs\"", "");
+            // System.Diagnostics.Process.Start(Directory.GetCurrentDirectory() );
+        }
+        private void mods_Click(object sender, RoutedEventArgs e)
+        {
+            if (list.SelectedIndex >= 0)
+            {
+               
+                ExecuteInCmd("start \"\" \"" + Properties.Settings.Default.GameDir + "\\versions\\"+ Data.clients[list.SelectedIndex].Name+"\\mods\"", "");
+            }
+            else notificationManager.Show(NotificationContentSDK.notificationWarning("请先选择启动的客户端", ""), "WindowArea");
+            // System.Diagnostics.Process.Start(Directory.GetCurrentDirectory() );
+        }
+        private void GameDir_Click(object sender, RoutedEventArgs e)
+        {
+
+            ExecuteInCmd("start \"\" \"" + Properties.Settings.Default.GameDir+ "\"", "");
             // System.Diagnostics.Process.Start(Directory.GetCurrentDirectory() );
         }
         public string ExecuteInCmd(string cmdline, string dir)
