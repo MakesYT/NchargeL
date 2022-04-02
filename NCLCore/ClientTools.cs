@@ -92,19 +92,24 @@ namespace NCLCore
                 process.StandardInput.WriteLine("\"" + java + "\" -jar \"" + Directory.GetCurrentDirectory() + "\\Resources\\Javacheck.jar\"" + "&exit");
                 process.StandardInput.Close();
                 string line = "";
+                string line2 = "";
                 string linetemp;
-                
+
                 while (true)
                 {
                     if ((linetemp = process.StandardOutput.ReadLine()) != null)
+                    {
+                        line2 = line;
                         line = linetemp;
+                    }
+
                     else break;
                 }
                 process.WaitForExit();
                 process.Close();
-                if (line == "false") return -1;
+                if (line2 == "false") return -1;
 
-                else if (line == "true")
+                else if (line2 == "true")
                     switch (client.McVer)
                     {
                         case "1.16.5":
@@ -119,7 +124,7 @@ namespace NCLCore
                             }
                     }
                 else return -2;
-                
+
             }
         }
         public static ObservableCollection<Client> GetALLClient(string dir)
@@ -138,7 +143,7 @@ namespace NCLCore
                         foreach (DirectoryInfo file in root.GetDirectories())
                         {
                             Client client = new Client();
-                            
+
                             FileInfo jsonFile = new FileInfo(file.FullName + "\\" + file.Name + ".json");
                             if (jsonFile.Exists)
                             {
@@ -164,7 +169,7 @@ namespace NCLCore
                                                 client.McVer = jObject["inheritsFrom"].ToString();
                                                 string pa = jsonFile.FullName;
                                                 log.Debug(dir + "\\versions\\" + client.McVer + "\\" + client.McVer + ".json");
-                                                using (System.IO.StreamReader jsonfile1 = System.IO.File.OpenText(dir + "\\versions\\"+ client.McVer+"\\"+ client.McVer+".json"))
+                                                using (System.IO.StreamReader jsonfile1 = System.IO.File.OpenText(dir + "\\versions\\" + client.McVer + "\\" + client.McVer + ".json"))
                                                 {
                                                     using (JsonTextReader reader1 = new JsonTextReader(jsonfile1))
                                                     {
