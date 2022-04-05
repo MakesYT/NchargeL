@@ -245,7 +245,7 @@ namespace NCLCore
                 throw new NCLException("c");
             }
         }
-        public void installForge(Client clt, string DownloadSoureURL, Lib forgelib, string java)
+        public  void installForge(Client clt, string DownloadSoureURL, Lib forgelib, string java)
         {
             log.Debug("forge安装");
             forgelib.url = DownloadSoureURL + "maven/" + forgelib.path.Replace(".jar", "-installer.jar");
@@ -508,6 +508,7 @@ namespace NCLCore
                 string line;
                 while ((line = process.StandardOutput.ReadLine()) != null)
                 {
+                    infoManager.Info(new Info(0, line));
                     log.Debug(line);
                 }
                 //获取cmd窗口的输出信息  

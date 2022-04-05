@@ -13,5 +13,9 @@
             this.info = info;
             PropertyChanged?.Invoke(this, info);
         }
+        public void clear()
+        {
+            PropertyChanged=null;
+        }
     }
 }

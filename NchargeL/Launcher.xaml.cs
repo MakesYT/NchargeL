@@ -133,6 +133,7 @@ namespace NchargeL
                                .HasMessage("游戏启动中.......")
                                .WithOverlay(progress)
                                .Queue();
+                               Main.main.infoManager.clear();
                                Main.main.infoManager.PropertyChanged += (oo, ee) =>
                            {
                                if ((oo as InfoManager).info.process != null)

@@ -41,10 +41,10 @@ namespace NCLCore
             infoManager.Info(new Info("开始下载Forge" + nchargeClient.forgeVersion, InfoType.info));
 
             ForgeInstaller.installForge(DownloadSoureURL, nchargeClient.name, rootdir, nchargeClient.forgeVersion, infoManager);
-            infoManager.Info(new Info("安装Forge" + nchargeClient.forgeVersion + "完成", InfoType.info));
+            infoManager.Info(new Info("安装Forge"  + nchargeClient.forgeVersion + "完成", InfoType.info));
             infoManager.Info(new Info("开始下载" + nchargeClient.name + "覆盖包", InfoType.info));
             downloadItems.Clear();
-            downloadItems.Add(new DownloadItem("http://download.ncserver.top:8000/NCL/" + nchargeClient.name + ".zip", rootdir + "\\temp\\" + nchargeClient.name + ".zip"));
+            downloadItems.Add(new DownloadItem("http://download.ncserver.top:8000/NCL/clients/" + nchargeClient.name +"/"+nchargeClient.NchargeVersion+ ".zip", rootdir + "\\temp\\" + nchargeClient.name + ".zip"));
             downloadManager.Start(downloadItems, 1);
             (new FastZip()).ExtractZip(rootdir + "\\temp\\" + nchargeClient.name + ".zip", rootdir + "\\versions\\" + nchargeClient.name, "");
 
@@ -56,11 +56,12 @@ namespace NCLCore
             File.WriteAllText(rootdir + "\\versions\\" + nchargeClient.name + "\\" + nchargeClient.name + ".ncharge", output);
             infoManager.Info(new Info("下载" + nchargeClient.name + "覆盖包完成", InfoType.info));
 
-
+            string re1 = HttpRequestHelper.GetResponseString(HttpRequestHelper.CreatePostHttpResponse("http://download.ncserver.top:8000/NCL/clients/"+nchargeClient.name+"/"+nchargeClient.NchargeVersion+".json", new Dictionary<String, String>()));
+            var jObject = JArray.Parse(re1);
             NchargeModsDownload modsdownload = new NchargeModsDownload(infoManager);
             // modsdownload.ClientDownload = this;
             modsdownload.toDir = rootdir + "\\versions\\" + nchargeClient.name + "\\mods\\";
-            modsdownload.Start(250, nchargeClient.mods);
+            modsdownload.Start(250, jObject);
 
             infoManager.Info(new Info("解析MODS完成,共需下载" + modsdownload.getMODs().Count + "个文件", InfoType.info));
             if (modsdownload.getMODs().Count != 0)

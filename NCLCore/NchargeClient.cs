@@ -10,6 +10,6 @@ namespace NCLCore
         public string NchargeVersion { get; set; }
         public string forgeVersion { get; set; }
         public string modsize { get; set; }
-        public JArray mods { get; set; }
+        public string mods { get; set; }
     }
 }

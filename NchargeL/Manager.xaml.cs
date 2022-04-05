@@ -2,14 +2,13 @@
 using log4net;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using NCLCore;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Notification.Wpf;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,7 +21,7 @@ namespace NchargeL
     /// </summary>
     public partial class Manager : Page
     {
-      
+
         NotificationManager notificationManager = new NotificationManager();
 
         private static readonly ILog log = LogManager.GetLogger("Manager");
@@ -36,11 +35,11 @@ namespace NchargeL
 
         private void list_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            group.Visibility= Visibility.Visible;
+            group.Visibility = Visibility.Visible;
             Client client = ((Client)((ListBox)e.OriginalSource).SelectedItem);
-            info.Text = "当前选择的客户端:\n" + client.Name ;
+            info.Text = "当前选择的客户端:\n" + client.Name;
             if (client.NchargeVer != null) info.Text += "\nNcharge版本:\n" + client.NchargeVer;
-            else info.Text += "\nNcharge版本:\n非Ncharge客户端" ;
+            else info.Text += "\nNcharge版本:\n非Ncharge客户端";
             // (ListBoxItem)((ListBox)e.Source).
         }
 
@@ -49,7 +48,7 @@ namespace NchargeL
             Client client = ((Client)(list.SelectedItem));
             INotificationMessage msg = null;
             LauncherClient launchc = new LauncherClient();
-            string name =null;
+            string name = null;
             Application.Current.Dispatcher.BeginInvoke(new Action(delegate
             {
                 var progress = new ProgressBar
@@ -69,12 +68,12 @@ namespace NchargeL
                 .Accent("#F15B19")
                 .Background("#F15B19")
                 .HasHeader("")
-                .HasMessage("删除"+client.Name+"客户端中.......")
+                .HasMessage("删除" + client.Name + "客户端中.......")
                 .WithOverlay(progress)
                 .Queue();
                 name = Data.clients[list.SelectedIndex].Name;
             })).Wait();
-            Task.Factory.StartNew(() => delFolor(Properties.Settings.Default.GameDir + "\\versions\\" + name,msg));
+            Task.Factory.StartNew(() => delFolor(Properties.Settings.Default.GameDir + "\\versions\\" + name, msg));
         }
         private void delFolor(string dir, INotificationMessage msg)
         {
@@ -102,8 +101,8 @@ namespace NchargeL
         {
             if (list.SelectedIndex >= 0)
             {
-               
-                ExecuteInCmd("start \"\" \"" + Properties.Settings.Default.GameDir + "\\versions\\"+ Data.clients[list.SelectedIndex].Name+"\\mods\"", "");
+
+                ExecuteInCmd("start \"\" \"" + Properties.Settings.Default.GameDir + "\\versions\\" + Data.clients[list.SelectedIndex].Name + "\\mods\"", "");
             }
             else notificationManager.Show(NotificationContentSDK.notificationWarning("请先选择启动的客户端", ""), "WindowArea");
             // System.Diagnostics.Process.Start(Directory.GetCurrentDirectory() );
@@ -111,7 +110,7 @@ namespace NchargeL
         private void GameDir_Click(object sender, RoutedEventArgs e)
         {
 
-            ExecuteInCmd("start \"\" \"" + Properties.Settings.Default.GameDir+ "\"", "");
+            ExecuteInCmd("start \"\" \"" + Properties.Settings.Default.GameDir + "\"", "");
             // System.Diagnostics.Process.Start(Directory.GetCurrentDirectory() );
         }
         public string ExecuteInCmd(string cmdline, string dir)
@@ -173,8 +172,140 @@ namespace NchargeL
 
             }
         }
+        private void fixForge(object sender, RoutedEventArgs e)
+        {
+            Task.Factory.StartNew(() => fix());
 
-        private void JavaDir(object sender, RoutedEventArgs e)
+        }
+        private void fix()
+        {
+            Client client = null;
+            Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+            {
+                client = Data.clients[list.SelectedIndex];
+            })).Wait();
+            int javaVer = ClientTools.JavaCheck(Properties.Settings.Default.Java, client);
+            bool flag = false;
+            switch (javaVer)
+            {
+                case 0:
+                    {
+                        //notificationManager.Show(NotificationContentSDK.notificationInformation("正在启动客户端", ""), "WindowArea");
+                        flag = true;
+                        break;
+                    }
+                case -1:
+                    {
+                        break;
+                    }
+                case -2:
+                    {
+                        break;
+                    }
+                case 1:
+                    {
+                        break;
+                    }
+                default:
+                    {
+                        flag = true;
+                        break;
+                    }
+            }
+            if (flag)
+            {
+                INotificationMessage msg = null;
+               
+                string msgstr = null;
+                Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+                {
+                    var progress = new ProgressBar
+                    {
+                        VerticalAlignment = VerticalAlignment.Bottom,
+                        HorizontalAlignment = HorizontalAlignment.Stretch,
+                        Height = 3,
+                        BorderThickness = new Thickness(0),
+                        Foreground = new SolidColorBrush(Color.FromArgb(128, 255, 255, 255)),
+                        Background = Brushes.Transparent,
+                        IsIndeterminate = true,
+                        IsHitTestVisible = false,
+                        Value = 10
+                    };
+                    progress.Value = 10;
+                    msg = Main.main.Manager.CreateMessage()
+                    .Accent("#F15B19")
+                    .Background("#F15B19")
+                    .HasHeader("重新安装Forge客户端中.......")
+                    .HasMessage("")
+                    .WithOverlay(progress)
+                    .Queue();
+                    Main.main.infoManager.PropertyChanged += (oo, ee) =>
+                    {
+                        if ((oo as InfoManager).info.process != null)
+                        {
+
+                            Info logtmp = (oo as InfoManager).info;
+                            log.Debug("消息反馈" + logtmp.msg + " " + logtmp.process);
+                            Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+                            {
+                                progress.Value = (double)logtmp.process;
+                                // stringinfo 
+                                msg.Message = logtmp.msg;
+                            })).Wait();
+                        }
+                    };
+                })).Wait();
+                FileInfo fileInfo = new FileInfo(client.rootdir + "\\versions\\" + client.Name + "\\" + client.Name + ".json");
+                using System.IO.StreamReader jsonfile = System.IO.File.OpenText(fileInfo.FullName);
+                using JsonTextReader reader = new JsonTextReader(jsonfile);
+                JObject jObject = (JObject)JToken.ReadFrom(reader);
+                bool installed = false;
+                foreach (JObject libsjosn in jObject["libraries"])
+                {
+                    if (libsjosn["name"].ToString().Contains("net.minecraftforge:forge"))
+                    {
+                        JObject tmplibsjosn = (JObject)libsjosn["downloads"];
+                        Lib lib = new Lib()
+                        {
+                            path = tmplibsjosn["artifact"]["path"].ToString(),
+                            url = tmplibsjosn["artifact"]["url"].ToString(),
+                            sha1 = tmplibsjosn["artifact"]["sha1"].ToString(),
+                            name = libsjosn["name"].ToString()
+
+                        };
+                        ClientTools clientTools = new ClientTools(Main.main.infoManager);
+                        clientTools.installForge(client, Properties.Settings.Default.DownloadSource, lib, Properties.Settings.Default.Java);
+                        installed = true;
+                        break;
+                    }
+                }
+                if (!installed)
+                {
+                    Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+                    {
+                        InfoDialog warn = new InfoDialog("", "未找到需要的Forge,该客户端未安装Forge");
+                        warn.ShowDialog();
+                    })).Wait();
+                }
+                Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+                {
+                    Main.main.Manager.Dismiss(msg);
+                    
+                })).Wait();
+                
+
+            }
+            else
+            {
+                Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+                {
+                    InfoDialog warn = new InfoDialog("", "你需要先选择使用的Java才能继续\n按确定将打开选择Java页面但不会继续执行操作\n如需继续请重新执行");
+                    warn.ShowDialog();
+                    JavaDir();
+                })).Wait();
+            }
+        }
+        private void JavaDir()
         {
             var dlg = new CommonOpenFileDialog();
             dlg.Filters.Add(new CommonFileDialogFilter("javaw.exe", "exe"));

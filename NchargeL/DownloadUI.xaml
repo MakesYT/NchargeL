@@ -10,6 +10,11 @@
       Title="DownloadUI">
 
     <Grid>
+        <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}"
+  ToolTip="刷新远程客户端列表"
+   Margin="679,322,23,10" Panel.ZIndex="1" Cursor="Hand" Width="48" Height="48" Background="{DynamicResource BodyColorWith50Opacity}" BorderBrush="{DynamicResource BodyColor}" Foreground="{DynamicResource ForegroundColor}" Click="Button_Click">
+            <materialDesign:PackIcon Kind="Reload" Cursor="Hand" Width="28" Height="28" />
+        </Button>
         <GroupBox Margin="0,5,0,200" materialDesign:ColorZoneAssist.Mode="Custom"
             materialDesign:ColorZoneAssist.Background="{DynamicResource BodyColor}"
                     materialDesign:ColorZoneAssist.Foreground="{DynamicResource ForegroundColor}" 

@@ -62,11 +62,12 @@ namespace NchargeL
             {
 
                 ClientDownload clientDownload = new ClientDownload(Main.main.infoManager);
-
+                Main.main.infoManager.clear();
 
                 Main.main.infoManager.PropertyChanged += (oo, ee) =>
                 {
                     Info logtmp = (oo as InfoManager).info;
+
                     Application.Current.Dispatcher.BeginInvoke(new Action(delegate
                     {
                         line++;
@@ -107,6 +108,7 @@ namespace NchargeL
                         ClientDownload clientDownload = new ClientDownload(Main.main.infoManager);
                         //clientDownload.init();
                         //int line = 0;
+                        Main.main.infoManager.clear();
                         Main.main.infoManager.PropertyChanged += (oo, ee) =>
                         {
                             Info logtmp = (oo as InfoManager).info;
@@ -148,32 +150,14 @@ namespace NchargeL
                 }
             }
 
-            Main.main.infoManager.PropertyChanged -= (oo, ee) =>
-            {
-                Info logtmp = (oo as InfoManager).info;
-                Application.Current.Dispatcher.BeginInvoke(new Action(delegate
-                {
-                    line++;
-                    if (line > 5)
-                    {
-                        line = 0;
-                        logs.Text = "";
-                    }
-                    log.Info("消息通知记录:" + logtmp.msg);
-                    logs.Text += logtmp.msg + "\n";
-                    //logs.Select(logs.Text.Length, 0);
-                    // logs.ScrollToEnd();
-                })).Wait();
 
-
-            };
         }
         void GetAllCients()
         {
-            string re1 = HttpRequestHelper.GetResponseString(HttpRequestHelper.CreatePostHttpResponse("http://download.ncserver.top:8000/NCL/list.json", new Dictionary<String, String>()));
-            var jObject = JObject.Parse(re1);
+            string re1 = HttpRequestHelper.GetResponseString(HttpRequestHelper.CreatePostHttpResponse("http://download.ncserver.top:8000/NCL/clients.json", new Dictionary<String, String>()));
+            var jObject = JArray.Parse(re1);
             List<NchargeClient> nchargeClients = new List<NchargeClient>();
-            foreach (JObject clientJson in jObject["Clients"])
+            foreach (JObject clientJson in jObject)
             {
                 NchargeClient client = new NchargeClient();
                 client.name = clientJson["name"].ToString();
@@ -183,7 +167,7 @@ namespace NchargeL
                 client.version = clientJson["version"].ToString();
                 client.NchargeVersion = clientJson["NchargeVersion"].ToString();
                 client.forgeVersion = clientJson["forgeVersion"].ToString();
-                client.mods = (JArray)clientJson["mods"];
+                client.mods = clientJson["modscount"].ToString();
                 nchargeClients.Add(client);
             }
             list.ItemsSource = nchargeClients;
@@ -192,12 +176,22 @@ namespace NchargeL
 
         private void list_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            NchargeClient nchargeClient = ((NchargeClient)((DataGrid)sender).SelectedItem);
-            info.Text = "客户端 : " + nchargeClient.name + "(" + nchargeClient.Cname + ")\n" +
-                "MOD总数 : " + nchargeClient.mods.Count.ToString() + "个\n" +
-                "MOD总大小 : " + nchargeClient.modsize + "\n" +
-                "整合包开启时间 : \n" + nchargeClient.time;
+            if (list.SelectedIndex != -1)
+            {
+                NchargeClient nchargeClient = ((NchargeClient)((DataGrid)sender).SelectedItem);
+                info.Text = "客户端 : " + nchargeClient.name + "(" + nchargeClient.Cname + ")\n" +
+                    "MOD总数 : " + nchargeClient.mods + "个\n" +
+                    "MOD总大小 : " + nchargeClient.modsize + "\n" +
+                    "整合包开启时间 : \n" + nchargeClient.time;
+            }
+            else info.Text = "当前未选择客户端";
 
+
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            GetAllCients();
         }
     }
 }
