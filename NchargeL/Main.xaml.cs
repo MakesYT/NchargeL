@@ -1,13 +1,14 @@
-﻿using Enterwell.Clients.Wpf.Notifications;
-using log4net;
-using Microsoft.WindowsAPICodePack.Dialogs;
-using NCLCore;
-using Notification.Wpf;
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
+using Enterwell.Clients.Wpf.Notifications;
+using log4net;
+using Microsoft.WindowsAPICodePack.Dialogs;
+using NchargeL.Properties;
+using NCLCore;
+using Notification.Wpf;
 
 namespace NchargeL
 {
@@ -16,24 +17,27 @@ namespace NchargeL
     /// </summary>
     public partial class Main : Window
     {
-        public NotificationManager notificationManager = new NotificationManager();
         public static Main main;
 
         private static readonly ILog log = LogManager.GetLogger("Main");
+        public AboutNCL aboutNCL = new AboutNCL();
+        public Account Account = new Account();
+        public DownloadUI downloadUI = new DownloadUI();
+
         // public Data data = new Data();
         public Home Home = new Home();
-        public Account Account = new Account();
-        public LoginUi LoginUi = new LoginUi();
-        private SettingUi settingUi = new SettingUi();
+
+        public InfoManager infoManager = new InfoManager();
         public Launcher launcher = new Launcher();
-        public AboutNCL aboutNCL = new AboutNCL();
-        public DownloadUI downloadUI = new DownloadUI();
+        public LoginUi LoginUi = new LoginUi();
         public Manager ManagerUi = new Manager();
-        public INotificationMessageManager Manager { get; } = new NotificationMessageManager();
+        public NotificationManager notificationManager = new NotificationManager();
+        private SettingUi settingUi = new SettingUi();
+
         public Main()
         {
             InitializeComponent();
-            Data.init();//初始化列表
+            Data.init(); //初始化列表
             this.DataContext = this;
             //  Properties.Settings.Default.DownloadSource = "https://bmclapi2.bangbang93.com/";
             notificationManager.Show(NotificationContentSDK.notificationInformation("弹窗测试", ""), "WindowArea");
@@ -41,17 +45,19 @@ namespace NchargeL
             main = this;
             hello.Text = Environment.UserName;
 
-            FrameWork.Content = new Frame() { Content = Home };
+            FrameWork.Content = new Frame() {Content = Home};
             if (Data.users.Count > 0)
             {
                 Data.users[0].reloadUser();
             }
+
             if (Data.users.Count > 0)
-            {//当前有账号登录
-                if (Properties.Settings.Default.GameDir != "")
+            {
+                //当前有账号登录
+                if (Settings.Default.GameDir != "")
                 {
                     // NCLcore nCLCore = newNCLcore(Properties.Settings.Default.DownloadSource, Properties.Settings.Default.GameDir);
-                    Data.clients = ClientTools.GetALLClient(Properties.Settings.Default.GameDir);
+                    Data.clients = ClientTools.GetALLClient(Settings.Default.GameDir);
 
                     //notificationManager.Show(NotificationContentSDK.notificationSuccess("客户端列表已更新", ""), "WindowArea");
                     if (Data.clients.Count > 0)
@@ -64,17 +70,20 @@ namespace NchargeL
 
                 else FrameWork.Content = downloadUI;
             }
-            else//无账号跳转登录界面
+            else //无账号跳转登录界面
             {
                 FrameWork.Content = LoginUi;
             }
         }
+
+        public INotificationMessageManager Manager { get; } = new NotificationMessageManager();
+
         public void InfoDialogShow(string infostr, string str)
         {
             info.Text = infostr;
             text.Text = str;
             host.IsOpen = true;
-            var storyboard = (Storyboard)this.FindResource("Storyboard1");
+            var storyboard = (Storyboard) this.FindResource("Storyboard1");
             storyboard.Begin();
         }
 
@@ -84,13 +93,14 @@ namespace NchargeL
             //log.Info(e.LeftButton.ToString().Equals("Pressed"));
             if (e.LeftButton.ToString().Equals("Pressed"))
                 DragMove();
-        }//鼠标拖拽兼容
+        } //鼠标拖拽兼容
 
         private void Close(object sender, RoutedEventArgs e)
         {
             closeDialog close = new closeDialog();
             close.ShowDialog();
         }
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             //log.Debug(Application.Current.MainWindow.Content.ToString());
@@ -99,14 +109,11 @@ namespace NchargeL
         }
 
 
-
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             //var a = Application.Current.Resources.MergedDictionaries;
-
-
-
         }
+
         private void HomeClick(object sender, RoutedEventArgs e)
         {
             //UserContent = Home;
@@ -119,8 +126,7 @@ namespace NchargeL
             withAnimation.From = can.ActualWidth;
             withAnimation.To = 150;
             withAnimation.Duration = TimeSpan.FromSeconds(0.2);
-            can.BeginAnimation(Button.WidthProperty, withAnimation);
-
+            can.BeginAnimation(WidthProperty, withAnimation);
         }
 
         private void StackPanel_MouseLeave(object sender, MouseEventArgs e)
@@ -129,16 +135,17 @@ namespace NchargeL
             withAnimation.From = can.ActualWidth;
             withAnimation.To = 50;
             withAnimation.Duration = TimeSpan.FromSeconds(0.2);
-            can.BeginAnimation(Button.WidthProperty, withAnimation);
+            can.BeginAnimation(WidthProperty, withAnimation);
         }
 
-        private void ViaClick(object sender, RoutedEventArgs e)//头像按钮事件
+        private void ViaClick(object sender, RoutedEventArgs e) //头像按钮事件
         {
             if (Data.users.Count > 0)
-            {//当前有账号登录
+            {
+                //当前有账号登录
                 FrameWork.Content = Account;
             }
-            else//无账号跳转登录界面
+            else //无账号跳转登录界面
             {
                 FrameWork.Content = LoginUi;
             }
@@ -147,18 +154,16 @@ namespace NchargeL
 
         private void Setting(object sender, RoutedEventArgs e)
         {
-
             // Manager.Dismiss(msg);
             FrameWork.Content = settingUi;
         }
-        public InfoManager infoManager = new InfoManager();
 
         public void loadLauncher()
         {
-            if (Properties.Settings.Default.GameDir != "")
+            if (Settings.Default.GameDir != "")
             {
                 //CLcore nCLCore = newNCLcore(Properties.Settings.Default.DownloadSource,);
-                Data.clients = ClientTools.GetALLClient(Properties.Settings.Default.GameDir);
+                Data.clients = ClientTools.GetALLClient(Settings.Default.GameDir);
 
                 notificationManager.Show(NotificationContentSDK.notificationSuccess("客户端列表已更新", ""), "WindowArea");
                 launcher = new Launcher();
@@ -175,10 +180,11 @@ namespace NchargeL
                 {
                     if (dlg.FileName.EndsWith(".minecraft"))
                     {
-                        Properties.Settings.Default.GameDir = dlg.FileName;
+                        Settings.Default.GameDir = dlg.FileName;
                         // NCLcore nCLCore = newNCLcore(Properties.Settings.Default.DownloadSource, dlg.FileName);
-                        Data.clients = ClientTools.GetALLClient(Properties.Settings.Default.GameDir);
-                        notificationManager.Show(NotificationContentSDK.notificationSuccess("客户端列表已更新", ""), "WindowArea");
+                        Data.clients = ClientTools.GetALLClient(Settings.Default.GameDir);
+                        notificationManager.Show(NotificationContentSDK.notificationSuccess("客户端列表已更新", ""),
+                            "WindowArea");
                         launcher = new Launcher();
                         //launcher.NCLCore = nCLCore;
                         FrameWork.Content = launcher;
@@ -189,12 +195,11 @@ namespace NchargeL
                         InfoDialog info = new InfoDialog("选择游戏目录", "您需要选择以.minecraft命名的文件夹");
                         info.ShowDialog();
                     }
-
                 }
-
             }
         }
-        private async void LauncherButton(object sender, RoutedEventArgs e)//启动游戏按钮
+
+        private async void LauncherButton(object sender, RoutedEventArgs e) //启动游戏按钮
         {
             //launcher=new Launcher();
             //Properties.Settings.Default.GameDir = @"D:\\IDEAJava\\6th\\V6\\out\\artifacts\\V6_jar\\.minecraft";
@@ -209,19 +214,18 @@ namespace NchargeL
 
         private void AboutButton(object sender, RoutedEventArgs e)
         {
-
             FrameWork.Content = aboutNCL;
         }
 
         private void ManageClient(object sender, RoutedEventArgs e)
         {
-            if (Properties.Settings.Default.GameDir != "")
+            if (Settings.Default.GameDir != "")
             {
                 //CLcore nCLCore = newNCLcore(Properties.Settings.Default.DownloadSource,);
-                Data.clients = ClientTools.GetALLClient(Properties.Settings.Default.GameDir);
+                Data.clients = ClientTools.GetALLClient(Settings.Default.GameDir);
 
                 notificationManager.Show(NotificationContentSDK.notificationSuccess("客户端列表已更新", ""), "WindowArea");
-                ManagerUi = new NchargeL.Manager();
+                ManagerUi = new Manager();
                 // launcher.NCLCore = nCLCore;
                 FrameWork.Content = ManagerUi;
             }
@@ -235,11 +239,12 @@ namespace NchargeL
                 {
                     if (dlg.FileName.EndsWith(".minecraft"))
                     {
-                        Properties.Settings.Default.GameDir = dlg.FileName;
+                        Settings.Default.GameDir = dlg.FileName;
                         // NCLcore nCLCore = newNCLcore(Properties.Settings.Default.DownloadSource, dlg.FileName);
-                        Data.clients = ClientTools.GetALLClient(Properties.Settings.Default.GameDir);
-                        notificationManager.Show(NotificationContentSDK.notificationSuccess("客户端列表已更新", ""), "WindowArea");
-                        ManagerUi = new NchargeL.Manager();
+                        Data.clients = ClientTools.GetALLClient(Settings.Default.GameDir);
+                        notificationManager.Show(NotificationContentSDK.notificationSuccess("客户端列表已更新", ""),
+                            "WindowArea");
+                        ManagerUi = new Manager();
                         //launcher.NCLCore = nCLCore;
                         FrameWork.Content = ManagerUi;
                         break;
@@ -249,12 +254,8 @@ namespace NchargeL
                         InfoDialog info = new InfoDialog("选择游戏目录", "您需要选择以.minecraft命名的文件夹");
                         info.ShowDialog();
                     }
-
                 }
-
             }
-
-
         }
 
         private void DownloadUiButton(object sender, RoutedEventArgs e)

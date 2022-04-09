@@ -13,10 +13,10 @@ namespace NchargeL
             InitializeComponent();
             info.Text = infostr;
             text.Text = str;
-            var storyboard = (Storyboard)this.FindResource("Storyboard1");
+            var storyboard = (Storyboard) this.FindResource("Storyboard1");
             storyboard.Begin();
-
         }
+
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             this.Close();

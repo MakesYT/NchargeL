@@ -1,7 +1,6 @@
-﻿
-using NchargeL.SettingUIs;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
+using NchargeL.SettingUIs;
 
 namespace NchargeL
 {
@@ -11,6 +10,7 @@ namespace NchargeL
     public partial class SettingUi : Page
     {
         ColorUi colorUi = new ColorUi();
+
         public SettingUi()
         {
             InitializeComponent();
@@ -19,7 +19,6 @@ namespace NchargeL
 
         private void ListBoxItem_Selected(object sender, RoutedEventArgs e)
         {
-
         }
     }
 }

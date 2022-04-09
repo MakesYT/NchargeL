@@ -1,8 +1,9 @@
-﻿using log4net;
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Media.Animation;
+using log4net;
+using NchargeL.Properties;
 
 namespace NchargeL
 {
@@ -12,18 +13,18 @@ namespace NchargeL
     public partial class closeDialog : Window
     {
         private static readonly ILog log = LogManager.GetLogger("closeDialog");
+
         public closeDialog()
         {
             InitializeComponent();
 
-            var storyboard = (Storyboard)this.FindResource("Storyboard1");
+            var storyboard = (Storyboard) this.FindResource("Storyboard1");
             storyboard.Begin();
-
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Properties.Settings.Default.Save();
+            Settings.Default.Save();
             StopProcess("wget.exe");
             this.Close();
             Main.main.Close();
@@ -33,11 +34,12 @@ namespace NchargeL
             Application.Current.Shutdown();
             Environment.Exit(0);
         }
+
         public static void StopProcess(string processName)
         {
             try
             {
-                Process[] processes = System.Diagnostics.Process.GetProcesses();
+                Process[] processes = Process.GetProcesses();
                 foreach (Process item in processes)
                 {
                     if (item.ProcessName.Contains(processName.Replace(".exe", "")))
@@ -50,7 +52,6 @@ namespace NchargeL
             }
             catch
             {
-
             }
         }
     }

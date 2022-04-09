@@ -4,16 +4,18 @@ namespace NCLCore
 {
     public class Info
     {
+        private readonly ILog log = LogManager.GetLogger("Info");
         public string msg;
         public double? process = null;
         public InfoType TYPE = InfoType.error;
-        private readonly ILog log = LogManager.GetLogger("Info");
+
         public Info(string msg, InfoType TYPE)
         {
             this.msg = msg;
             this.TYPE = TYPE;
             log.Debug("[" + GetStringType(TYPE) + "]" + msg);
         }
+
         public Info(double process, string msg)
         {
             this.process = process;
@@ -36,6 +38,4 @@ namespace NCLCore
             };
         }
     }
-
-
 }

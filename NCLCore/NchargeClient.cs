@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json.Linq;
-namespace NCLCore
+﻿namespace NCLCore
 {
     public class NchargeClient
     {

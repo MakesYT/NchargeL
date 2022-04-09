@@ -15,17 +15,14 @@ namespace NchargeL
 
         private void ListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-
         }
 
         private void java_TextChanged(object sender, TextChangedEventArgs e)
         {
-
         }
 
         private void showpermit_Click(object sender, RoutedEventArgs e)

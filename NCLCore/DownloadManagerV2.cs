@@ -1,24 +1,33 @@
-﻿using log4net;
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using log4net;
 
 namespace NCLCore
 {
-
     public class DownloadManagerV2
     {
-
-        InfoManager infoManager;
-        public DownloadManagerV2(InfoManager infoManager) { this.infoManager = infoManager; }
-        public DownloadManagerV2(InfoManager infoManager, bool a) { this.infoManager = infoManager; this.returnProcess = a; }
-        private bool returnProcess = false;
         private static readonly ILog log = LogManager.GetLogger("DownloadManagerV2");
-        private List<DownloadItem> Hashs = new List<DownloadItem>();
-        private List<DownloadItem> cancellationsOccurrenceLists = new List<DownloadItem>();
-        private int DownloadCount = 0;
         private int AllCount = 0;
         private int cancellationsOccurrenceCount = 0;
+        private List<DownloadItem> cancellationsOccurrenceLists = new List<DownloadItem>();
+        private int DownloadCount = 0;
         private string error = "";
+        private List<DownloadItem> Hashs = new List<DownloadItem>();
+        InfoManager infoManager;
+
         private int nowthreadnum = 0;
+
+        private bool returnProcess = false;
+
+        public DownloadManagerV2(InfoManager infoManager)
+        {
+            this.infoManager = infoManager;
+        }
+
+        public DownloadManagerV2(InfoManager infoManager, bool a)
+        {
+            this.infoManager = infoManager;
+            this.returnProcess = a;
+        }
         //private InfoManager infoManager = null;
 
         public DownloadReslut Start(List<DownloadItem> list, int thread)
@@ -29,19 +38,20 @@ namespace NCLCore
             log.Debug(Hashs.Count);
             AllCount = Hashs.Count;
             while (Hashs.Count != 0 || nowthreadnum != 0)
-                while (nowthreadnum < thread)
+            while (nowthreadnum < thread)
+            {
+                //log.Debug(nowthreadnum+"   "+ Hashs.Count);
+                Thread.Sleep(10);
+                if (Hashs.Count > 0 && nowthreadnum < thread)
                 {
-                    //log.Debug(nowthreadnum+"   "+ Hashs.Count);
-                    Thread.Sleep(10);
-                    if (Hashs.Count > 0 && nowthreadnum < thread)
-                    {
-                        nowthreadnum++;
-                        DownloadItem hash = Hashs.First();
-                        Hashs.Remove(hash);
-                        Task.Factory.StartNew(() => ExecuteInCmd(hash));
-                    }
-                    else if (nowthreadnum == 0) break;
+                    nowthreadnum++;
+                    DownloadItem hash = Hashs.First();
+                    Hashs.Remove(hash);
+                    Task.Factory.StartNew(() => ExecuteInCmd(hash));
                 }
+                else if (nowthreadnum == 0) break;
+            }
+
             //infoManager.Info( new Info("下载" + "客户端完成",InfoType.success));
             if (cancellationsOccurrenceCount != 0)
             {
@@ -52,8 +62,8 @@ namespace NCLCore
             }
             else
                 return new DownloadReslut(true);
-
         }
+
         private string ExecuteInCmd(DownloadItem hash)
         {
             bool finnsh = false;
@@ -70,7 +80,8 @@ namespace NCLCore
 
                 process.Start();
                 // process.StandardInput.AutoFlush = true;
-                DirectoryInfo directoryInfo = new DirectoryInfo(hash.fullname.Substring(0, hash.fullname.LastIndexOf("\\") + 1));
+                DirectoryInfo directoryInfo =
+                    new DirectoryInfo(hash.fullname.Substring(0, hash.fullname.LastIndexOf("\\") + 1));
                 if (!directoryInfo.Exists) directoryInfo.Create();
                 //log.Info("\"" + Directory.GetCurrentDirectory() + "\\Resources\\wget.exe\" \"" + hash.uri + "\" -O \"" + hash.fullname + "\"" + "&exit");
                 //log.Debug(hash.uri+" "+ hash.fullname);
@@ -97,6 +108,7 @@ namespace NCLCore
                         finnsh = true;
                     }
                 }
+
                 process.WaitForExit();
                 process.Close();
                 if (!finnsh)
@@ -105,6 +117,7 @@ namespace NCLCore
                     error = error + allline;
                     cancellationsOccurrenceLists.Add(hash);
                 }
+
                 nowthreadnum--;
                 //AllCount--;
                 DownloadCount++;
@@ -116,10 +129,5 @@ namespace NCLCore
                 return "";
             }
         }
-
-
-
-
-
     }
 }

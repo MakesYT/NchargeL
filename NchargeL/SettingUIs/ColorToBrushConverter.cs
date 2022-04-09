@@ -15,6 +15,7 @@ namespace NchargeL.SettingUIs
             {
                 return new SolidColorBrush(color);
             }
+
             return Binding.DoNothing;
         }
 
@@ -24,6 +25,7 @@ namespace NchargeL.SettingUIs
             {
                 return brush.Color;
             }
+
             return default(Color);
         }
     }

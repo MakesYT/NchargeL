@@ -1,12 +1,10 @@
 ﻿<Page x:Class="NchargeL.AboutNCL"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:NchargeL"
-      mc:Ignorable="d" 
-      xmlns:Properties="clr-namespace:NchargeL.Properties"
-      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      mc:Ignorable="d"
+      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       Width="750" Height="370"
       Title="AboutNCL">
 
@@ -14,49 +12,54 @@
 
 
         <GroupBox Margin="10,0,0,155" materialDesign:ColorZoneAssist.Mode="Custom"
-            materialDesign:ColorZoneAssist.Background="{DynamicResource BodyColor}"
-            materialDesign:ColorZoneAssist.Foreground="{DynamicResource ForegroundColor}"
-            Header="服务器须知" Width="300" HorizontalAlignment="Left" Padding="0,0,0,0" Grid.IsSharedSizeScope="True" FontFamily="HarmonyOS Sans Medium" FontSize="20" HorizontalContentAlignment="Center" Foreground="{x:Null}" BorderBrush="#FFB3DDF7">
-            <TextBox x:Name="info2" InputMethod.IsInputMethodEnabled="False" Background="{DynamicResource BodyColorWith50Opacity}"
-                materialDesign:ColorZoneAssist.Mode="Custom" 
-                materialDesign:ColorZoneAssist.Background="{DynamicResource BodyColor}" 
-                materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource BodyColor}" 
-                materialDesign:ColorZoneAssist.Foreground="{DynamicResource ForegroundColor}"  
-                materialDesign:HintAssist.Foreground="{DynamicResource BodyColor}"  
-                materialDesign:HintAssist.Hint="
+                  materialDesign:ColorZoneAssist.Background="{DynamicResource BodyColor}"
+                  materialDesign:ColorZoneAssist.Foreground="{DynamicResource ForegroundColor}"
+                  Header="服务器须知" Width="300" HorizontalAlignment="Left" Padding="0,0,0,0" Grid.IsSharedSizeScope="True"
+                  FontFamily="HarmonyOS Sans Medium" FontSize="20" HorizontalContentAlignment="Center"
+                  Foreground="{x:Null}" BorderBrush="#FFB3DDF7">
+            <TextBox x:Name="info2" InputMethod.IsInputMethodEnabled="False"
+                     Background="{DynamicResource BodyColorWith50Opacity}"
+                     materialDesign:ColorZoneAssist.Mode="Custom"
+                     materialDesign:ColorZoneAssist.Background="{DynamicResource BodyColor}"
+                     materialDesign:TextFieldAssist.UnderlineBrush="{DynamicResource BodyColor}"
+                     materialDesign:ColorZoneAssist.Foreground="{DynamicResource ForegroundColor}"
+                     materialDesign:HintAssist.Foreground="{DynamicResource BodyColor}"
+                     materialDesign:HintAssist.Hint="
   服务器版本&#xA;
   新启动器下载的客户端不要&#xA;传给别人！！！&#xA;
   客户端保存了玩家账号的可&#xA;公开信息和电脑基本信息&#xA;
   这些信息用于保护服务器防止&#xA;遭受网络攻击&#xA;
-  这些信息不会上传至互联网  " 
-                     Style="{StaticResource MaterialDesignFilledTextBox}" 
-                     HorizontalContentAlignment="Left" FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi" 
-                     FontSize="20" BorderBrush="{DynamicResource BodyColorWith20Opacity}" 
-                     SelectionTextBrush="{x:Null}" CaretBrush="{x:Null}" Foreground="{DynamicResource TextColor}" 
-                     Cursor="IBeam" 
-                     SelectionBrush="{DynamicResource BodyColor}" 
-                     Width="300" Margin="0,0,0,0" TextChanged="java_TextChanged" >
-
-
-            </TextBox>
+  这些信息不会上传至互联网  "
+                     Style="{StaticResource MaterialDesignFilledTextBox}"
+                     HorizontalContentAlignment="Left" FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi"
+                     FontSize="20" BorderBrush="{DynamicResource BodyColorWith20Opacity}"
+                     SelectionTextBrush="{x:Null}" CaretBrush="{x:Null}" Foreground="{DynamicResource TextColor}"
+                     Cursor="IBeam"
+                     SelectionBrush="{DynamicResource BodyColor}"
+                     Width="300" Margin="0,0,0,0" TextChanged="java_TextChanged" />
 
         </GroupBox>
-        <Image HorizontalAlignment="Left" Height="170" Margin="487,10,0,0" VerticalAlignment="Top" Width="129" Source="Resources/f68fa724e01109bff5b69782fa0640db.jpg"/>
-        <Image HorizontalAlignment="Left" Height="170" Margin="344,10,0,0" VerticalAlignment="Top" Width="146" Source="Resources/f6c082b631bddb16edba7e0fe0b6d720.png"/>
-        <Image HorizontalAlignment="Left" Height="170" Margin="616,10,0,0" VerticalAlignment="Top" Width="124" Source="Resources/8ee20a6fa281ace6499d14210a46c8e3.png"/>
-        <Button x:Name="showpermit" BorderBrush="{x:Null}" 
-                Foreground="{DynamicResource ForegroundColor}" Cursor="Hand"  
-                IsDefault="True" Background="{DynamicResource BodyColorWith50Opacity}" 
-                FocusVisualStyle="{x:Null}"  Style="{StaticResource MaterialDesignOutlinedLightButton}" 
-                Content="许可证" HorizontalAlignment="Left" Margin="10,215,0,0" VerticalAlignment="Top" Click="showpermit_Click"/>
-        <TextBox x:Name="permition" Text="
+        <Image HorizontalAlignment="Left" Height="170" Margin="487,10,0,0" VerticalAlignment="Top" Width="129"
+               Source="Resources/f68fa724e01109bff5b69782fa0640db.jpg" />
+        <Image HorizontalAlignment="Left" Height="170" Margin="344,10,0,0" VerticalAlignment="Top" Width="146"
+               Source="Resources/f6c082b631bddb16edba7e0fe0b6d720.png" />
+        <Image HorizontalAlignment="Left" Height="170" Margin="616,10,0,0" VerticalAlignment="Top" Width="124"
+               Source="Resources/8ee20a6fa281ace6499d14210a46c8e3.png" />
+        <Button x:Name="showpermit" BorderBrush="{x:Null}"
+                Foreground="{DynamicResource ForegroundColor}" Cursor="Hand"
+                IsDefault="True" Background="{DynamicResource BodyColorWith50Opacity}"
+                FocusVisualStyle="{x:Null}" Style="{StaticResource MaterialDesignOutlinedLightButton}"
+                Content="许可证" HorizontalAlignment="Left" Margin="10,215,0,0" VerticalAlignment="Top"
+                Click="showpermit_Click" />
+        <TextBox x:Name="permition"
+                 Text="
  https://logging.apache.org/log4net/ &#xD;&#xA;
  https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit &#xD;&#xA;
  https://github.com/Platonenkov/Notification.Wpf &#xD;&#xA;
  https://dot.net/ &#xD;&#xA;
- https://www.newtonsoft.com/json" 
-                 HorizontalAlignment="Center" Margin="0,249,0,0" VerticalAlignment="Top" Width="730" Height="111" 
-                 TextWrapping="WrapWithOverflow"  IsReadOnly="True" 
+ https://www.newtonsoft.com/json"
+                 HorizontalAlignment="Center" Margin="0,249,0,0" VerticalAlignment="Top" Width="730" Height="111"
+                 TextWrapping="WrapWithOverflow" IsReadOnly="True"
                  Background="{DynamicResource BodyColorWith50Opacity}"
                  FontWeight="Normal" />
 

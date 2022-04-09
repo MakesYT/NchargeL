@@ -1,11 +1,11 @@
-﻿using ICSharpCode.SharpZipLib.Zip;
-using log4net;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
+using ICSharpCode.SharpZipLib.Zip;
+using log4net;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace NCLCore
 {
@@ -13,58 +13,68 @@ namespace NCLCore
     {
         private static readonly ILog log = LogManager.GetLogger("ClientTools");
         InfoManager infoManager;
-        public ClientTools(InfoManager infoManager) { this.infoManager = infoManager; }
+
+        public ClientTools(InfoManager infoManager)
+        {
+            this.infoManager = infoManager;
+        }
+
         public void checkAssets(Client client, string DownloadSoureURL)
         {
-
-
             FileInfo assetsIndexInfo = new FileInfo(client.rootdir + "\\assets\\indexes\\" + client.assets + ".json");
             if (!assetsIndexInfo.Exists)
             {
                 infoManager.Info(new Info(0, "Assets-Index文件不存在,正在下载"));
 
-                FileInfo AssetsFileInfo = new FileInfo(client.rootdir + "\\versions\\" + client.McVer + "\\" + client.McVer + ".json");
-                using (System.IO.StreamReader jsonfile = System.IO.File.OpenText(AssetsFileInfo.FullName))
+                FileInfo AssetsFileInfo =
+                    new FileInfo(client.rootdir + "\\versions\\" + client.McVer + "\\" + client.McVer + ".json");
+                using (StreamReader jsonfile = File.OpenText(AssetsFileInfo.FullName))
                 {
                     using (JsonTextReader reader = new JsonTextReader(jsonfile))
                     {
-                        JObject jObject = (JObject)JToken.ReadFrom(reader);
+                        JObject jObject = (JObject) JToken.ReadFrom(reader);
                         DownloadManagerV2 downloadManagerV2 = new DownloadManagerV2(infoManager, true);
 
                         //downloadManagerV2.setInfoManager(infoManager);
                         List<DownloadItem> downloadItems = new List<DownloadItem>();
-                        downloadItems.Add(new DownloadItem(jObject["assetIndex"]["url"].ToString().Replace("https://launchermeta.mojang.com/", DownloadSoureURL), assetsIndexInfo.FullName));
+                        downloadItems.Add(new DownloadItem(
+                            jObject["assetIndex"]["url"].ToString()
+                                .Replace("https://launchermeta.mojang.com/", DownloadSoureURL),
+                            assetsIndexInfo.FullName));
                         downloadManagerV2.Start(downloadItems, 1);
-
                     }
                 }
             }
+
             DownloadManagerV2 downloadManager = new DownloadManagerV2(infoManager, true);
             //downloadManager.setInfoManager(infoManager);
             List<DownloadItem> assetsDownloadItems = new List<DownloadItem>();
-            using (System.IO.StreamReader jsonfile = System.IO.File.OpenText(assetsIndexInfo.FullName))
+            using (StreamReader jsonfile = File.OpenText(assetsIndexInfo.FullName))
             {
                 using (JsonTextReader reader = new JsonTextReader(jsonfile))
                 {
-                    JObject jObject = (JObject)JToken.ReadFrom(reader);
+                    JObject jObject = (JObject) JToken.ReadFrom(reader);
                     string jstr;
-                    foreach (var o in ((JObject)jObject["objects"]).Properties())
+                    foreach (var o in ((JObject) jObject["objects"]).Properties())
                     {
                         jstr = o.Name;
 
                         var hash = jObject["objects"][o.Name]["hash"].ToString();
-                        FileInfo assetinfo = new FileInfo(client.rootdir + "\\assets\\objects\\" + hash[0] + hash[1] + "\\" + hash);
+                        FileInfo assetinfo =
+                            new FileInfo(client.rootdir + "\\assets\\objects\\" + hash[0] + hash[1] + "\\" + hash);
                         if (!assetinfo.Exists)
                         {
                             log.Info("资源文件:" + hash + "不存在");
-                            assetsDownloadItems.Add(new DownloadItem(DownloadSoureURL + "assets/" + hash[0] + hash[1] + "/" + hash, assetinfo.FullName));
-
+                            assetsDownloadItems.Add(new DownloadItem(
+                                DownloadSoureURL + "assets/" + hash[0] + hash[1] + "/" + hash, assetinfo.FullName));
                         }
                     }
                 }
             }
+
             downloadManager.Start(assetsDownloadItems, 300);
         }
+
         /// <summary>
         /// return 0 java正确
         /// return 1 java版本错误
@@ -89,7 +99,8 @@ namespace NCLCore
 
                 process.Start();
                 // process.StandardInput.AutoFlush = true;
-                process.StandardInput.WriteLine("\"" + java + "\" -jar \"" + Directory.GetCurrentDirectory() + "\\Resources\\Javacheck.jar\"" + "&exit");
+                process.StandardInput.WriteLine("\"" + java + "\" -jar \"" + Directory.GetCurrentDirectory() +
+                                                "\\Resources\\Javacheck.jar\"" + "&exit");
                 process.StandardInput.Close();
                 string line = "";
                 string line2 = "";
@@ -105,6 +116,7 @@ namespace NCLCore
 
                     else break;
                 }
+
                 process.WaitForExit();
                 process.Close();
                 if (line2 == "false") return -1;
@@ -113,20 +125,20 @@ namespace NCLCore
                     switch (client.McVer)
                     {
                         case "1.16.5":
-                            {
-                                if (line == "11") return 0;
-                                else return 11;
-                            }
+                        {
+                            if (line == "11") return 0;
+                            else return 11;
+                        }
                         default:
-                            {
-                                if (line == "1.8") return 0;
-                                else return 1;
-                            }
+                        {
+                            if (line == "1.8") return 0;
+                            else return 1;
+                        }
                     }
                 else return -2;
-
             }
         }
+
         public static ObservableCollection<Client> GetALLClient(string dir)
         {
             ObservableCollection<Client> clients = new ObservableCollection<Client>();
@@ -152,11 +164,11 @@ namespace NCLCore
                                 client.Name = file.Name;
                                 try
                                 {
-                                    using (System.IO.StreamReader jsonfile = System.IO.File.OpenText(jsonFile.FullName))
+                                    using (StreamReader jsonfile = File.OpenText(jsonFile.FullName))
                                     {
                                         using (JsonTextReader reader = new JsonTextReader(jsonfile))
                                         {
-                                            JObject jObject = (JObject)JToken.ReadFrom(reader);
+                                            JObject jObject = (JObject) JToken.ReadFrom(reader);
                                             if (jObject["assets"] != null)
                                             {
                                                 client.assets = jObject["assets"].ToString();
@@ -168,13 +180,14 @@ namespace NCLCore
                                                 client.Forge = true;
                                                 client.McVer = jObject["inheritsFrom"].ToString();
                                                 string pa = jsonFile.FullName;
-                                                log.Debug(dir + "\\versions\\" + client.McVer + "\\" + client.McVer + ".json");
-                                                using (System.IO.StreamReader jsonfile1 = System.IO.File.OpenText(dir + "\\versions\\" + client.McVer + "\\" + client.McVer + ".json"))
+                                                log.Debug(dir + "\\versions\\" + client.McVer + "\\" + client.McVer +
+                                                          ".json");
+                                                using (StreamReader jsonfile1 = File.OpenText(dir + "\\versions\\" +
+                                                           client.McVer + "\\" + client.McVer + ".json"))
                                                 {
                                                     using (JsonTextReader reader1 = new JsonTextReader(jsonfile1))
                                                     {
-
-                                                        JObject jObject1 = (JObject)JToken.ReadFrom(reader1);
+                                                        JObject jObject1 = (JObject) JToken.ReadFrom(reader1);
                                                         //log.Debug(jObject1.ToString());
                                                         client.assets = jObject1["assets"].ToString();
                                                         log.Debug("inheritsFrom" + client.assets);
@@ -185,33 +198,41 @@ namespace NCLCore
                                             {
                                                 client.McVer = jObject["id"].ToString();
                                             }
-
                                         }
                                     }
                                 }
-                                catch (Exception ex) { log.Error(ex); }
+                                catch (Exception ex)
+                                {
+                                    log.Error(ex);
+                                }
                             }
+
                             FileInfo nchargeFile = new FileInfo(file.FullName + "\\" + file.Name + ".ncharge");
                             if (nchargeFile.Exists)
                             {
                                 client.Ncharge = true;
                                 try
                                 {
-                                    using (System.IO.StreamReader jsonfile = System.IO.File.OpenText(nchargeFile.FullName))
+                                    using (StreamReader jsonfile = File.OpenText(nchargeFile.FullName))
                                     {
                                         using (JsonTextReader reader = new JsonTextReader(jsonfile))
                                         {
-                                            JObject jObject = (JObject)JToken.ReadFrom(reader);
+                                            JObject jObject = (JObject) JToken.ReadFrom(reader);
                                             try
                                             {
                                                 client.NchargeVer = jObject["ver"].ToString();
                                             }
-                                            catch (Exception ex) { }
+                                            catch (Exception ex)
+                                            {
+                                            }
                                         }
                                     }
                                 }
-                                catch (Exception ex) { }
+                                catch (Exception ex)
+                                {
+                                }
                             }
+
                             if (client.isNotNull())
                             {
                                 client.Id = clients.Count + 1;
@@ -221,9 +242,14 @@ namespace NCLCore
                     }
                 }
             }
-            catch (Exception ex) { log.Error(ex); }
+            catch (Exception ex)
+            {
+                log.Error(ex);
+            }
+
             return clients;
         }
+
         string GetSHA1(string s)
         {
             try
@@ -238,6 +264,7 @@ namespace NCLCore
                 {
                     sc.Append(retval[i].ToString("x2"));
                 }
+
                 return sc.ToString();
             }
             catch (Exception ex)
@@ -245,22 +272,29 @@ namespace NCLCore
                 throw new NCLException("c");
             }
         }
-        public  void installForge(Client clt, string DownloadSoureURL, Lib forgelib, string java)
+
+        public void installForge(Client clt, string DownloadSoureURL, Lib forgelib, string java)
         {
             log.Debug("forge安装");
             forgelib.url = DownloadSoureURL + "maven/" + forgelib.path.Replace(".jar", "-installer.jar");
-            string jardir = (clt.rootdir + "\\libraries\\" + forgelib.path.Replace("/", "\\")).Replace(".jar", "-installer.jar");
+            string jardir =
+                (clt.rootdir + "\\libraries\\" + forgelib.path.Replace("/", "\\")).Replace(".jar", "-installer.jar");
             DownloadManagerV2 downloadManagerV2 = new DownloadManagerV2(infoManager);
             //downloadManagerV2.setInfoManager(infoManager);
             List<DownloadItem> downloadItems = new List<DownloadItem>();
             downloadItems.Add(new DownloadItem(forgelib.url, jardir));
             downloadManagerV2.Start(downloadItems, 1);
             //string forgeInstallerName = jardir.Substring(jardir.LastIndexOf("\\")+1);
-            FileInfo forge_bootstrapper = new FileInfo(Directory.GetCurrentDirectory() + "\\Resources\\forge-install-bootstrapper.jar");
+            FileInfo forge_bootstrapper =
+                new FileInfo(Directory.GetCurrentDirectory() + "\\Resources\\forge-install-bootstrapper.jar");
             forge_bootstrapper.CopyTo(clt.rootdir + "\\forge-install-bootstrapper.jar", true);
-            log.Debug(java + " -cp \"forge-install-bootstrapper.jar;" + jardir + "\" com.bangbang93.ForgeInstaller " + "\"" + clt.rootdir + "\"");
-            ExecuteInCmd("\"" + java + "\"" + " -cp \"forge-install-bootstrapper.jar;" + jardir + "\" com.bangbang93.ForgeInstaller " + "\"" + clt.rootdir + "\"", clt.rootdir);
+            log.Debug(java + " -cp \"forge-install-bootstrapper.jar;" + jardir + "\" com.bangbang93.ForgeInstaller " +
+                      "\"" + clt.rootdir + "\"");
+            ExecuteInCmd(
+                "\"" + java + "\"" + " -cp \"forge-install-bootstrapper.jar;" + jardir +
+                "\" com.bangbang93.ForgeInstaller " + "\"" + clt.rootdir + "\"", clt.rootdir);
         }
+
         public Libs GetLibs(Client client, string DownloadSoureURL)
         {
             DownloadManagerV2 downloadManager = new DownloadManagerV2(infoManager);
@@ -271,18 +305,19 @@ namespace NCLCore
             List<Lib> Nativelibs = new List<Lib>();
             try
             {
-                FileInfo fileInfo = new FileInfo(client.rootdir + "\\versions\\" + client.Name + "\\" + client.Name + ".json");
-                using System.IO.StreamReader jsonfile = System.IO.File.OpenText(fileInfo.FullName);
+                FileInfo fileInfo =
+                    new FileInfo(client.rootdir + "\\versions\\" + client.Name + "\\" + client.Name + ".json");
+                using StreamReader jsonfile = File.OpenText(fileInfo.FullName);
                 using JsonTextReader reader = new JsonTextReader(jsonfile);
-                JObject jObject = (JObject)JToken.ReadFrom(reader);
+                JObject jObject = (JObject) JToken.ReadFrom(reader);
                 if (jObject["libraries"] != null)
                 {
                     foreach (JObject libsjosn in jObject["libraries"])
                     {
                         bool need = false;
-                        if ((JArray)libsjosn["rules"] != null)
+                        if ((JArray) libsjosn["rules"] != null)
                         {
-                            foreach (JObject js in (JArray)libsjosn["rules"])
+                            foreach (JObject js in (JArray) libsjosn["rules"])
                             {
                                 if (js["action"].ToString() == "allow")
                                 {
@@ -292,9 +327,10 @@ namespace NCLCore
                             }
                         }
                         else need = true;
+
                         if (need)
                         {
-                            JObject tmplibsjosn = (JObject)libsjosn["downloads"];
+                            JObject tmplibsjosn = (JObject) libsjosn["downloads"];
                             if (libsjosn["natives"] != null)
                             {
                                 Lib lib = new Lib()
@@ -305,7 +341,8 @@ namespace NCLCore
                                     name = libsjosn["name"].ToString(),
                                     native = true
                                 };
-                                FileInfo fileInfo1 = new FileInfo(client.rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"));
+                                FileInfo fileInfo1 =
+                                    new FileInfo(client.rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"));
                                 if (!fileInfo1.Exists)
                                 {
                                     infoManager.Info(new Info(lib.path + "Natives库文件不存在,正在重新获取", InfoType.info));
@@ -313,28 +350,36 @@ namespace NCLCore
                                     //log.Debug(lib.path + "Natives库文件不存在");
                                     if (DownloadSoureURL != null)
                                     {
-                                        lib.url = lib.url.Replace("https://libraries.minecraft.net/", DownloadSoureURL + "maven/");
+                                        lib.url = lib.url.Replace("https://libraries.minecraft.net/",
+                                            DownloadSoureURL + "maven/");
                                     }
-                                    items.Add(new DownloadItem(lib.url, client.rootdir + "\\libraries\\" + lib.path.Replace("/", "\\")));
+
+                                    items.Add(new DownloadItem(lib.url,
+                                        client.rootdir + "\\libraries\\" + lib.path.Replace("/", "\\")));
                                     //info = new Info(lib.path + "Natives库文件获取成功", "success");
                                 }
                                 else
                                 {
-
                                     if (GetSHA1(fileInfo1.FullName) == lib.sha1)
                                     {
-                                        log.Debug("Natives库文件存在" + client.rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"));
+                                        log.Debug("Natives库文件存在" + client.rootdir + "\\libraries\\" +
+                                                  lib.path.Replace("/", "\\"));
                                     }
                                     else
                                     {
                                         fileInfo1.Delete();
                                         if (DownloadSoureURL != null)
                                         {
-                                            lib.url = lib.url.Replace("https://libraries.minecraft.net/", DownloadSoureURL + "maven/");
-                                            lib.url = lib.url.Replace("https://maven.minecraftforge.net/", DownloadSoureURL + "maven/");
+                                            lib.url = lib.url.Replace("https://libraries.minecraft.net/",
+                                                DownloadSoureURL + "maven/");
+                                            lib.url = lib.url.Replace("https://maven.minecraftforge.net/",
+                                                DownloadSoureURL + "maven/");
                                         }
-                                        items.Add(new DownloadItem(lib.url, client.rootdir + "\\libraries\\" + lib.path.Replace("/", "\\")));
-                                        log.Debug("Natives库文件异常sha1校验不通过" + client.rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"));
+
+                                        items.Add(new DownloadItem(lib.url,
+                                            client.rootdir + "\\libraries\\" + lib.path.Replace("/", "\\")));
+                                        log.Debug("Natives库文件异常sha1校验不通过" + client.rootdir + "\\libraries\\" +
+                                                  lib.path.Replace("/", "\\"));
                                     }
                                 }
                                 //log.Debug(rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"));
@@ -350,22 +395,26 @@ namespace NCLCore
                                     url = tmplibsjosn["artifact"]["url"].ToString(),
                                     sha1 = tmplibsjosn["artifact"]["sha1"].ToString(),
                                     name = libsjosn["name"].ToString()
-
                                 };
                                 //log.Debug(DownloadSoureURL);
                                 if (DownloadSoureURL != null)
                                 {
-                                    lib.url = lib.url.Replace("https://maven.minecraftforge.net/", DownloadSoureURL + "maven/");
-                                    lib.url = lib.url.Replace("https://libraries.minecraft.net/", DownloadSoureURL + "maven/");
+                                    lib.url = lib.url.Replace("https://maven.minecraftforge.net/",
+                                        DownloadSoureURL + "maven/");
+                                    lib.url = lib.url.Replace("https://libraries.minecraft.net/",
+                                        DownloadSoureURL + "maven/");
                                 }
-                                FileInfo fileInfo1 = new FileInfo(client.rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"));
+
+                                FileInfo fileInfo1 =
+                                    new FileInfo(client.rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"));
                                 if (!fileInfo1.Exists)
                                 {
                                     infoManager.Info(new Info(lib.path + "库文件不存在,正在重新获取", InfoType.info));
                                     //info = new Info(lib.path + "库文件不存在,正在重新获取", "info");
                                     if (!lib.path.Contains("net/minecraftforge/forge/"))
                                     {
-                                        items.Add(new DownloadItem(lib.url, client.rootdir + "\\libraries\\" + lib.path.Replace("/", "\\")));
+                                        items.Add(new DownloadItem(lib.url,
+                                            client.rootdir + "\\libraries\\" + lib.path.Replace("/", "\\")));
                                     }
                                     else
                                     {
@@ -374,15 +423,14 @@ namespace NCLCore
                                         libs.forgeintall = true;
                                         libs.forgelib = lib;
                                     }
-
                                 }
                                 else if (GetSHA1(fileInfo1.FullName) != lib.sha1)
                                 {
                                     fileInfo1.Delete();
                                     if (!lib.path.Contains("net/minecraftforge/forge/"))
                                     {
-
-                                        items.Add(new DownloadItem(lib.url, client.rootdir + "\\libraries\\" + lib.path.Replace("/", "\\")));
+                                        items.Add(new DownloadItem(lib.url,
+                                            client.rootdir + "\\libraries\\" + lib.path.Replace("/", "\\")));
                                         log.Debug("库文件异常sha1校验不通过" + fileInfo1.FullName);
                                     }
                                     else
@@ -393,19 +441,22 @@ namespace NCLCore
                                         libs.forgelib = lib;
                                     }
                                 }
-                                else log.Debug("库文件存在" + client.rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"));
+                                else
+                                    log.Debug("库文件存在" + client.rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"));
+
                                 Normallibs.Add(lib);
                             }
                         }
-
                     }
                 }
                 else
                 {
-
                 }
             }
-            catch (Exception ex) { }
+            catch (Exception ex)
+            {
+            }
+
             downloadManager.Start(items, 50);
 
             libs.Normallibs = Normallibs;
@@ -425,6 +476,7 @@ namespace NCLCore
             {
                 libstr = libstr + clt.rootdir + "\\libraries\\" + lib.path + ";";
             }
+
             libstr = libstr + clt.dir + "\\" + clt.Name + ".jar";
             DirectoryInfo nativedir = new DirectoryInfo(clt.rootdir + "\\versions\\" + clt.Name + "\\natives");
             if (!nativedir.Exists)
@@ -432,11 +484,13 @@ namespace NCLCore
             log.Debug(nativedir.FullName);
             foreach (Lib lib in libs.Nativelibs)
             {
-
-                (new FastZip()).ExtractZip(clt.rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"), clt.rootdir + "\\versions\\" + clt.McVer + "\\natives\\", "");
+                (new FastZip()).ExtractZip(clt.rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"),
+                    clt.rootdir + "\\versions\\" + clt.McVer + "\\natives\\", "");
             }
+
             return libstr;
         }
+
         public string GetLibsCommandstr(Client clt, Client ver, string DownloadSoureURL, string java)
         {
             string libstr = null;
@@ -452,15 +506,17 @@ namespace NCLCore
                 //  { log.Info("1"); }
                 allLibs.Add(lib);
             }
+
             DirectoryInfo nativedir = new DirectoryInfo(clt.rootdir + "\\versions\\" + clt.Name + "\\natives");
             if (!nativedir.Exists)
                 nativedir.Create();
             log.Debug(nativedir.FullName);
             foreach (Lib lib in libs2.Nativelibs)
             {
-
-                (new FastZip()).ExtractZip(clt.rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"), clt.rootdir + "\\versions\\" + clt.Name + "\\natives\\", "");
+                (new FastZip()).ExtractZip(clt.rootdir + "\\libraries\\" + lib.path.Replace("/", "\\"),
+                    clt.rootdir + "\\versions\\" + clt.Name + "\\natives\\", "");
             }
+
             Libs libs = GetLibs(clt, DownloadSoureURL);
             if (libs.forgeintall) installForge(clt, DownloadSoureURL, libs.forgelib, java);
             //libstr = libstr + "\"";
@@ -470,16 +526,19 @@ namespace NCLCore
                     log4jbugs.Add(lib);
                 allLibs.Add(lib);
             }
+
             log.Info(log4jbugs.Count);
             if (log4jbugs.Count > 2)
             {
                 allLibs.Remove(log4jbugs[0]);
                 allLibs.Remove(log4jbugs[1]);
             }
+
             foreach (Lib lib in allLibs)
             {
                 libstr = libstr + clt.rootdir + "\\libraries\\" + lib.path + ";";
             }
+
             libstr = libstr + clt.rootdir + "\\versions\\" + clt.McVer + "\\" + clt.McVer + ".jar";
 
 
@@ -489,7 +548,6 @@ namespace NCLCore
 
         public string ExecuteInCmd(string cmdline, string dir)
         {
-
             using (var process = new Process())
             {
                 process.StartInfo.FileName = "cmd.exe";
@@ -511,6 +569,7 @@ namespace NCLCore
                     infoManager.Info(new Info(0, line));
                     log.Debug(line);
                 }
+
                 //获取cmd窗口的输出信息  
                 // string output = process.StandardOutput.ReadToEnd();
                 // process.StandardOutput.

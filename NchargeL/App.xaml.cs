@@ -1,8 +1,8 @@
-﻿
-using log4net;
-using System;
+﻿using System;
 using System.Net;
 using System.Windows;
+using System.Windows.Threading;
+using log4net;
 
 namespace NchargeL
 {
@@ -12,6 +12,7 @@ namespace NchargeL
     public partial class App : Application
     {
         private static readonly ILog log = LogManager.GetLogger("App");
+
         protected override void OnStartup(StartupEventArgs e)
         {
             ServicePointManager.DefaultConnectionLimit = 10240;
@@ -24,7 +25,7 @@ namespace NchargeL
         }
 
 
-        void Current_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+        void Current_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             e.Handled = true;
             Exprint(e);
@@ -37,34 +38,32 @@ namespace NchargeL
 
 
             ErrorDialog error = new ErrorDialog("", "（1）发生了一个错误！请联系腐竹！" + Environment.NewLine
-                            + e.ExceptionObject.ToString());
+                                                                        + e.ExceptionObject.ToString());
             error.ShowDialog();
             // }));
-
         }
-        private void App_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+
+        private void App_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             e.Handled = true;
             Exprint(e);
-
         }
-        private void Exprint(System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
+
+        private void Exprint(DispatcherUnhandledExceptionEventArgs e)
         {
-            Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+            Current.Dispatcher.BeginInvoke(new Action(delegate
             {
-
-
                 try
                 {
                     e.Handled = true;
                     if (e.Exception.InnerException == null)
                     {
                         log.Error("（1）发生了一个错误！请联系腐竹！" + Environment.NewLine
-                                           + "（2）错误源：" + e.Exception.Source + Environment.NewLine
-                                           + "（3）详细信息：" + e.Exception.Message + Environment.NewLine);
+                                                      + "（2）错误源：" + e.Exception.Source + Environment.NewLine
+                                                      + "（3）详细信息：" + e.Exception.Message + Environment.NewLine);
                         ErrorDialog error = new ErrorDialog("", "（1）发生了一个错误！请联系腐竹！" + Environment.NewLine
-                                           + "（2）错误源：" + e.Exception.Source + Environment.NewLine
-                                           + "（3）详细信息：" + e.Exception.Message + Environment.NewLine);
+                            + "（2）错误源：" + e.Exception.Source + Environment.NewLine
+                            + "（3）详细信息：" + e.Exception.Message + Environment.NewLine);
                         error.ShowDialog();
 
                         //MessageBox.Show("（1）发生了一个错误！请联系腐竹！" + Environment.NewLine
@@ -74,17 +73,18 @@ namespace NchargeL
                     }
                     else
                     {
-
                         log.Error("（1）发生了一个错误！请联系腐竹！" + Environment.NewLine
-                                            + "（2）错误源：" + e.Exception.InnerException.Source + Environment.NewLine
-                                            + "（3）错误信息：" + e.Exception.Message + Environment.NewLine
-                                            + "（4）详细信息：" + e.Exception.InnerException.Message + Environment.NewLine
-                                            + "（5）报错区域：" + e.Exception.InnerException.StackTrace);
+                                                      + "（2）错误源：" + e.Exception.InnerException.Source +
+                                                      Environment.NewLine
+                                                      + "（3）错误信息：" + e.Exception.Message + Environment.NewLine
+                                                      + "（4）详细信息：" + e.Exception.InnerException.Message +
+                                                      Environment.NewLine
+                                                      + "（5）报错区域：" + e.Exception.InnerException.StackTrace);
                         ErrorDialog error = new ErrorDialog("", "（1）发生了一个错误！请联系腐竹！" + Environment.NewLine
-                                            + "（2）错误源：" + e.Exception.InnerException.Source + Environment.NewLine
-                                            + "（3）错误信息：" + e.Exception.Message + Environment.NewLine
-                                            + "（4）详细信息：" + e.Exception.InnerException.Message + Environment.NewLine
-                                            + "（5）报错区域：" + e.Exception.InnerException.StackTrace);
+                            + "（2）错误源：" + e.Exception.InnerException.Source + Environment.NewLine
+                            + "（3）错误信息：" + e.Exception.Message + Environment.NewLine
+                            + "（4）详细信息：" + e.Exception.InnerException.Message + Environment.NewLine
+                            + "（5）报错区域：" + e.Exception.InnerException.StackTrace);
                         error.ShowDialog();
                         //MessageBox.Show("（1）发生了一个错误！请联系腐竹！" + Environment.NewLine
                         //                    + "（2）错误源：" + e.Exception.InnerException.Source + Environment.NewLine
@@ -92,7 +92,6 @@ namespace NchargeL
                         //                    + "（4）详细信息：" + e.Exception.InnerException.Message + Environment.NewLine
                         //                    + "（5）报错区域：" + e.Exception.InnerException.StackTrace);
                     }
-
                 }
                 catch (Exception e2)
                 {

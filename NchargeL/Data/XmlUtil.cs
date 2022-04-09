@@ -7,43 +7,8 @@ using System.Xml.Serialization;
 /// </summary>
 public class XmlUtil
 {
-    #region 反序列化
-    /// <summary>
-    /// 反序列化
-    /// </summary>
-    /// <param name="type">类型</param>
-    /// <param name="xml">XML字符串</param>
-    /// <returns></returns>
-    public static object Deserialize(Type type, string xml)
-    {
-        try
-        {
-            using (StringReader sr = new StringReader(xml))
-            {
-                XmlSerializer xmldes = new XmlSerializer(type);
-                return xmldes.Deserialize(sr);
-            }
-        }
-        catch (Exception e)
-        {
-
-            return null;
-        }
-    }
-    /// <summary>
-    /// 反序列化
-    /// </summary>
-    /// <param name="type"></param>
-    /// <param name="xml"></param>
-    /// <returns></returns>
-    public static object Deserialize(Type type, Stream stream)
-    {
-        XmlSerializer xmldes = new XmlSerializer(type);
-        return xmldes.Deserialize(stream);
-    }
-    #endregion
-
     #region 序列化
+
     /// <summary>
     /// 序列化
     /// </summary>
@@ -63,6 +28,7 @@ public class XmlUtil
         {
             throw;
         }
+
         Stream.Position = 0;
         StreamReader sr = new StreamReader(Stream);
         string str = sr.ReadToEnd();
@@ -71,6 +37,44 @@ public class XmlUtil
         Stream.Dispose();
 
         return str;
+    }
+
+    #endregion
+
+    #region 反序列化
+
+    /// <summary>
+    /// 反序列化
+    /// </summary>
+    /// <param name="type">类型</param>
+    /// <param name="xml">XML字符串</param>
+    /// <returns></returns>
+    public static object Deserialize(Type type, string xml)
+    {
+        try
+        {
+            using (StringReader sr = new StringReader(xml))
+            {
+                XmlSerializer xmldes = new XmlSerializer(type);
+                return xmldes.Deserialize(sr);
+            }
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// 反序列化
+    /// </summary>
+    /// <param name="type"></param>
+    /// <param name="xml"></param>
+    /// <returns></returns>
+    public static object Deserialize(Type type, Stream stream)
+    {
+        XmlSerializer xmldes = new XmlSerializer(type);
+        return xmldes.Deserialize(stream);
     }
 
     #endregion

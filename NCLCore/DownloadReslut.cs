@@ -1,6 +1,5 @@
 ﻿namespace NCLCore
 {
-
     public class DownloadReslut
     {
         bool allSuccess = false;
@@ -11,6 +10,7 @@
             this.allSuccess = allSuccess;
             this.downloadItems = downloadItems;
         }
+
         public DownloadReslut(bool allSuccess)
         {
             this.allSuccess = allSuccess;

@@ -3,25 +3,35 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Ncharge"
         mc:Ignorable="d"
         Background="{x:Null}"
         WindowStartupLocation="CenterScreen"
-        Title="Ncharge启动器初始化" Height="200" Width="300" BorderThickness="7" HorizontalAlignment="Left" VerticalAlignment="Top"   WindowStyle="None" MouseDown="Window_MouseDown" >
+        Title="Ncharge启动器初始化" Height="200" Width="300" BorderThickness="7" HorizontalAlignment="Left"
+        VerticalAlignment="Top" WindowStyle="None" MouseDown="Window_MouseDown">
     <Window.Effect>
-        <DropShadowEffect ShadowDepth="1" BlurRadius="15" Direction="270" Opacity="0.75" Color="#FF211613"/>
+        <DropShadowEffect ShadowDepth="1" BlurRadius="15" Direction="270" Opacity="0.75" Color="#FF211613" />
     </Window.Effect>
-    <materialDesign:Card >
-        <Grid HorizontalAlignment="Left" Width="300" >
-            
-            <materialDesign:ColorZone Mode="Inverted" Padding="0" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0" HorizontalAlignment="Left" Width="290" Background="{DynamicResource BodyColor}" Foreground="#FFFAFAFA">
+    <materialDesign:Card>
+        <Grid HorizontalAlignment="Left" Width="300">
+
+            <materialDesign:ColorZone Mode="Inverted" Padding="0" VerticalAlignment="Top"
+                                      HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0"
+                                      HorizontalAlignment="Left" Width="290" Background="{DynamicResource BodyColor}"
+                                      Foreground="#FFFAFAFA">
 
                 <Grid HorizontalAlignment="Left" Width="290" VerticalAlignment="Top">
-                    <TextBlock VerticalAlignment="Center" Margin="3,3,0,3" Text="Ncharge启动器" HorizontalAlignment="Left" FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi" FontSize="30" />
-                    <Button FocusVisualStyle="{x:Null}" Height="Auto" Margin="0" HorizontalAlignment="Right" VerticalAlignment="Center" Padding="0" BorderBrush="{x:Null}" Background="{x:Null}" Foreground="{x:Null}" RenderTransformOrigin="1.553,-0.3" Click="Button_Click" Width="36" Cursor="Hand">
-                        <materialDesign:PackIcon Kind="Close" Height="Auto" Width="Auto" Foreground="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" HorizontalAlignment="Right" RenderTransformOrigin="0.839,0.064" VerticalAlignment="Top" Margin="0,0,7,0" />
+                    <TextBlock VerticalAlignment="Center" Margin="3,3,0,3" Text="Ncharge启动器" HorizontalAlignment="Left"
+                               FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi" FontSize="30" />
+                    <Button FocusVisualStyle="{x:Null}" Height="Auto" Margin="0" HorizontalAlignment="Right"
+                            VerticalAlignment="Center" Padding="0" BorderBrush="{x:Null}" Background="{x:Null}"
+                            Foreground="{x:Null}" RenderTransformOrigin="1.553,-0.3" Click="Button_Click" Width="36"
+                            Cursor="Hand">
+                        <materialDesign:PackIcon Kind="Close" Height="Auto" Width="Auto"
+                                                 Foreground="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}"
+                                                 HorizontalAlignment="Right" RenderTransformOrigin="0.839,0.064"
+                                                 VerticalAlignment="Top" Margin="0,0,7,0" />
                     </Button>
                 </Grid>
 
@@ -29,12 +39,17 @@
             </materialDesign:ColorZone>
 
 
-
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                <materialDesign:Card HorizontalAlignment="Center" RenderTransformOrigin="0.566,1.303" Margin="0" UniformCornerRadius="6" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi" VerticalAlignment="Center"/>
+                <materialDesign:Card HorizontalAlignment="Center" RenderTransformOrigin="0.566,1.303" Margin="0"
+                                     UniformCornerRadius="6" HorizontalContentAlignment="Center"
+                                     VerticalContentAlignment="Center"
+                                     FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi"
+                                     VerticalAlignment="Center" />
             </StackPanel>
 
-            <Label Content="加载中......&#xD;&#xA;请稍后" HorizontalAlignment="Center" VerticalAlignment="Center" RenderTransformOrigin="0.51,0.567" FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi" FontSize="48" Margin="0,51,0,31"/>
+            <Label Content="加载中......&#xD;&#xA;请稍后" HorizontalAlignment="Center" VerticalAlignment="Center"
+                   RenderTransformOrigin="0.51,0.567" FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi"
+                   FontSize="48" Margin="0,51,0,31" />
         </Grid>
     </materialDesign:Card>
 </Window>

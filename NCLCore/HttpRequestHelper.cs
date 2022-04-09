@@ -1,8 +1,8 @@
-﻿using Newtonsoft.Json;
-using System.Net;
+﻿using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using Newtonsoft.Json;
 
 namespace NCLCore
 {
@@ -25,11 +25,13 @@ namespace NCLCore
                 {
                     request = WebRequest.Create(url) as HttpWebRequest;
                 }
+
                 //request.Method = "POST";
                 request.ContentType = "application/json";
 
                 //设置代理UserAgent和超时
-                request.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.74 Safari/537.36 Edg/99.0.1150.52";
+                request.UserAgent =
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.74 Safari/537.36 Edg/99.0.1150.52";
                 //request.Timeout = timeout;
 
                 //if (cookies != null)
@@ -40,7 +42,6 @@ namespace NCLCore
                 //发送POST数据 
                 if (!(parameters == null || parameters.Count == 0))
                 {
-
                     request.Method = "POST";
                     //System.Console.WriteLine(JsonConvert.SerializeObject(parameters));
                     byte[] data = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(parameters));
@@ -49,13 +50,13 @@ namespace NCLCore
                         stream.Write(data, 0, data.Length);
                     }
                 }
+
                 string[] values = request.Headers.GetValues("Content-Type");
 
                 return request.GetResponse() as HttpWebResponse;
-
             }
-            return null;
 
+            return null;
         }
 
         /// <summary>
@@ -67,19 +68,18 @@ namespace NCLCore
             {
                 StreamReader reader = new StreamReader(s, Encoding.UTF8);
                 return reader.ReadToEnd();
-
             }
         }
 
         /// <summary>
         /// 验证证书
         /// </summary>
-        private static bool CheckValidationResult(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors errors)
+        private static bool CheckValidationResult(object sender, X509Certificate certificate, X509Chain chain,
+            SslPolicyErrors errors)
         {
             if (errors == SslPolicyErrors.None)
                 return true;
             return false;
         }
     }
-
 }

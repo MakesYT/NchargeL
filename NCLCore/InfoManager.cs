@@ -1,6 +1,5 @@
 ﻿namespace NCLCore
 {
-
     public class InfoManager
     {
         // public InfoType type{get;set;}
@@ -13,9 +12,10 @@
             this.info = info;
             PropertyChanged?.Invoke(this, info);
         }
+
         public void clear()
         {
-            PropertyChanged=null;
+            PropertyChanged = null;
         }
     }
 }
