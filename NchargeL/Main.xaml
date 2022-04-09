@@ -3,10 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:System="clr-namespace:System;assembly=mscorlib"
-    xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes" 
     xmlns:notifications="clr-namespace:Notification.Wpf.Controls;assembly=Notification.Wpf"
-    xmlns:System1="clr-namespace:System;assembly=netstandard" xmlns:controls="clr-namespace:Enterwell.Clients.Wpf.Notifications.Controls;assembly=Enterwell.Clients.Wpf.Notifications" x:Name="window" x:Class="NchargeL.Main"
+        xmlns:controls="clr-namespace:Enterwell.Clients.Wpf.Notifications.Controls;assembly=Enterwell.Clients.Wpf.Notifications" x:Name="window" x:Class="NchargeL.Main"
     mc:Ignorable="d"
     AllowsTransparency="True" 
         Title="NCL启动器" Height="450" Width="800" WindowStartupLocation="CenterScreen" BorderThickness="7"  WindowStyle="None" Background="{x:Null}">
@@ -64,7 +63,7 @@
                     </Button>
                     <Button FocusVisualStyle="{x:Null}" BorderBrush="{x:Null}" Foreground="{DynamicResource ForegroundColor}" Height="42" Width="38" Padding="0" Margin="6,0,0,0" Click="HomeClick" Cursor="Hand" >
                         <Button.Background>
-                            <ImageBrush ImageSource="/Resources/icon.ico" Stretch="UniformToFill"/>
+                            <ImageBrush ImageSource="/Resources/icon.png" Stretch="UniformToFill" />
                         </Button.Background>
 
                     </Button>
@@ -109,7 +108,7 @@
 
                         <Button FocusVisualStyle="{x:Null}" Style="{StaticResource MaterialDesignFlatButton}" Background="{x:Null}" BorderBrush="{x:Null}" HorizontalAlignment="Left" Height="60" Padding="0" Click="ViaClick" Cursor="Hand" Foreground="#FF6AA8FF" Width="180" Margin="0,30,0,0" >
                             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left"  Width="180">
-                                <Image RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.ClearTypeHint="Enabled" Name="userImage" Source="/NchargeL;component/Resources/user.png" HorizontalAlignment="Left" VerticalAlignment="Top" Width="48" Height="48"></Image>
+                                <Image RenderOptions.BitmapScalingMode="NearestNeighbor" RenderOptions.ClearTypeHint="Enabled" Name="userImage" Source="/NchargeL;component/Resources/user.png" HorizontalAlignment="Left" VerticalAlignment="Top" Width="48" Height="48" />
 
                                 <TextBlock Margin="4,0,0,0" Name="hello"  Text="" TextWrapping="Wrap"  Foreground="{DynamicResource TextColor}" FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
 
