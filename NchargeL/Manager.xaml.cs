@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -180,7 +181,96 @@ namespace NchargeL
         {
             Task.Factory.StartNew(() => fix());
         }
+        private void update_Click(object sender, RoutedEventArgs e)
+        {
+        Client clt=((Client) ((ListBox) e.OriginalSource).SelectedItem);
+        if (clt.Ncharge)
+        {
+            Task.Factory.StartNew(() => updateClient(clt));
+        }else Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+        {
+            InfoDialog warn = new InfoDialog("", "非Ncharge客户端不支持检查更新");
+            warn.ShowDialog();
+        })).Wait();
+            
+        }
 
+        public void updateClient(Client clt)
+        {
+            string re1 = HttpRequestHelper.GetResponseString(
+                HttpRequestHelper.CreatePostHttpResponse("http://download.ncserver.top:8000/NCL/clients.json",
+                    new Dictionary<String, String>()));
+            var jObject = JArray.Parse(re1);
+            bool f = false;
+            foreach (JObject clientJson in jObject)
+            {
+                if (clientJson["name"].ToString()==clt.Name)
+                {
+                    f = true;
+                    if (clt.NchargeVer==clientJson["NchargeVersion"].ToString())
+                    {
+                        Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+                        {
+                        notificationManager.Show(NotificationContentSDK.notificationInformation("","无需更新"));
+                        })).Wait();
+                        }else
+                    {
+                        INotificationMessage msg = null;
+                        Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+                        {
+                            var progress = new ProgressBar
+                            {
+                                VerticalAlignment = VerticalAlignment.Bottom,
+                                HorizontalAlignment = HorizontalAlignment.Stretch,
+                                Height = 3,
+                                BorderThickness = new Thickness(0),
+                                Foreground = new SolidColorBrush(Color.FromArgb(128, 255, 255, 255)),
+                                Background = Brushes.Transparent,
+                                IsIndeterminate = true,
+                                IsHitTestVisible = false,
+                                Value = 10
+                            };
+                            progress.Value = 10;
+                            msg = Main.main.Manager.CreateMessage()
+                                .Accent("#F15B19")
+                                .Background("#F15B19")
+                                .HasHeader("更新客户端中.......")
+                                .HasMessage("")
+                                .WithOverlay(progress)
+                                .Queue();
+                            Main.main.infoManager.PropertyChanged += (oo, ee) =>
+                            {
+                                if ((oo as InfoManager).info.process != null)
+                                {
+                                    Info logtmp = (oo as InfoManager).info;
+                                    log.Debug("消息反馈" + logtmp.msg + " " + logtmp.process);
+                                    Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+                                    {
+                                        progress.Value = (double) logtmp.process;
+                                        // stringinfo 
+                                        msg.Message = logtmp.msg;
+                                    })).Wait();
+                                }
+                            };
+                        })).Wait();
+                        //更新客户端代码
+                        {
+                            
+                        }
+                    }
+                    break;
+                }
+
+            }
+
+            if (!f)
+            {
+                Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+                {
+                    notificationManager.Show(NotificationContentSDK.notificationError("","无法在远端查询到该客户端"));
+                })).Wait(); 
+            }
+        }
         private void fix()
         {
             Client client = null;
