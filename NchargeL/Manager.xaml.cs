@@ -238,6 +238,7 @@ namespace NchargeL
                                 .HasMessage("")
                                 .WithOverlay(progress)
                                 .Queue();
+                            Main.main.infoManager.clear();
                             Main.main.infoManager.PropertyChanged += (oo, ee) =>
                             {
                                 if ((oo as InfoManager).info.process != null)
@@ -255,7 +256,8 @@ namespace NchargeL
                         })).Wait();
                         //更新客户端代码
                         {
-                            
+                            ClientUpdate clientUpdate = new ClientUpdate(Main.main.infoManager);
+                            clientUpdate.update(clt);
                         }
                     }
                     break;
