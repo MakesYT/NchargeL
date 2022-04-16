@@ -10,7 +10,27 @@ namespace NchargeL
     /// </summary>
     public partial class InfoDialog : Window
     {
-        public int time = 0;
+        private readonly int time;
+        public bool cancelfg;
+
+        public InfoDialog(string infostr, string str, bool cancelfg)
+        {
+            InitializeComponent();
+            info.Text = infostr;
+            text.Text = str;
+            var storyboard = (Storyboard) FindResource("Storyboard1");
+            storyboard.Begin();
+            if (time != 0)
+            {
+                close.IsEnabled = false;
+                close.Content = "关闭(" + time + ")";
+                var thread2 = new Thread(timeLaterColse);
+                thread2.Name = "Test2";
+                thread2.Start();
+            }
+
+            cancel.Visibility = Visibility.Visible;
+        }
 
         public InfoDialog(string infostr, string str)
         {
@@ -68,6 +88,12 @@ namespace NchargeL
                 close.Content = "关闭";
                 close.IsEnabled = true;
             }));
+        }
+
+        private void Cancel_OnClick_Click(object sender, RoutedEventArgs e)
+        {
+            cancelfg = true;
+            Close();
         }
     }
 }

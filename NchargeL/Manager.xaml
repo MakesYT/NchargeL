@@ -76,7 +76,7 @@
                         Click="del_click
                          " Height="70" Width="120" FontFamily="HarmonyOS Sans"
                         FontWeight="Bold" FontSize="23" Padding="0,0,0,0" Margin="5,74,0,0" />
-                <Button IsEnabled="False" x:Name="update" BorderBrush="{x:Null}"
+                <Button x:Name="update" BorderBrush="{x:Null}"
                         Foreground="{DynamicResource ForegroundColor}" Cursor="Hand" IsDefault="True"
                         Background="{DynamicResource BodyColorWith50Opacity}" FocusVisualStyle="{x:Null}"
                         Style="{StaticResource MaterialDesignOutlinedLightButton}" Content="检测更新"

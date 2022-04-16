@@ -25,6 +25,8 @@ namespace NchargeL
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Settings.Default.Save();
+
+            //Settings.Default.Properties.Clear();
             StopProcess("wget.exe");
             this.Close();
             Main.main.Close();
