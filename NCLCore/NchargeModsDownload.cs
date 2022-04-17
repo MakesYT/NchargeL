@@ -9,6 +9,8 @@ namespace NCLCore
     internal class NchargeModsDownload
     {
         private static readonly ILog log = LogManager.GetLogger("NchargeModsDownload");
+        private readonly List<DownloadItem> allmods = new();
+        private readonly bool process;
         public int AllCount = 0;
         int cancellationsOccurrenceCount = 0;
         public int DownloadCount = 0;
@@ -16,7 +18,6 @@ namespace NCLCore
         InfoManager infoManager;
         List<DownloadItem> listmods = new List<DownloadItem>();
         List<JObject> modJsons = new List<JObject>();
-
         int nowthreadnum = 0;
         public string toDir;
 
@@ -25,11 +26,22 @@ namespace NCLCore
             this.infoManager = infoManager;
         }
 
+        public NchargeModsDownload(InfoManager infoManager, bool process)
+        {
+            this.infoManager = infoManager;
+            this.process = process;
+        }
+
         public ClientDownload ClientDownload { get; set; }
 
         public string getDir()
         {
             return toDir;
+        }
+
+        public List<DownloadItem> getAllmods()
+        {
+            return allmods;
         }
 
         public void Start(int thread, JArray jArray)
@@ -119,21 +131,29 @@ namespace NCLCore
                         {
                             flag = true;
                             DownloadCount++;
-                            infoManager.Info(new Info(
-                                DownloadCount + "/" + AllCount + "文件" + dir.Substring(dir.LastIndexOf("\\") + 1) +
-                                "无需下载,sha1校验通过", InfoType.info));
-
+                            if (process)
+                                infoManager.Info(new Info(0,
+                                    DownloadCount + "/" + AllCount + "文件" + dir.Substring(dir.LastIndexOf("\\") + 1) +
+                                    "无需下载,sha1校验通过"));
+                            else
+                                infoManager.Info(new Info(
+                                    DownloadCount + "/" + AllCount + "文件" + dir.Substring(dir.LastIndexOf("\\") + 1) +
+                                    "无需下载,sha1校验通过", InfoType.info));
+                            var downloadItem = new DownloadItem(uri, dir);
+                            allmods.Add(downloadItem);
                             nowthreadnum--;
                         }
                     }
 
                     if (!flag)
                     {
-                        infoManager.Info(new Info("需要下载" + jObject["fileName"].ToString(), InfoType.info));
+                        if (!process) infoManager.Info(new Info("需要下载" + jObject["fileName"], InfoType.info));
+
 
                         log.Debug("需要下载:" + jObject["downloadUrl"].ToString());
                         DownloadItem downloadItem = new DownloadItem(uri, dir);
                         listmods.Add(downloadItem);
+                        allmods.Add(downloadItem);
                         nowthreadnum--;
                     }
                 }

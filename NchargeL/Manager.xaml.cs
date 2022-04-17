@@ -199,109 +199,208 @@ namespace NchargeL
 
         public void updateClient(Client clt)
         {
-            string re1 = HttpRequestHelper.GetResponseString(
-                HttpRequestHelper.CreatePostHttpResponse("http://download.ncserver.top:8000/NCL/clienttest.json",
-                    new Dictionary<String, String>()));
-            var jObject = JArray.Parse(re1);
-            bool f = false;
-            foreach (JObject clientJson in jObject)
+            var javaVer = ClientTools.JavaCheck(Settings.Default.Java, clt);
+            var flag = false;
+            switch (javaVer)
             {
-                if (clientJson["name"].ToString() == clt.Name)
+                case 0:
                 {
-                    f = true;
-                    if (clt.NchargeVer == clientJson["NchargeVersion"].ToString())
-                    {
-                        Application.Current.Dispatcher.BeginInvoke(new Action(delegate
-                        {
-                            notificationManager.Show(NotificationContentSDK.notificationInformation("", "无需更新"),
-                                "WindowArea");
-                        })).Wait();
-                    }
-                    else //需要更新
-                    {
-                        var cancel = false;
-                        Application.Current.Dispatcher.BeginInvoke(new Action(delegate
-                        {
-                            var warn = new InfoDialog("",
-                                "当前版本:" + clt.NchargeVer + ",将更新为:" + clientJson["NchargeVersion"] + "\n按确定继续", false);
-                            warn.ShowDialog();
-                            cancel = warn.cancelfg;
-                        })).Wait();
-                        if (!cancel)
-                        {
-                            INotificationMessage msg = null;
-                            Application.Current.Dispatcher.BeginInvoke(new Action(delegate
-                            {
-                                var progress = new ProgressBar
-                                {
-                                    VerticalAlignment = VerticalAlignment.Bottom,
-                                    HorizontalAlignment = HorizontalAlignment.Stretch,
-                                    Height = 3,
-                                    BorderThickness = new Thickness(0),
-                                    Foreground = new SolidColorBrush(Color.FromArgb(128, 255, 255, 255)),
-                                    Background = Brushes.Transparent,
-                                    IsIndeterminate = true,
-                                    IsHitTestVisible = false,
-                                    Value = 10
-                                };
-                                progress.Value = 10;
-                                msg = Main.main.Manager.CreateMessage()
-                                    .Accent("#F15B19")
-                                    .Background("#F15B19")
-                                    .HasHeader("更新客户端中.......")
-                                    .HasMessage("")
-                                    .WithOverlay(progress)
-                                    .Queue();
-                                Main.main.infoManager.clear();
-                                Main.main.infoManager.PropertyChanged += (oo, ee) =>
-                                {
-                                    if ((oo as InfoManager).info.process != null)
-                                    {
-                                        var logtmp = (oo as InfoManager).info;
-                                        log.Debug("消息反馈" + logtmp.msg + " " + logtmp.process);
-                                        Application.Current.Dispatcher.BeginInvoke(new Action(delegate
-                                        {
-                                            progress.Value = (double) logtmp.process;
-                                            // stringinfo 
-                                            msg.Message = logtmp.msg;
-                                        })).Wait();
-                                    }
-                                };
-                            })).Wait();
-                            //更新客户端代码
-                            {
-                                var client = new NchargeClient();
-                                client.name = clientJson["name"].ToString();
-                                client.time = clientJson["time"].ToString();
-                                client.Cname = clientJson["Cname"].ToString();
-                                client.modsize = clientJson["modsize"].ToString();
-                                client.version = clientJson["version"].ToString();
-                                client.NchargeVersion = clientJson["NchargeVersion"].ToString();
-                                client.forgeVersion = clientJson["forgeVersion"].ToString();
-                                client.mods = clientJson["modscount"].ToString();
-                                var clientUpdate = new ClientUpdate(Main.main.infoManager);
-                                clientUpdate.update(clt, client);
-                            }
-                        }
-                        else
-                        {
-                            Application.Current.Dispatcher.BeginInvoke(new Action(delegate
-                            {
-                                notificationManager.Show(NotificationContentSDK.notificationWarning("", "取消更新"),
-                                    "WindowArea");
-                            })).Wait();
-                        }
-                    }
-
+                    //notificationManager.Show(NotificationContentSDK.notificationInformation("正在启动客户端", ""), "WindowArea");
+                    flag = true;
+                    break;
+                }
+                case -1:
+                {
+                    break;
+                }
+                case -2:
+                {
+                    break;
+                }
+                case 1:
+                {
+                    break;
+                }
+                default:
+                {
+                    flag = true;
                     break;
                 }
             }
 
-            if (!f)
+            if (flag)
+            {
+                var re1 = HttpRequestHelper.GetResponseString(
+                    HttpRequestHelper.CreatePostHttpResponse("http://download.ncserver.top:8000/NCL/clienttest.json",
+                        new Dictionary<string, string>()));
+                var jObject = JArray.Parse(re1);
+                var f = false;
+                foreach (JObject clientJson in jObject)
+                    if (clientJson["name"].ToString() == clt.Name)
+                    {
+                        f = true;
+                        if (clt.NchargeVer == clientJson["NchargeVersion"].ToString())
+                        {
+                            Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+                            {
+                                notificationManager.Show(NotificationContentSDK.notificationInformation("", "无需更新"),
+                                    "WindowArea");
+                            })).Wait();
+                        }
+                        else //需要更新
+                        {
+                            var cancel = false;
+                            Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+                            {
+                                var warn = new InfoDialog("",
+                                    "当前版本:" + clt.NchargeVer + ",将更新为:" + clientJson["NchargeVersion"] + "\n按确定继续",
+                                    false);
+                                warn.ShowDialog();
+                                cancel = warn.cancelfg;
+                            })).Wait();
+                            if (!cancel)
+                            {
+                                INotificationMessage msg = null;
+                                Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+                                {
+                                    var progress = new ProgressBar
+                                    {
+                                        VerticalAlignment = VerticalAlignment.Bottom,
+                                        HorizontalAlignment = HorizontalAlignment.Stretch,
+                                        Height = 3,
+                                        BorderThickness = new Thickness(0),
+                                        Foreground = new SolidColorBrush(Color.FromArgb(128, 255, 255, 255)),
+                                        Background = Brushes.Transparent,
+                                        IsIndeterminate = true,
+                                        IsHitTestVisible = false,
+                                        Value = 10
+                                    };
+                                    progress.Value = 10;
+                                    msg = Main.main.Manager.CreateMessage()
+                                        .Accent("#F15B19")
+                                        .Background("#F15B19")
+                                        .HasHeader("更新客户端中.......")
+                                        .HasMessage("")
+                                        .WithOverlay(progress)
+                                        .Queue();
+                                    Main.main.infoManager.clear();
+                                    Main.main.infoManager.PropertyChanged += (oo, ee) =>
+                                    {
+                                        if ((oo as InfoManager).info.process != null)
+                                        {
+                                            var logtmp = (oo as InfoManager).info;
+                                            log.Debug("消息反馈" + logtmp.msg + " " + logtmp.process);
+                                            Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+                                            {
+                                                progress.Value = (double) logtmp.process;
+                                                // stringinfo 
+                                                msg.Header = logtmp.msg;
+                                            })).Wait();
+                                        }
+                                        else
+                                        {
+                                            var logtmp = (oo as InfoManager).info;
+                                            Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+                                            {
+                                                switch (logtmp.TYPE)
+                                                {
+                                                    case InfoType.info:
+                                                    {
+                                                        notificationManager.Show(
+                                                            NotificationContentSDK.notificationInformation(logtmp.msg,
+                                                                ""),
+                                                            "WindowArea");
+                                                        break;
+                                                    }
+                                                    case InfoType.error:
+                                                    {
+                                                        notificationManager.Show(
+                                                            NotificationContentSDK.notificationError(logtmp.msg, ""),
+                                                            "WindowArea");
+                                                        break;
+                                                    }
+                                                    case InfoType.warn:
+                                                    {
+                                                        notificationManager.Show(
+                                                            NotificationContentSDK.notificationWarning(logtmp.msg, ""),
+                                                            "WindowArea");
+                                                        break;
+                                                    }
+                                                    case InfoType.success:
+                                                    {
+                                                        notificationManager.Show(
+                                                            NotificationContentSDK.notificationSuccess(logtmp.msg, ""),
+                                                            "WindowArea");
+                                                        break;
+                                                    }
+                                                    case InfoType.errorDia:
+                                                    {
+                                                        Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+                                                        {
+                                                            var warn = new ErrorDialog("", logtmp.msg);
+                                                            warn.Show();
+                                                        })).Wait();
+
+                                                        break;
+                                                    }
+                                                    case InfoType.successDia:
+                                                    {
+                                                        Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+                                                        {
+                                                            var warn = new InfoDialog("", logtmp.msg);
+                                                            warn.Show();
+                                                        })).Wait();
+
+                                                        break;
+                                                    }
+                                                }
+                                            })).Wait();
+                                        }
+                                    };
+                                })).Wait();
+                                //更新客户端代码
+                                {
+                                    var client = new NchargeClient();
+                                    client.name = clientJson["name"].ToString();
+                                    client.time = clientJson["time"].ToString();
+                                    client.Cname = clientJson["Cname"].ToString();
+                                    client.modsize = clientJson["modsize"].ToString();
+                                    client.version = clientJson["version"].ToString();
+                                    client.NchargeVersion = clientJson["NchargeVersion"].ToString();
+                                    client.forgeVersion = clientJson["forgeVersion"].ToString();
+                                    client.mods = clientJson["modscount"].ToString();
+                                    var clientUpdate = new ClientUpdate(Main.main.infoManager);
+                                    clientUpdate.update(clt, client, Settings.Default.Java,
+                                        Settings.Default.DownloadSource);
+                                }
+                            }
+                            else
+                            {
+                                Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+                                {
+                                    notificationManager.Show(NotificationContentSDK.notificationWarning("", "取消更新"),
+                                        "WindowArea");
+                                })).Wait();
+                            }
+                        }
+
+                        break;
+                    }
+
+                if (!f)
+                    Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+                    {
+                        notificationManager.Show(NotificationContentSDK.notificationError("", "无法在远端查询到该客户端"),
+                            "WindowArea");
+                    })).Wait();
+            }
+            else //无java
             {
                 Application.Current.Dispatcher.BeginInvoke(new Action(delegate
                 {
-                    notificationManager.Show(NotificationContentSDK.notificationError("", "无法在远端查询到该客户端"));
+                    var warn = new InfoDialog("", "你需要先选择使用的Java才能继续\n按确定将打开选择Java页面但不会继续执行操作\n如需继续请重新执行");
+                    warn.ShowDialog();
+                    JavaDir();
                 })).Wait();
             }
         }
