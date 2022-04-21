@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -7,7 +8,7 @@ namespace NCLCore;
 public class ClientUpdate
 {
     private InfoManager infoManager;
-
+    private static readonly ILog log = LogManager.GetLogger("ClientUpdate");
     public ClientUpdate(InfoManager infoManager)
     {
         this.infoManager = infoManager;
@@ -117,8 +118,13 @@ public class ClientUpdate
                 var tempoldLists = oldLists;
                 var tempnewLists = newLists;
                 foreach (var mod in newLists) tempoldLists.Remove(mod);
+                log.Debug(tempnewLists.ToString());
                 dels = tempoldLists;
-                foreach (var mod in dels)
+                var delsdownload = new NchargeModsDownload(infoManager, true);
+                // modsdownload.ClientDownload = this;
+                delsdownload.toDir = clt.rootdir + "\\versions\\" + nchargeClient.name + "\\mods\\";
+                delsdownload.Start(250, dels);
+                foreach (var mod in delsdownload.getAllmods())
                 {
                     var file = new FileInfo(mod.fullname);
                     file.Delete();
@@ -128,7 +134,12 @@ public class ClientUpdate
                 foreach (var mod in oldLists) tempnewLists.Remove(mod);
                 needs = tempnewLists;
                 info.AppendLine("需要下载的Mods:");
-                foreach (var mod in needs)
+                
+                var needsdownload = new NchargeModsDownload(infoManager, true);
+                // modsdownload.ClientDownload = this;
+                needsdownload.toDir = clt.rootdir + "\\versions\\" + nchargeClient.name + "\\mods\\";
+                needsdownload.Start(250, dels);
+                foreach (var mod in needsdownload.getAllmods())
                 {
                     var file = new FileInfo(mod.fullname);
 
@@ -136,7 +147,7 @@ public class ClientUpdate
                 }
 
                 var mod1 = new DownloadManagerV2(infoManager, true);
-                mod1.Start(needs, 50);
+                mod1.Start(needsdownload.getAllmods(), 50);
                 infoManager.Info(new Info(info.ToString(), InfoType.successDia));
             }
         }
