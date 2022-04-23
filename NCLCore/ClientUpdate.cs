@@ -7,8 +7,9 @@ namespace NCLCore;
 
 public class ClientUpdate
 {
-    private InfoManager infoManager;
     private static readonly ILog log = LogManager.GetLogger("ClientUpdate");
+    private InfoManager infoManager;
+
     public ClientUpdate(InfoManager infoManager)
     {
         this.infoManager = infoManager;
@@ -91,9 +92,11 @@ public class ClientUpdate
                 foreach (var file in oldDirectoryInfo.GetFiles())
                     if (!existsmodsStr.Contains(file.FullName))
                     {
+                        log.Debug(existsmodsStr);
+                        log.Debug(file.FullName);
                         file.Delete();
                         infoManager.Info(new Info(0, "删除Mods:" + file.Name));
-                        info.AppendLine("   " + file.Name);
+                        info.AppendLine("1   " + file.Name);
                     }
 
                 infoManager.Info(new Info(0, "删除无法对比Mods完成,获取新版本Mods中"));
@@ -113,13 +116,22 @@ public class ClientUpdate
             }
             {
                 //确认多余mods,以及需要下载的mod
-                JArray dels;
-                JArray needs;
-                var tempoldLists = oldLists;
-                var tempnewLists = newLists;
-                foreach (var mod in newLists) tempoldLists.Remove(mod);
-                log.Debug(tempnewLists.ToString());
-                dels = tempoldLists;
+                var dels = new JArray();
+                var needs = new JArray();
+                //((JArray)oldLists).Select(x => new string(x.ToString())).ToList();
+                var tempoldLists = oldLists.Select(x => new string(x.ToString())).ToList();
+                var tempnewLists = newLists.Select(x => new string(x.ToString())).ToList();
+                log.Debug(tempoldLists[0]);
+                foreach (var mod in newLists.Select(x => new string(x.ToString())).ToList())
+                {
+                    tempoldLists.Remove(mod);
+                    //tempoldLists.ToList().ForEach(i => i.Remove());
+                    log.Debug(mod);
+                } //老的mod列表删除与新MOd相同的部分,剩下的即为多余的
+
+                log.Debug(tempoldLists);
+                foreach (var j in tempoldLists) dels.Add(JObject.Parse(j));
+                //dels = JArray.Parse(tempoldLists.\);
                 var delsdownload = new NchargeModsDownload(infoManager, true);
                 // modsdownload.ClientDownload = this;
                 delsdownload.toDir = clt.rootdir + "\\versions\\" + nchargeClient.name + "\\mods\\";
@@ -131,14 +143,18 @@ public class ClientUpdate
                     info.AppendLine("   " + file.Name);
                 }
 
-                foreach (var mod in oldLists) tempnewLists.Remove(mod);
-                needs = tempnewLists;
+                foreach (var mod in oldLists.Select(x => new string(x.ToString())).ToList())
+                    // tempnewLists.Where(i => i.Type == JTokenType.String && (string)i == mod.ToString()).ToList().ForEach(i => i.Remove());
+                    tempnewLists.Remove(mod);
+                // tempnewLists.Remove((JObject)mod);
+                foreach (var j in tempnewLists) needs.Add(JObject.Parse(j));
+                //  needs = JArray.FromObject(tempnewLists);
                 info.AppendLine("需要下载的Mods:");
-                
+
                 var needsdownload = new NchargeModsDownload(infoManager, true);
                 // modsdownload.ClientDownload = this;
                 needsdownload.toDir = clt.rootdir + "\\versions\\" + nchargeClient.name + "\\mods\\";
-                needsdownload.Start(250, dels);
+                needsdownload.Start(250, needs);
                 foreach (var mod in needsdownload.getAllmods())
                 {
                     var file = new FileInfo(mod.fullname);
@@ -148,7 +164,18 @@ public class ClientUpdate
 
                 var mod1 = new DownloadManagerV2(infoManager, true);
                 mod1.Start(needsdownload.getAllmods(), 50);
+                var jObject1 = new JObject();
+                jObject1.Add("ver", nchargeClient.NchargeVersion);
+                var output = JsonConvert.SerializeObject(jObject1, Formatting.Indented);
+                if (File.Exists(clt.rootdir + "\\versions\\" + nchargeClient.name + "\\" + nchargeClient.name +
+                                ".ncharge"))
+                    File.Delete(clt.rootdir + "\\versions\\" + nchargeClient.name + "\\" + nchargeClient.name +
+                                ".ncharge");
+                File.WriteAllText(
+                    clt.rootdir + "\\versions\\" + nchargeClient.name + "\\" + nchargeClient.name + ".ncharge",
+                    output);
                 infoManager.Info(new Info(info.ToString(), InfoType.successDia));
+                infoManager.Info(new Info(100, "InfoType.successDia"));
             }
         }
     }

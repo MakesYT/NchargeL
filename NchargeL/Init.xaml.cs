@@ -16,7 +16,7 @@ namespace Ncharge
     public partial class MainWindow : Window
     {
         private static readonly ILog log = LogManager.GetLogger("Init");
-        private readonly string ver = "1.2.4";
+        private readonly string ver = "1.2.9";
 
 
         public MainWindow()

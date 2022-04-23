@@ -231,7 +231,7 @@ namespace NchargeL
             if (flag)
             {
                 var re1 = HttpRequestHelper.GetResponseString(
-                    HttpRequestHelper.CreatePostHttpResponse("http://download.ncserver.top:8000/NCL/clienttest.json",
+                    HttpRequestHelper.CreatePostHttpResponse("http://download.ncserver.top:8000/NCL/clients.json",
                         new Dictionary<string, string>()));
                 var jObject = JArray.Parse(re1);
                 var f = false;
@@ -295,6 +295,7 @@ namespace NchargeL
                                                 progress.Value = (double) logtmp.process;
                                                 // stringinfo 
                                                 msg.Header = logtmp.msg;
+                                                if (logtmp.process == 100) Main.main.Manager.Dismiss(msg);
                                             })).Wait();
                                         }
                                         else
