@@ -1,5 +1,10 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Configuration;
+using System.IO;
+using System.Text;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace NchargeL.Properties
 {
@@ -27,7 +32,23 @@ namespace NchargeL.Properties
 
         private void SettingsSavingEventHandler(object sender, CancelEventArgs e)
         {
+            JObject jObject =new JObject();
+            jObject.Add("BodyColorS", BodyColorS.ToString());
+            jObject.Add("NotificationSuccess", NotificationSuccess.ToString());
+            jObject.Add("NotificationError", NotificationError.ToString());
+            jObject.Add("NotificationWarning",NotificationWarning.ToString());
+            jObject.Add("TextColor", TextColor.ToString());
+            jObject.Add("ForegroundColor", ForegroundColor.ToString());
+            jObject.Add("BackgroundColor", BackgroundColor.ToString());
+            jObject.Add("DownloadSource", DownloadSource);
+            jObject.Add("GameDir", GameDir);
+            jObject.Add("User", User);
+            jObject.Add("Java", Java);
+            jObject.Add("RAM", RAM);
             // 在此处添加用于处理 SettingsSaving 事件的代码。
+            string ApplicationData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            File.WriteAllText(ApplicationData+"\\NchargeL\\config.json", jObject.ToString(Formatting.Indented));
+
         }
     }
 }

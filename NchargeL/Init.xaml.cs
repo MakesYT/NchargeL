@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using log4net;
 using NchargeL;
 using NchargeL.Properties;
 using NCLCore;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
 namespace Ncharge
@@ -16,7 +19,7 @@ namespace Ncharge
     public partial class MainWindow : Window
     {
         private static readonly ILog log = LogManager.GetLogger("Init");
-        private readonly string ver = "1.2.9";
+        private readonly string ver = "1.2.9-3";
 
 
         public MainWindow()
@@ -25,8 +28,49 @@ namespace Ncharge
             this.Show();
             //long timeStamp = DateTimeOffset.Now.ToUniversalTime().Ticks; 
             log.Info("初始化....");
-            // log.Info(NchargeL.Properties.Settings.Default.User._token);
-            if (Settings.Default.First)
+            string ApplicationData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            //File.WriteAllText(ApplicationData + "\\config.json", jObject.ToString(Formatting.Indented));
+            if (File.Exists(ApplicationData + "\\NchargeL\\config.json"))
+            {
+                try
+                {
+                    using var jsonfile = File.OpenText(ApplicationData + "\\NchargeL\\config.json");
+
+                    using var reader = new JsonTextReader(jsonfile);
+                    var jObject = (JObject)JToken.ReadFrom(reader);
+
+
+                    ColorConverter converter = new ColorConverter();
+
+                   // Color color = (Color)converter.ConvertFromString("#FFDFD991");
+                    Settings.Default.BodyColorS =
+                        (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(jObject["BodyColorS"].ToString());
+                    Settings.Default.NotificationSuccess =
+                        (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(jObject["NotificationSuccess"].ToString());
+                    Settings.Default.NotificationError =
+                        (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(jObject["NotificationError"].ToString());
+                    Settings.Default.NotificationWarning =
+                        (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(jObject["NotificationWarning"].ToString());
+                    Settings.Default.TextColor =
+                        (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(jObject["TextColor"].ToString());
+                    Settings.Default.ForegroundColor =
+                        (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(jObject["ForegroundColor"].ToString());
+                    Settings.Default.BackgroundColor =
+                        (System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(jObject["BackgroundColor"].ToString());
+                    Settings.Default.DownloadSource = jObject["DownloadSource"].ToString();
+                    Settings.Default.GameDir = jObject["GameDir"].ToString();
+                    Settings.Default.User = jObject["User"].ToString();
+                    Settings.Default.Java = jObject["Java"].ToString();
+                    Settings.Default.RAM = jObject["RAM"].ToObject<int>();
+                    Settings.Default.First = false;
+                }
+                catch (Exception e)
+                {
+                   log.Debug("读取旧配置文件失败"+e.ToString());
+                }
+            }
+                // log.Info(NchargeL.Properties.Settings.Default.User._token);
+                if (Settings.Default.First)
             {
                 Application.Current.Dispatcher.BeginInvoke(new Action(delegate
                 {

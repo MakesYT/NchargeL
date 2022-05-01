@@ -167,10 +167,6 @@ public class ClientUpdate
                 var jObject1 = new JObject();
                 jObject1.Add("ver", nchargeClient.NchargeVersion);
                 var output = JsonConvert.SerializeObject(jObject1, Formatting.Indented);
-                if (File.Exists(clt.rootdir + "\\versions\\" + nchargeClient.name + "\\" + nchargeClient.name +
-                                ".ncharge"))
-                    File.Delete(clt.rootdir + "\\versions\\" + nchargeClient.name + "\\" + nchargeClient.name +
-                                ".ncharge");
                 File.WriteAllText(
                     clt.rootdir + "\\versions\\" + nchargeClient.name + "\\" + nchargeClient.name + ".ncharge",
                     output);
