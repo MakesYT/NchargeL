@@ -19,7 +19,7 @@
             <materialDesign:ColorZone Mode="Inverted" Padding="0" VerticalAlignment="Top"
                                       HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="0"
                                       HorizontalAlignment="Left" Width="290" Background="{DynamicResource BodyColor}"
-                                      Foreground="#FFFAFAFA">
+                                      Foreground="#FFFAFAFA" Height="40">
 
                 <Grid HorizontalAlignment="Left" Width="290" VerticalAlignment="Top">
                     <TextBlock VerticalAlignment="Center" Margin="3,3,0,3" Text="Ncharge启动器" HorizontalAlignment="Left"
@@ -39,13 +39,7 @@
             </materialDesign:ColorZone>
 
 
-            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                <materialDesign:Card HorizontalAlignment="Center" RenderTransformOrigin="0.566,1.303" Margin="0"
-                                     UniformCornerRadius="6" HorizontalContentAlignment="Center"
-                                     VerticalContentAlignment="Center"
-                                     FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi"
-                                     VerticalAlignment="Center" />
-            </StackPanel>
+            
 
             <Label Content="加载中......&#xD;&#xA;请稍后" HorizontalAlignment="Center" VerticalAlignment="Center"
                    RenderTransformOrigin="0.51,0.567" FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi"

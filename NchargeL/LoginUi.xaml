@@ -49,7 +49,7 @@
         <Grid>
             <Label Content="登陆账号" HorizontalAlignment="Center" Margin="0,30,0,0" VerticalAlignment="Top" Width="206"
                    FontSize="50" FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi"
-                   Foreground="{DynamicResource TextColor}" HorizontalContentAlignment="Center" Background="{x:Null}" />
+                   Foreground="{DynamicResource TextColor}" HorizontalContentAlignment="Center" Background="{x:Null}" BorderBrush="{x:Null}" />
             <StackPanel HorizontalAlignment="Center" Height="174" Margin="0,101,0,0" VerticalAlignment="Top"
                         Width="413">
                 <StackPanel />

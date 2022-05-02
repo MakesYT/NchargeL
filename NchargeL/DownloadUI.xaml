@@ -4,10 +4,26 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:hc="https://handyorg.github.io/handycontrol"
+      xmlns:nchargeL="clr-namespace:NchargeL"
+      xmlns:forms="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
       mc:Ignorable="d"
       Width="750" Height="380"
       Title="DownloadUI">
+    <Page.Resources>
 
+        <nchargeL:Data x:Key="t" />
+        <Style x:Key="color" TargetType="DataGridColumnHeader" BasedOn="{StaticResource DataGridColumnHeaderStyle}">
+            <Setter Property="Foreground" Value="{DynamicResource TextColor}" />
+            <Setter Property="Background" Value="{DynamicResource BodyColorWith20Opacity}" />
+            <Setter Property="Width" Value="Auto"></Setter>
+           <Setter Property="FontSize" Value="13"></Setter>
+            <Setter Property="HorizontalContentAlignment" Value="Left"></Setter>
+            
+        </Style>
+        
+
+    </Page.Resources>
     <Grid>
         <Button Style="{StaticResource MaterialDesignFloatingActionLightButton}"
                 ToolTip="刷新远程客户端列表"
@@ -16,51 +32,24 @@
                 Foreground="{DynamicResource ForegroundColor}" Click="Button_Click">
             <materialDesign:PackIcon Kind="Reload" Cursor="Hand" Width="28" Height="28" />
         </Button>
-        <GroupBox Margin="0,5,0,200" materialDesign:ColorZoneAssist.Mode="Custom"
-                  materialDesign:ColorZoneAssist.Background="{DynamicResource BodyColor}"
-                  materialDesign:ColorZoneAssist.Foreground="{DynamicResource ForegroundColor}"
-                  Header="                       Ncharge客户端列表" Width="433" HorizontalAlignment="Left" Padding="0,0,0,0"
+        <GroupBox Margin="0,5,0,200" hc:TitleElement.Background="{DynamicResource BodyColorWith80Opacity}"
+                  Header="Ncharge客户端列表" Width="433" HorizontalAlignment="Left" Padding="0,0,0,0"
                   Grid.IsSharedSizeScope="True" FontFamily="HarmonyOS Sans Medium" FontSize="20"
-                  HorizontalContentAlignment="Center" Foreground="{x:Null}" BorderBrush="#FFB3DDF7">
-            <DataGrid DisplayMemberPath="Name" x:Name="list" Background="{DynamicResource BodyColorWith50Opacity}"
-                      Width="433" VerticalAlignment="Center" Height="155" HorizontalAlignment="Center"
-                      ItemContainerStyle="{DynamicResource color}" AutoGenerateColumns="False" IsReadOnly="True"
-                      SelectionChanged="list_SelectionChanged" UseLayoutRounding="False"
-                      ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True"
-                      ScrollViewer.VerticalScrollBarVisibility="Auto">
+                  HorizontalContentAlignment="Center" Foreground="{DynamicResource ForegroundColor}" BorderBrush="{x:Null}" >
+            <DataGrid DisplayMemberPath="Name" x:Name="list" Background="{DynamicResource BodyColorWith50Opacity}" 
+                      Width="433" VerticalAlignment="Center" Height="155" HorizontalAlignment="Center" ColumnHeaderStyle="{DynamicResource color}"
+                     
+                    
+                      ItemContainerStyle="{DynamicResource color}"  IsReadOnly="True"
+                      SelectionChanged="list_SelectionChanged" UseLayoutRounding="False" 
+                      hc:DataGridAttach.CanUnselectAllWithBlankArea="True" HeadersVisibility="All" RowHeaderWidth="60" AutoGenerateColumns="False"
+                      ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" 
+                      ScrollViewer.VerticalScrollBarVisibility="Auto" BorderBrush="{DynamicResource BodyColorWith20Opacity}" Foreground="{x:Null}">
                 <DataGrid.Columns>
-                    <materialDesign:DataGridTextColumn Header="整合包名称"
-                                                       ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
-                                                       EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
-                                                       FontFamily="HarmonyOS Sans Medium">
-                        <materialDesign:DataGridTextColumn.Binding>
-                            <Binding Path="Cname" />
-                        </materialDesign:DataGridTextColumn.Binding>
-                    </materialDesign:DataGridTextColumn>
-                    <materialDesign:DataGridTextColumn Header="游戏版本"
-                                                       ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
-                                                       EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
-                                                       FontFamily="HarmonyOS Sans Medium">
-                        <materialDesign:DataGridTextColumn.Binding>
-                            <Binding Path="version" />
-                        </materialDesign:DataGridTextColumn.Binding>
-                    </materialDesign:DataGridTextColumn>
-                    <materialDesign:DataGridTextColumn Header="Ncharge版本"
-                                                       ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
-                                                       EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
-                                                       FontFamily="HarmonyOS Sans Medium">
-                        <materialDesign:DataGridTextColumn.Binding>
-                            <Binding Path="NchargeVersion" />
-                        </materialDesign:DataGridTextColumn.Binding>
-                    </materialDesign:DataGridTextColumn>
-                    <materialDesign:DataGridTextColumn Header="Forge版本"
-                                                       ElementStyle="{StaticResource MaterialDesignDataGridTextColumnStyle}"
-                                                       EditingElementStyle="{StaticResource MaterialDesignDataGridTextColumnPopupEditingStyle}"
-                                                       FontFamily="HarmonyOS Sans Medium">
-                        <materialDesign:DataGridTextColumn.Binding>
-                            <Binding Path="forgeVersion" />
-                        </materialDesign:DataGridTextColumn.Binding>
-                    </materialDesign:DataGridTextColumn>
+                    <DataGridTextColumn  FontSize="13" FontFamily="HarmonyOS Sans Medium" IsReadOnly="True" CanUserResize="False" Binding="{Binding Cname}" Header="整合包名称" />
+                    <DataGridTextColumn FontSize="13" FontFamily="HarmonyOS Sans Medium" IsReadOnly="True"  CanUserResize="False" Binding="{Binding version}" Header="游戏版本" />
+                    <DataGridTextColumn FontSize="13" FontFamily="HarmonyOS Sans Medium" IsReadOnly="True"  CanUserResize="False" Binding="{Binding NchargeVersion}" Header="Ncharge版本" />
+                    <DataGridTextColumn FontSize="13" FontFamily="HarmonyOS Sans Medium" IsReadOnly="True"  CanUserResize="False" Binding="{Binding forgeVersion}" Header="Forge版本" />
                 </DataGrid.Columns>
             </DataGrid>
 

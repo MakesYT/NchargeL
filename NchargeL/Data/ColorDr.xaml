@@ -11,11 +11,15 @@
     </Style>
     <SolidColorBrush x:Key="BodyColor" x:Name="BodyColor"
                      Color="{Binding Path=BodyColorS, Source={x:Static settings:Settings.Default}}" />
+    <SolidColorBrush x:Key="BodyColorWith80Opacity"
+                     Color="{Binding Path=BodyColorS, Source={x:Static settings:Settings.Default}}" Opacity="0.8" />
     <SolidColorBrush x:Key="BodyColorWith50Opacity"
                      Color="{Binding Path=BodyColorS, Source={x:Static settings:Settings.Default}}" Opacity="0.5" />
+    <SolidColorBrush x:Key="BodyColorWith30Opacity"
+                     Color="{Binding Path=BodyColorS, Source={x:Static settings:Settings.Default}}" Opacity="0.3" />
     <SolidColorBrush x:Key="BodyColorWith20Opacity"
                      Color="{Binding Path=BodyColorS, Source={x:Static settings:Settings.Default}}" Opacity="0.2" />
-
+    <SolidColorBrush x:Key="TitleElementBackground" Color="#FFAEC4E2" Opacity="0.45" />
     <SolidColorBrush x:Key="NotificationSuccess" po:Freeze="True"
                      Color="{Binding Path=NotificationSuccess, Source={x:Static settings:Settings.Default}}"
                      Opacity="0.6" />
