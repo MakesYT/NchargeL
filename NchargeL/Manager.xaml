@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="clr-namespace:NchargeL"
       mc:Ignorable="d" xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+      xmlns:hc="https://handyorg.github.io/handycontrol"
 
       Width="750" Height="380"
       Title="Launcher">
@@ -42,12 +43,19 @@
                 Foreground="{DynamicResource ForegroundColor}" Click="GameDir_Click">
             <materialDesign:PackIcon Kind="FolderOpenOutline" Cursor="Hand" Width="28" Height="28" />
         </Button>
-        <GroupBox Margin="0,5,0,0" materialDesign:ColorZoneAssist.Mode="Custom"
-                  materialDesign:ColorZoneAssist.Background="{DynamicResource BodyColor}"
-                  materialDesign:ColorZoneAssist.Foreground="{DynamicResource ForegroundColor}"
-                  Header="              客户端列表" Width="250" HorizontalAlignment="Left" Padding="0,0,0,0"
+        <GroupBox Margin="0,5,0,0" hc:TitleElement.Background="{DynamicResource BodyColorWith80Opacity}"
+                  Header="客户端列表" Width="250" HorizontalAlignment="Left" Padding="0,0,0,0"
                   Grid.IsSharedSizeScope="True" FontFamily="HarmonyOS Sans Medium" FontSize="20"
-                  HorizontalContentAlignment="Center" Foreground="{x:Null}" BorderBrush="#FFB3DDF7">
+                  HorizontalContentAlignment="Center" Foreground="{DynamicResource ForegroundColor}" BorderBrush="#FFB3DDF7">
+            <GroupBox.Effect>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="13"  Direction="310" Color="White"/>
+            </GroupBox.Effect>
+            <GroupBox.Style>
+                <Style TargetType="GroupBox">
+                    <Setter Property="Background" Value="{DynamicResource BodyColorWith20Opacity}"></Setter>
+                </Style>
+
+            </GroupBox.Style>
             <ListBox SelectedValuePath="Id" DisplayMemberPath="Name" x:Name="list"
                      Background="{DynamicResource BodyColorWith50Opacity}"
                      Width="249" VerticalAlignment="Top" Height="350" HorizontalAlignment="Center"
@@ -61,14 +69,28 @@
         <TextBox IsReadOnly="True" HorizontalContentAlignment="Center" x:Name="info" Text="当前未选择客户端"
                  Margin="255,5,245,271" Foreground="{DynamicResource ForegroundColor}"
                  Background="{DynamicResource BodyColorWith50Opacity}" FontFamily="HarmonyOS Sans" FontSize="20"
-                 Cursor="IBeam" />
-        <GroupBox x:Name="group" Visibility="Hidden" Margin="255,114,0,94" materialDesign:ColorZoneAssist.Mode="Custom"
-                  materialDesign:ColorZoneAssist.Background="{DynamicResource BodyColor}"
-                  materialDesign:ColorZoneAssist.Foreground="{DynamicResource ForegroundColor}"
-                  Header="              客户端管理" Width="250" HorizontalAlignment="Left" Padding="0,0,0,0"
+                 Cursor="IBeam" >
+            <TextBox.Effect>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="13"  Direction="310" Color="White"/>
+            </TextBox.Effect>
+        </TextBox>
+        <GroupBox x:Name="group" Visibility="Hidden" Margin="255,114,0,94"  hc:TitleElement.Background="{DynamicResource BodyColorWith80Opacity}"
+                  Header="客户端管理" Width="250" HorizontalAlignment="Left" Padding="0,0,0,0"
                   Grid.IsSharedSizeScope="True" FontFamily="HarmonyOS Sans Medium" FontSize="20"
-                  HorizontalContentAlignment="Center" Foreground="{x:Null}" BorderBrush="#FFB3DDF7">
+                  HorizontalContentAlignment="Center" Foreground="{DynamicResource ForegroundColor}" BorderBrush="#FFB3DDF7">
+            <GroupBox.Effect>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="13"  Direction="310" Color="White"/>
+            </GroupBox.Effect>
+            <GroupBox.Style>
+                <Style TargetType="GroupBox">
+                    <Setter Property="Background" Value="{DynamicResource BodyColorWith20Opacity}"></Setter>
+                </Style>
+
+            </GroupBox.Style>
             <Grid>
+                <Grid.Effect>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="13"  Direction="310" Color="White"/>
+                </Grid.Effect>
                 <Button x:Name="del" BorderBrush="{x:Null}" Foreground="{DynamicResource NotificationError}"
                         Cursor="Hand" IsDefault="True" Background="{DynamicResource BodyColorWith50Opacity}"
                         FocusVisualStyle="{x:Null}" Style="{StaticResource MaterialDesignOutlinedLightButton}"

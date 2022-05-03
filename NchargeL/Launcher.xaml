@@ -70,7 +70,12 @@
             <GroupBox.Effect>
                 <DropShadowEffect BlurRadius="10" ShadowDepth="13"  Direction="310" Color="White"/>
             </GroupBox.Effect>
-
+            <GroupBox.Style>
+                <Style TargetType="GroupBox">
+                    <Setter Property="Background" Value="{DynamicResource BodyColorWith20Opacity}"></Setter>
+                </Style>
+                
+            </GroupBox.Style>
 
             <ListBox SelectedValuePath="Id" DisplayMemberPath="Name" x:Name="list"
                      
@@ -87,6 +92,12 @@
                   Header="全局游戏设置" Width="477" HorizontalAlignment="Left"
                   Padding="0,0,0,0" Grid.IsSharedSizeScope="True" FontFamily="HarmonyOS Sans Medium" FontSize="20"
                   HorizontalContentAlignment="Center" Foreground="{DynamicResource ForegroundColor}" BorderBrush="{DynamicResource BodyColorWith30Opacity}" Background="{x:Null}">
+            <GroupBox.Style>
+                <Style TargetType="GroupBox">
+                    <Setter Property="Background" Value="{DynamicResource BodyColorWith20Opacity}"></Setter>
+                    <Setter Property="BorderBrush" Value="{DynamicResource ForegroundColor}"></Setter>
+                </Style>
+            </GroupBox.Style>
             <GroupBox.Effect>
                 <DropShadowEffect BlurRadius="10" ShadowDepth="13" Direction="310"  Color="White"/>
             </GroupBox.Effect>

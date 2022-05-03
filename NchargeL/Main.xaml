@@ -135,7 +135,7 @@
                     </Grid>
                     <Image Source="/bg21.png" Width="786" Height="389" Panel.ZIndex="-21" Stretch="UniformToFill">
                         <Image.Effect>
-                            <BlurEffect Radius="12"/>
+                            <BlurEffect Radius="20"/>
                         </Image.Effect>
 
                     </Image>
