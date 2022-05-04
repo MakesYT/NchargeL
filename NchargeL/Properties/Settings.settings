@@ -1,45 +1,46 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="NchargeL.Properties" GeneratedClassName="Settings">
-  <Profiles />
-  <Settings>
-    <Setting Name="First" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
-    </Setting>
-    <Setting Name="BodyColorS" Type="System.Windows.Media.Color" Scope="User">
-      <Value Profile="(Default)">#FF81D8CF</Value>
-    </Setting>
-    <Setting Name="NotificationSuccess" Type="System.Windows.Media.Color" Scope="User">
-      <Value Profile="(Default)">#FF02B340</Value>
-    </Setting>
-    <Setting Name="NotificationError" Type="System.Windows.Media.Color" Scope="User">
-      <Value Profile="(Default)">#FFF52443</Value>
-    </Setting>
-    <Setting Name="NotificationWarning" Type="System.Windows.Media.Color" Scope="User">
-      <Value Profile="(Default)">#FFFFFF4D</Value>
-    </Setting>
-    <Setting Name="TextColor" Type="System.Windows.Media.Color" Scope="User">
-      <Value Profile="(Default)">#FF1D1D1F</Value>
-    </Setting>
-    <Setting Name="ForegroundColor" Type="System.Windows.Media.Color" Scope="User">
-      <Value Profile="(Default)">#FFFDFFF4</Value>
-    </Setting>
-    <Setting Name="BackgroundColor" Type="System.Windows.Media.Color" Scope="User">
-      <Value Profile="(Default)">#FFFDFFF4</Value>
-    </Setting>
-    <Setting Name="DownloadSource" Type="System.String" Scope="User">
-      <Value Profile="(Default)">https://download.mcbbs.net/</Value>
-    </Setting>
-    <Setting Name="GameDir" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="User" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
-    </Setting>
-    <Setting Name="Java" Type="System.String" Scope="User">
-      <Value Profile="(Default)">java</Value>
-    </Setting>
-    <Setting Name="RAM" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">8000</Value>
-    </Setting>
-  </Settings>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)"
+              GeneratedClassNamespace="NchargeL.Properties" GeneratedClassName="Settings">
+    <Profiles/>
+    <Settings>
+        <Setting Name="First" Type="System.Boolean" Scope="User">
+            <Value Profile="(Default)">True</Value>
+        </Setting>
+        <Setting Name="BodyColorS" Type="System.Windows.Media.Color" Scope="User">
+            <Value Profile="(Default)">#FF81D8CF</Value>
+        </Setting>
+        <Setting Name="NotificationSuccess" Type="System.Windows.Media.Color" Scope="User">
+            <Value Profile="(Default)">#FF02B340</Value>
+        </Setting>
+        <Setting Name="NotificationError" Type="System.Windows.Media.Color" Scope="User">
+            <Value Profile="(Default)">#FFF52443</Value>
+        </Setting>
+        <Setting Name="NotificationWarning" Type="System.Windows.Media.Color" Scope="User">
+            <Value Profile="(Default)">#FFFFFF4D</Value>
+        </Setting>
+        <Setting Name="TextColor" Type="System.Windows.Media.Color" Scope="User">
+            <Value Profile="(Default)">#FF1D1D1F</Value>
+        </Setting>
+        <Setting Name="ForegroundColor" Type="System.Windows.Media.Color" Scope="User">
+            <Value Profile="(Default)">#FFFDFFF4</Value>
+        </Setting>
+        <Setting Name="BackgroundColor" Type="System.Windows.Media.Color" Scope="User">
+            <Value Profile="(Default)">#FFFDFFF4</Value>
+        </Setting>
+        <Setting Name="DownloadSource" Type="System.String" Scope="User">
+            <Value Profile="(Default)">https://download.mcbbs.net/</Value>
+        </Setting>
+        <Setting Name="GameDir" Type="System.String" Scope="User">
+            <Value Profile="(Default)"/>
+        </Setting>
+        <Setting Name="User" Type="System.String" Scope="User">
+            <Value Profile="(Default)"/>
+        </Setting>
+        <Setting Name="Java" Type="System.String" Scope="User">
+            <Value Profile="(Default)">java</Value>
+        </Setting>
+        <Setting Name="RAM" Type="System.Int32" Scope="User">
+            <Value Profile="(Default)">8000</Value>
+        </Setting>
+    </Settings>
 </SettingsFile>

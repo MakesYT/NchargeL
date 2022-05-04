@@ -1,15 +1,14 @@
 ﻿using System.Windows.Controls;
 
-namespace NchargeL.SettingUIs
+namespace NchargeL.SettingUIs;
+
+/// <summary>
+///     GameSetting.xaml 的交互逻辑
+/// </summary>
+public partial class GameSetting : Page
 {
-    /// <summary>
-    /// GameSetting.xaml 的交互逻辑
-    /// </summary>
-    public partial class GameSetting : Page
+    public GameSetting()
     {
-        public GameSetting()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

@@ -4,7 +4,6 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       mc:Ignorable="d"
-      xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       xmlns:hc="https://handyorg.github.io/handycontrol"
       Width="750" Height="370"
       Title="AboutNCL">
@@ -12,16 +11,16 @@
     <Grid>
 
 
-        <GroupBox Margin="10,0,0,155"  hc:TitleElement.Background="{DynamicResource BodyColorWith80Opacity}"
+        <GroupBox Margin="10,0,0,155" hc:TitleElement.Background="{DynamicResource BodyColorWith80Opacity}"
                   Header="服务器须知" Width="300" HorizontalAlignment="Left" Padding="0,0,0,0" Grid.IsSharedSizeScope="True"
                   FontFamily="HarmonyOS Sans Medium" FontSize="20" HorizontalContentAlignment="Center"
                   Foreground="{DynamicResource ForegroundColor}" BorderBrush="#FFB3DDF7">
             <GroupBox.Effect>
-                <DropShadowEffect BlurRadius="10" ShadowDepth="13"  Direction="310" Color="White"/>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="13" Direction="310" Color="White" />
             </GroupBox.Effect>
             <GroupBox.Style>
                 <Style TargetType="GroupBox">
-                    <Setter Property="Background" Value="{DynamicResource BodyColorWith20Opacity}"></Setter>
+                    <Setter Property="Background" Value="{DynamicResource BodyColorWith20Opacity}" />
                 </Style>
 
             </GroupBox.Style>
@@ -33,7 +32,7 @@
   客户端保存了玩家账号的可&#xA;公开信息和电脑基本信息&#xA;
   这些信息用于保护服务器防止&#xA;遭受网络攻击&#xA;
   这些信息不会上传至互联网  "
-                     
+
                      HorizontalContentAlignment="Left" FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi"
                      FontSize="20" BorderBrush="{DynamicResource BodyColorWith20Opacity}"
                      SelectionTextBrush="{x:Null}" CaretBrush="{x:Null}" Foreground="{DynamicResource TextColor}"
@@ -48,16 +47,16 @@
                Source="Resources/f6c082b631bddb16edba7e0fe0b6d720.png" />
         <Image HorizontalAlignment="Left" Height="170" Margin="616,10,0,0" VerticalAlignment="Top" Width="124"
                Source="Resources/8ee20a6fa281ace6499d14210a46c8e3.png" />
-        <GroupBox Margin="0,215,0,10"  hc:TitleElement.Background="{DynamicResource BodyColorWith80Opacity}"
+        <GroupBox Margin="0,215,0,10" hc:TitleElement.Background="{DynamicResource BodyColorWith80Opacity}"
                   Header="许可证" Width="730" HorizontalAlignment="Center" Padding="0,0,0,0" Grid.IsSharedSizeScope="True"
                   FontFamily="HarmonyOS Sans Medium" FontSize="20" HorizontalContentAlignment="Center"
                   Foreground="{DynamicResource ForegroundColor}" BorderBrush="#FFB3DDF7">
             <GroupBox.Effect>
-                <DropShadowEffect BlurRadius="10" ShadowDepth="13"  Direction="310" Color="White"/>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="13" Direction="310" Color="White" />
             </GroupBox.Effect>
             <GroupBox.Style>
                 <Style TargetType="GroupBox">
-                    <Setter Property="Background" Value="{DynamicResource BodyColorWith20Opacity}"></Setter>
+                    <Setter Property="Background" Value="{DynamicResource BodyColorWith20Opacity}" />
                 </Style>
 
             </GroupBox.Style>
@@ -76,7 +75,6 @@
                      SelectionBrush="{DynamicResource BodyColor}" Margin="0,0,-2,0" TextChanged="java_TextChanged" />
 
         </GroupBox>
-
 
 
     </Grid>

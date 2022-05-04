@@ -4,82 +4,77 @@ using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using Newtonsoft.Json;
 
-namespace NCLCore
+namespace NCLCore;
+
+public class HttpRequestHelper
 {
-    public class HttpRequestHelper
+    public static HttpWebResponse CreatePostHttpResponse(string url, IDictionary<string, string> parameters)
     {
-        public static HttpWebResponse CreatePostHttpResponse(string url, IDictionary<string, string> parameters)
+        var cout = 0;
+        while (cout < 10)
         {
-            int cout = 0;
-            while (cout < 10)
+            HttpWebRequest request = null;
+            //如果是发送HTTPS请求 
+            if (url.StartsWith("https", StringComparison.OrdinalIgnoreCase))
+                //ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(CheckValidationResult);
+                request = WebRequest.Create(url) as HttpWebRequest;
+            //request.ProtocolVersion = HttpVersion.Version10;
+            else
+                request = WebRequest.Create(url) as HttpWebRequest;
+
+            //request.Method = "POST";
+            request.ContentType = "application/json";
+
+            //设置代理UserAgent和超时
+            request.UserAgent =
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.74 Safari/537.36 Edg/99.0.1150.52";
+            //request.Timeout = timeout;
+
+            //if (cookies != null)
+            //{
+            //    request.CookieContainer = new CookieContainer();
+            //    request.CookieContainer.Add(cookies);
+            //}
+            //发送POST数据 
+            if (!(parameters == null || parameters.Count == 0))
             {
-                HttpWebRequest request = null;
-                //如果是发送HTTPS请求 
-                if (url.StartsWith("https", StringComparison.OrdinalIgnoreCase))
+                request.Method = "POST";
+                //System.Console.WriteLine(JsonConvert.SerializeObject(parameters));
+                var data = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(parameters));
+                using (var stream = request.GetRequestStream())
                 {
-                    //ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(CheckValidationResult);
-                    request = WebRequest.Create(url) as HttpWebRequest;
-                    //request.ProtocolVersion = HttpVersion.Version10;
+                    stream.Write(data, 0, data.Length);
                 }
-                else
-                {
-                    request = WebRequest.Create(url) as HttpWebRequest;
-                }
-
-                //request.Method = "POST";
-                request.ContentType = "application/json";
-
-                //设置代理UserAgent和超时
-                request.UserAgent =
-                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.74 Safari/537.36 Edg/99.0.1150.52";
-                //request.Timeout = timeout;
-
-                //if (cookies != null)
-                //{
-                //    request.CookieContainer = new CookieContainer();
-                //    request.CookieContainer.Add(cookies);
-                //}
-                //发送POST数据 
-                if (!(parameters == null || parameters.Count == 0))
-                {
-                    request.Method = "POST";
-                    //System.Console.WriteLine(JsonConvert.SerializeObject(parameters));
-                    byte[] data = Encoding.ASCII.GetBytes(JsonConvert.SerializeObject(parameters));
-                    using (Stream stream = request.GetRequestStream())
-                    {
-                        stream.Write(data, 0, data.Length);
-                    }
-                }
-
-                string[] values = request.Headers.GetValues("Content-Type");
-
-                return request.GetResponse() as HttpWebResponse;
             }
 
-            return null;
+            var values = request.Headers.GetValues("Content-Type");
+
+            return request.GetResponse() as HttpWebResponse;
         }
 
-        /// <summary>
-        /// 获取请求的数据
-        /// </summary>
-        public static string GetResponseString(HttpWebResponse webresponse)
-        {
-            using (Stream s = webresponse.GetResponseStream())
-            {
-                StreamReader reader = new StreamReader(s, Encoding.UTF8);
-                return reader.ReadToEnd();
-            }
-        }
+        return null;
+    }
 
-        /// <summary>
-        /// 验证证书
-        /// </summary>
-        private static bool CheckValidationResult(object sender, X509Certificate certificate, X509Chain chain,
-            SslPolicyErrors errors)
+    /// <summary>
+    ///     获取请求的数据
+    /// </summary>
+    public static string GetResponseString(HttpWebResponse webresponse)
+    {
+        using (var s = webresponse.GetResponseStream())
         {
-            if (errors == SslPolicyErrors.None)
-                return true;
-            return false;
+            var reader = new StreamReader(s, Encoding.UTF8);
+            return reader.ReadToEnd();
         }
+    }
+
+    /// <summary>
+    ///     验证证书
+    /// </summary>
+    private static bool CheckValidationResult(object sender, X509Certificate certificate, X509Chain chain,
+        SslPolicyErrors errors)
+    {
+        if (errors == SslPolicyErrors.None)
+            return true;
+        return false;
     }
 }

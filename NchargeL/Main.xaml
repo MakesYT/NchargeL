@@ -15,18 +15,6 @@
         <DropShadowEffect ShadowDepth="1" BlurRadius="6" Direction="270" Opacity="0.75" Color="#FF211613" />
     </Window.Effect>
     <Window.Resources>
-        <Storyboard x:Key="Storyboard1">
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="line"
-                                           Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)">
-                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0.582" />
-                <EasingDoubleKeyFrame KeyTime="00:00:01" Value="0.991" />
-            </DoubleAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="line"
-                                           Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)">
-                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="-5.274" />
-                <EasingDoubleKeyFrame KeyTime="00:00:01" Value="-0.228" />
-            </DoubleAnimationUsingKeyFrames>
-        </Storyboard>
 
     </Window.Resources>
 
@@ -135,7 +123,7 @@
                     </Grid>
                     <Image Source="/bg21.png" Width="786" Height="389" Panel.ZIndex="-21" Stretch="UniformToFill">
                         <Image.Effect>
-                            <BlurEffect Radius="20"/>
+                            <BlurEffect Radius="20" />
                         </Image.Effect>
 
                     </Image>
@@ -175,7 +163,8 @@
                                                          HorizontalAlignment="Left" Margin="0,0,3,0" />
                                 <Label FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi" Content="启动客户端"
                                        Margin="2,2,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"
-                                       Background="{x:Null}" FontSize="18" Foreground="{DynamicResource TextColor}" BorderBrush="{x:Null}" />
+                                       Background="{x:Null}" FontSize="18" Foreground="{DynamicResource TextColor}"
+                                       BorderBrush="{x:Null}" />
                             </StackPanel>
                         </Button>
                         <Button FocusVisualStyle="{x:Null}" Style="{StaticResource MaterialDesignFlatButton}"
@@ -188,7 +177,8 @@
                                                          HorizontalAlignment="Center" />
                                 <Label FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi" Content="下载客户端"
                                        Margin="2,2,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"
-                                       Background="{x:Null}" FontSize="18" Foreground="{DynamicResource TextColor}" BorderBrush="{x:Null}" />
+                                       Background="{x:Null}" FontSize="18" Foreground="{DynamicResource TextColor}"
+                                       BorderBrush="{x:Null}" />
                             </StackPanel>
                         </Button>
                         <Button FocusVisualStyle="{x:Null}" Style="{StaticResource MaterialDesignFlatButton}"
@@ -201,7 +191,8 @@
                                                          HorizontalAlignment="Center" />
                                 <Label FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi" Content="管理客户端"
                                        Margin="2,2,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"
-                                       Background="{x:Null}" FontSize="18" Foreground="{DynamicResource TextColor}" BorderBrush="{x:Null}" />
+                                       Background="{x:Null}" FontSize="18" Foreground="{DynamicResource TextColor}"
+                                       BorderBrush="{x:Null}" />
                             </StackPanel>
                         </Button>
                         <Button FocusVisualStyle="{x:Null}" Style="{StaticResource MaterialDesignFlatButton}"
@@ -214,7 +205,8 @@
                                                          HorizontalAlignment="Center" />
                                 <Label FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi" Content="启动器设置"
                                        Margin="2,2,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"
-                                       Background="{x:Null}" FontSize="18" Foreground="{DynamicResource TextColor}" BorderBrush="{x:Null}" />
+                                       Background="{x:Null}" FontSize="18" Foreground="{DynamicResource TextColor}"
+                                       BorderBrush="{x:Null}" />
                             </StackPanel>
                         </Button>
                         <Button FocusVisualStyle="{x:Null}" Style="{StaticResource MaterialDesignFlatButton}"
@@ -227,7 +219,8 @@
                                                          HorizontalAlignment="Center" />
                                 <Label FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi" Content="关于启动器"
                                        Margin="2,2,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"
-                                       FontSize="18" Background="{x:Null}" Foreground="{DynamicResource TextColor}" BorderBrush="{x:Null}" />
+                                       FontSize="18" Background="{x:Null}" Foreground="{DynamicResource TextColor}"
+                                       BorderBrush="{x:Null}" />
                             </StackPanel>
                         </Button>
 

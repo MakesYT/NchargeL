@@ -33,13 +33,13 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type TextBox}">
                         <Grid>
-                            <Rectangle RadiusX="5" RadiusY="5" Fill="{DynamicResource BodyColorWith50Opacity}" Stroke="{DynamicResource BodyColorWith30Opacity}"  StrokeThickness="2"/>
+                            <Rectangle RadiusX="5" RadiusY="5" Fill="{DynamicResource BodyColorWith50Opacity}"
+                                       Stroke="{DynamicResource BodyColorWith30Opacity}" StrokeThickness="2" />
                             <ScrollViewer x:Name="PART_ContentHost"
                                           HorizontalScrollBarVisibility="Hidden"
                                           VerticalScrollBarVisibility="Hidden"
                                           Padding="{TemplateBinding Padding}"
-                                          Focusable="false">
-                            </ScrollViewer>
+                                          Focusable="false" />
                         </Grid>
                     </ControlTemplate>
                 </Setter.Value>
@@ -63,51 +63,57 @@
             <materialDesign:PackIcon Kind="FolderOpenOutline" Cursor="Hand" Width="28" Height="28" />
         </Button>
 
-        <GroupBox  Margin="0,5,0,10" hc:TitleElement.Background="{DynamicResource BodyColorWith80Opacity}"
+        <GroupBox Margin="0,5,0,10" hc:TitleElement.Background="{DynamicResource BodyColorWith80Opacity}"
                   Header="客户端列表" Width="250" HorizontalAlignment="Left" Padding="0,0,0,0"
                   Grid.IsSharedSizeScope="True" FontFamily="HarmonyOS Sans Medium" FontSize="20"
-                  HorizontalContentAlignment="Center" Foreground="{DynamicResource ForegroundColor}" Background="{DynamicResource BodyColorWith50Opacity}" BorderBrush="{x:Null}" >
+                  HorizontalContentAlignment="Center" Foreground="{DynamicResource ForegroundColor}"
+                  Background="{DynamicResource BodyColorWith50Opacity}" BorderBrush="{x:Null}">
             <GroupBox.Effect>
-                <DropShadowEffect BlurRadius="10" ShadowDepth="13"  Direction="310" Color="White"/>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="13" Direction="310" Color="White" />
             </GroupBox.Effect>
             <GroupBox.Style>
                 <Style TargetType="GroupBox">
-                    <Setter Property="Background" Value="{DynamicResource BodyColorWith20Opacity}"></Setter>
+                    <Setter Property="Background" Value="{DynamicResource BodyColorWith20Opacity}" />
                 </Style>
-                
+
             </GroupBox.Style>
 
             <ListBox SelectedValuePath="Id" DisplayMemberPath="Name" x:Name="list"
-                     
+
                      Width="249" VerticalAlignment="Top" Height="350" HorizontalAlignment="Center"
                      ItemContainerStyle="{DynamicResource color}"
                      ItemsSource="{Binding Source={StaticResource t},Path=clients,UpdateSourceTrigger=PropertyChanged}"
                      SelectionChanged="list_SelectionChanged" UseLayoutRounding="False"
                      ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True"
-                     ScrollViewer.VerticalScrollBarVisibility="Auto" Background="{x:Null}" Foreground="{x:Null}" BorderBrush="{x:Null}" />
+                     ScrollViewer.VerticalScrollBarVisibility="Auto" Background="{x:Null}" Foreground="{x:Null}"
+                     BorderBrush="{x:Null}" />
 
         </GroupBox>
 
         <GroupBox Margin="255,5,0,209" hc:TitleElement.Background="{DynamicResource BodyColorWith80Opacity}"
                   Header="全局游戏设置" Width="477" HorizontalAlignment="Left"
                   Padding="0,0,0,0" Grid.IsSharedSizeScope="True" FontFamily="HarmonyOS Sans Medium" FontSize="20"
-                  HorizontalContentAlignment="Center" Foreground="{DynamicResource ForegroundColor}" BorderBrush="{DynamicResource BodyColorWith30Opacity}" Background="{x:Null}">
+                  HorizontalContentAlignment="Center" Foreground="{DynamicResource ForegroundColor}"
+                  BorderBrush="{DynamicResource BodyColorWith30Opacity}" Background="{x:Null}">
             <GroupBox.Style>
                 <Style TargetType="GroupBox">
-                    <Setter Property="Background" Value="{DynamicResource BodyColorWith20Opacity}"></Setter>
-                    <Setter Property="BorderBrush" Value="{DynamicResource ForegroundColor}"></Setter>
+                    <Setter Property="Background" Value="{DynamicResource BodyColorWith20Opacity}" />
+                    <Setter Property="BorderBrush" Value="{DynamicResource ForegroundColor}" />
                 </Style>
             </GroupBox.Style>
             <GroupBox.Effect>
-                <DropShadowEffect BlurRadius="10" ShadowDepth="13" Direction="310"  Color="White"/>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="13" Direction="310" Color="White" />
             </GroupBox.Effect>
             <StackPanel ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.CanContentScroll="False"
-                        HorizontalAlignment="Center" Height="148" >
+                        HorizontalAlignment="Center" Height="148">
                 <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" VerticalAlignment="Top">
-                    <TextBox x:Name="java" InputMethod.IsInputMethodEnabled="False" Style="{StaticResource TextBoxExtend}"
-                             hc:InfoElement.Title="Java路径:" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.HorizontalAlignment="Center"  
-                             hc:InfoElement.VerticalAlignment="Center" hc:TitleElement.TitleWidth="90"     Text="{Binding Path=Java,Source={x:Static Properties:Settings.Default}}"
-                              HorizontalContentAlignment="Left"
+                    <TextBox x:Name="java" InputMethod.IsInputMethodEnabled="False"
+                             Style="{StaticResource TextBoxExtend}"
+                             hc:InfoElement.Title="Java路径:" hc:InfoElement.TitlePlacement="Left"
+                             hc:InfoElement.HorizontalAlignment="Center"
+                             hc:InfoElement.VerticalAlignment="Center" hc:TitleElement.TitleWidth="90"
+                             Text="{Binding Path=Java,Source={x:Static Properties:Settings.Default}}"
+                             HorizontalContentAlignment="Left"
                              FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi" FontSize="18"
                              BorderBrush="{DynamicResource BodyColorWith20Opacity}" SelectionTextBrush="{x:Null}"
                              CaretBrush="{x:Null}" Foreground="{DynamicResource TextColor}" Cursor="IBeam"
@@ -125,10 +131,11 @@
                 </StackPanel>
                 <TextBox InputMethod.IsInputMethodEnabled="False"
                          Style="{StaticResource TextBoxExtend}"
-                         hc:InfoElement.Title="  内存&#13;(单位MB)" hc:InfoElement.TitlePlacement="Left" hc:InfoElement.HorizontalAlignment="Center"  
+                         hc:InfoElement.Title="  内存&#13;(单位MB)" hc:InfoElement.TitlePlacement="Left"
+                         hc:InfoElement.HorizontalAlignment="Center"
                          hc:InfoElement.VerticalAlignment="Center" hc:TitleElement.TitleWidth="90"
                          Text="{Binding Path=RAM,Source={x:Static Properties:Settings.Default}}"
-                          HorizontalContentAlignment="Left"
+                         HorizontalContentAlignment="Left"
                          FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi" FontSize="18"
                          BorderBrush="{DynamicResource BodyColorWith20Opacity}" SelectionTextBrush="{x:Null}"
                          CaretBrush="{x:Null}" Foreground="{DynamicResource TextColor}" Cursor="IBeam"
@@ -140,12 +147,13 @@
                 </TextBox>
             </StackPanel>
         </GroupBox>
-        <TextBox  IsReadOnly="True" HorizontalContentAlignment="Center" x:Name="info" Text="当前未选择客户端"
+        <TextBox IsReadOnly="True" HorizontalContentAlignment="Center" x:Name="info" Text="当前未选择客户端"
                  Margin="389,265,177,11"
                  Background="{x:Null}" FontFamily="HarmonyOS Sans" FontSize="20"
-                 Cursor="IBeam" BorderBrush="{x:Null}" SelectionBrush="{x:Null}" SelectionTextBrush="{x:Null}" Foreground="{DynamicResource ForegroundColor}" >
+                 Cursor="IBeam" BorderBrush="{x:Null}" SelectionBrush="{x:Null}" SelectionTextBrush="{x:Null}"
+                 Foreground="{DynamicResource ForegroundColor}">
             <TextBox.Effect>
-                <DropShadowEffect BlurRadius="10" ShadowDepth="8" Direction="310"  Color="White"/>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="8" Direction="310" Color="White" />
             </TextBox.Effect>
         </TextBox>
         <Button x:Name="logs" BorderBrush="{x:Null}" Foreground="{DynamicResource ForegroundColor}" Cursor="Hand"

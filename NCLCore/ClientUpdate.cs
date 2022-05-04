@@ -8,7 +8,7 @@ namespace NCLCore;
 public class ClientUpdate
 {
     private static readonly ILog log = LogManager.GetLogger("ClientUpdate");
-    private InfoManager infoManager;
+    private readonly InfoManager infoManager;
 
     public ClientUpdate(InfoManager infoManager)
     {

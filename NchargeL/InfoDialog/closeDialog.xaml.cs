@@ -5,56 +5,53 @@ using System.Windows.Media.Animation;
 using log4net;
 using NchargeL.Properties;
 
-namespace NchargeL
+namespace NchargeL;
+
+/// <summary>
+///     InfoDialog.xaml 的交互逻辑
+/// </summary>
+public partial class closeDialog : Window
 {
-    /// <summary>
-    /// InfoDialog.xaml 的交互逻辑
-    /// </summary>
-    public partial class closeDialog : Window
+    private static readonly ILog log = LogManager.GetLogger("closeDialog");
+
+    public closeDialog()
     {
-        private static readonly ILog log = LogManager.GetLogger("closeDialog");
+        InitializeComponent();
 
-        public closeDialog()
+        var storyboard = (Storyboard) FindResource("Storyboard1");
+        storyboard.Begin();
+    }
+
+    private void Button_Click(object sender, RoutedEventArgs e)
+    {
+        Settings.Default.Save();
+
+        //Settings.Default.Properties.Clear();
+        StopProcess("wget.exe");
+        Close();
+        Main.main.Close();
+        // System.Environment.Exit(0);
+        //  System.Threading.ThreadPool.
+        Process.GetCurrentProcess().Kill();
+        Application.Current.Shutdown();
+        Environment.Exit(0);
+    }
+
+    public static void StopProcess(string processName)
+    {
+        try
         {
-            InitializeComponent();
-
-            var storyboard = (Storyboard) this.FindResource("Storyboard1");
-            storyboard.Begin();
-        }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            Settings.Default.Save();
-
-            //Settings.Default.Properties.Clear();
-            StopProcess("wget.exe");
-            this.Close();
-            Main.main.Close();
-            // System.Environment.Exit(0);
-            //  System.Threading.ThreadPool.
-            Process.GetCurrentProcess().Kill();
-            Application.Current.Shutdown();
-            Environment.Exit(0);
-        }
-
-        public static void StopProcess(string processName)
-        {
-            try
-            {
-                Process[] processes = Process.GetProcesses();
-                foreach (Process item in processes)
+            var processes = Process.GetProcesses();
+            foreach (var item in processes)
+                if (item.ProcessName.Contains(processName.Replace(".exe", "")))
                 {
-                    if (item.ProcessName.Contains(processName.Replace(".exe", "")))
-                    {
-                        item.Kill();
-                        log.Info("已杀死" + item.Id);
-                        // break;
-                    }
+                    item.Kill();
+                    log.Info("已杀死" + item.Id);
+                    // break;
                 }
-            }
-            catch
-            {
-            }
+        }
+        catch
+        {
         }
     }
 }

@@ -9,7 +9,7 @@
         <Setter Property="Foreground" Value="{DynamicResource BodyColor}" />
         <Setter Property="Foreground" Value="{DynamicResource BodyColor}" />
     </Style>
-    <SolidColorBrush x:Key="BodyColor" x:Name="BodyColor"
+    <SolidColorBrush x:Key="BodyColor"
                      Color="{Binding Path=BodyColorS, Source={x:Static settings:Settings.Default}}" />
     <SolidColorBrush x:Key="BodyColorWith80Opacity"
                      Color="{Binding Path=BodyColorS, Source={x:Static settings:Settings.Default}}" Opacity="0.8" />

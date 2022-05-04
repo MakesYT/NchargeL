@@ -5,8 +5,6 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
       xmlns:hc="https://handyorg.github.io/handycontrol"
-      xmlns:nchargeL="clr-namespace:NchargeL"
-      xmlns:forms="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
       mc:Ignorable="d"
       Width="750" Height="380"
       Title="DownloadUI">
@@ -17,28 +15,27 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type TextBox}">
                         <Grid>
-                            <Rectangle RadiusX="10" RadiusY="10" Fill="{DynamicResource BodyColorWith50Opacity}" Stroke="{DynamicResource BodyColorWith30Opacity}"  StrokeThickness="2"/>
+                            <Rectangle RadiusX="10" RadiusY="10" Fill="{DynamicResource BodyColorWith50Opacity}"
+                                       Stroke="{DynamicResource BodyColorWith30Opacity}" StrokeThickness="2" />
                             <ScrollViewer x:Name="PART_ContentHost"
                                           HorizontalScrollBarVisibility="Hidden"
                                           VerticalScrollBarVisibility="Hidden"
                                           Padding="{TemplateBinding Padding}"
-                                          Focusable="false">
-                            </ScrollViewer>
+                                          Focusable="false" />
                         </Grid>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
-        <nchargeL:Data x:Key="t" />
         <Style x:Key="color" TargetType="DataGridColumnHeader" BasedOn="{StaticResource DataGridColumnHeaderStyle}">
             <Setter Property="Foreground" Value="{DynamicResource TextColor}" />
             <Setter Property="Background" Value="{DynamicResource BodyColorWith20Opacity}" />
-            <Setter Property="Width" Value="Auto"></Setter>
-           <Setter Property="FontSize" Value="13"></Setter>
-            <Setter Property="HorizontalContentAlignment" Value="Left"></Setter>
-            
+            <Setter Property="Width" Value="Auto" />
+            <Setter Property="FontSize" Value="13" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+
         </Style>
-        
+
 
     </Page.Resources>
     <Grid>
@@ -47,80 +44,90 @@
                 Margin="679,322,23,10" Panel.ZIndex="1" Cursor="Hand" Width="48" Height="48"
                 Background="{DynamicResource BodyColorWith50Opacity}" BorderBrush="{DynamicResource BodyColor}"
                 Foreground="{DynamicResource ForegroundColor}" Click="Button_Click">
-             <Button.Effect>
-                <DropShadowEffect BlurRadius="10" ShadowDepth="13"  Direction="310" Color="White"/>
+            <Button.Effect>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="13" Direction="310" Color="White" />
             </Button.Effect>
             <materialDesign:PackIcon Kind="Reload" Cursor="Hand" Width="28" Height="28" />
-            
-           
-            </Button>
-        
+
+
+        </Button>
+
         <GroupBox Margin="0,5,0,200" hc:TitleElement.Background="{DynamicResource BodyColorWith80Opacity}"
                   Header="Ncharge客户端列表" Width="433" HorizontalAlignment="Left" Padding="0,0,0,0"
                   Grid.IsSharedSizeScope="True" FontFamily="HarmonyOS Sans Medium" FontSize="20"
-                  HorizontalContentAlignment="Center" Foreground="{DynamicResource ForegroundColor}" BorderBrush="{x:Null}" >
+                  HorizontalContentAlignment="Center" Foreground="{DynamicResource ForegroundColor}"
+                  BorderBrush="{x:Null}">
             <GroupBox.Effect>
-                <DropShadowEffect BlurRadius="10" ShadowDepth="13"  Direction="310" Color="White"/>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="13" Direction="310" Color="White" />
             </GroupBox.Effect>
             <GroupBox.Style>
                 <Style TargetType="GroupBox">
-                    <Setter Property="Background" Value="{DynamicResource BodyColorWith20Opacity}"></Setter>
+                    <Setter Property="Background" Value="{DynamicResource BodyColorWith20Opacity}" />
                 </Style>
             </GroupBox.Style>
-            <DataGrid DisplayMemberPath="Name" x:Name="list" Background="{DynamicResource BodyColorWith50Opacity}" 
-                      Width="433" VerticalAlignment="Center" Height="155" HorizontalAlignment="Center" ColumnHeaderStyle="{DynamicResource color}"
-                     
-                    
-                      ItemContainerStyle="{DynamicResource color}"  IsReadOnly="True"
-                      SelectionChanged="list_SelectionChanged" UseLayoutRounding="False" 
-                      hc:DataGridAttach.CanUnselectAllWithBlankArea="True" HeadersVisibility="All" RowHeaderWidth="60" AutoGenerateColumns="False"
-                      ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" 
-                      ScrollViewer.VerticalScrollBarVisibility="Auto" BorderBrush="{DynamicResource BodyColorWith20Opacity}" Foreground="{x:Null}">
+            <DataGrid DisplayMemberPath="Name" x:Name="list" Background="{DynamicResource BodyColorWith50Opacity}"
+                      Width="433" VerticalAlignment="Center" Height="155" HorizontalAlignment="Center"
+                      ColumnHeaderStyle="{DynamicResource color}"
+
+
+                      ItemContainerStyle="{DynamicResource color}" IsReadOnly="True"
+                      SelectionChanged="list_SelectionChanged" UseLayoutRounding="False"
+                      hc:DataGridAttach.CanUnselectAllWithBlankArea="True" HeadersVisibility="All" RowHeaderWidth="60"
+                      AutoGenerateColumns="False"
+                      ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True"
+                      ScrollViewer.VerticalScrollBarVisibility="Auto"
+                      BorderBrush="{DynamicResource BodyColorWith20Opacity}" Foreground="{x:Null}">
                 <DataGrid.Columns>
-                    <DataGridTextColumn  FontSize="13" FontFamily="HarmonyOS Sans Medium" IsReadOnly="True" CanUserResize="False" Binding="{Binding Cname}" Header="整合包名称" />
-                    <DataGridTextColumn FontSize="13" FontFamily="HarmonyOS Sans Medium" IsReadOnly="True"  CanUserResize="False" Binding="{Binding version}" Header="游戏版本" />
-                    <DataGridTextColumn FontSize="13" FontFamily="HarmonyOS Sans Medium" IsReadOnly="True"  CanUserResize="False" Binding="{Binding NchargeVersion}" Header="Ncharge版本" />
-                    <DataGridTextColumn FontSize="13" FontFamily="HarmonyOS Sans Medium" IsReadOnly="True"  CanUserResize="False" Binding="{Binding forgeVersion}" Header="Forge版本" />
+                    <DataGridTextColumn FontSize="13" FontFamily="HarmonyOS Sans Medium" IsReadOnly="True"
+                                        CanUserResize="False" Binding="{Binding Cname}" Header="整合包名称" />
+                    <DataGridTextColumn FontSize="13" FontFamily="HarmonyOS Sans Medium" IsReadOnly="True"
+                                        CanUserResize="False" Binding="{Binding version}" Header="游戏版本" />
+                    <DataGridTextColumn FontSize="13" FontFamily="HarmonyOS Sans Medium" IsReadOnly="True"
+                                        CanUserResize="False" Binding="{Binding NchargeVersion}" Header="Ncharge版本" />
+                    <DataGridTextColumn FontSize="13" FontFamily="HarmonyOS Sans Medium" IsReadOnly="True"
+                                        CanUserResize="False" Binding="{Binding forgeVersion}" Header="Forge版本" />
                 </DataGrid.Columns>
             </DataGrid>
 
         </GroupBox>
         <TextBox x:Name="info" Text="当前未选择客户端" Margin="438,10,10,253" Foreground="{DynamicResource ForegroundColor}"
-                   Background="{DynamicResource BodyColorWith50Opacity}" FontFamily="HarmonyOS Sans" FontSize="20" >
+                 Background="{DynamicResource BodyColorWith50Opacity}" FontFamily="HarmonyOS Sans" FontSize="20">
             <TextBox.Effect>
-                <DropShadowEffect BlurRadius="10" ShadowDepth="13"  Direction="310" Color="White"/>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="13" Direction="310" Color="White" />
             </TextBox.Effect>
         </TextBox>
         <TextBox x:Name="systeminfo" Text="当前未选择客户端" Margin="438,132,10,131"
                  Foreground="{DynamicResource ForegroundColor}" Background="{DynamicResource BodyColorWith50Opacity}"
-                 FontFamily="HarmonyOS Sans" FontSize="20" >
+                 FontFamily="HarmonyOS Sans" FontSize="20">
             <TextBox.Effect>
-                <DropShadowEffect BlurRadius="10" ShadowDepth="13"  Direction="310" Color="White"/>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="13" Direction="310" Color="White" />
             </TextBox.Effect>
         </TextBox>
         <GroupBox Margin="0,185,0,0" materialDesign:ColorZoneAssist.Mode="Custom"
                   hc:TitleElement.Background="{DynamicResource BodyColorWith80Opacity}"
                   Header="安装Logs" Width="433" HorizontalAlignment="Left"
                   Padding="0,0,0,0" Grid.IsSharedSizeScope="True" FontFamily="HarmonyOS Sans Medium" FontSize="20"
-                  HorizontalContentAlignment="Center" Foreground="{DynamicResource ForegroundColor}" BorderBrush="{x:Null}" Panel.ZIndex="-4">
+                  HorizontalContentAlignment="Center" Foreground="{DynamicResource ForegroundColor}"
+                  BorderBrush="{x:Null}" Panel.ZIndex="-4">
             <GroupBox.Effect>
-                <DropShadowEffect BlurRadius="10" ShadowDepth="13"  Direction="310" Color="White"/>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="13" Direction="310" Color="White" />
             </GroupBox.Effect>
             <!--  <TextBox VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" IsReadOnly="True" x:Name="logs"  FontSize="20"  FontFamily="/NchargeL;component/Resources/#HarmonyOS Sans" FontWeight="Bold" Foreground="{DynamicResource TextColor}" Cursor="IBeam" Height="170" Background="{DynamicResource BodyColorWith50Opacity}" IsTabStop="False"></TextBox>
             -->
-                <GroupBox.Style>
-                    <Style TargetType="GroupBox">
-                        <Setter Property="Background" Value="{DynamicResource BodyColorWith20Opacity}"></Setter>
-                    </Style>
-                </GroupBox.Style>
-            <Run x:Name="logs" ScrollViewer.VerticalScrollBarVisibility="Visible" hc:TitleElement.Background="{DynamicResource BodyColorWith80Opacity}"
-                 
+            <GroupBox.Style>
+                <Style TargetType="GroupBox">
+                    <Setter Property="Background" Value="{DynamicResource BodyColorWith20Opacity}" />
+                </Style>
+            </GroupBox.Style>
+            <Run x:Name="logs" ScrollViewer.VerticalScrollBarVisibility="Visible"
+                 hc:TitleElement.Background="{DynamicResource BodyColorWith80Opacity}"
+
                  ScrollViewer.HorizontalScrollBarVisibility="Visible" Foreground="{DynamicResource ForegroundColor}"
                  Background="{DynamicResource BodyColorWith50Opacity}" FontSize="20"
-                 FontFamily="/NchargeL;component/Resources/#HarmonyOS Sans" FontWeight="Bold" Language="zh-cn" >
-                
+                 FontFamily="/NchargeL;component/Resources/#HarmonyOS Sans" FontWeight="Bold" Language="zh-cn">
+
                 <Run.FocusVisualStyle>
-                    <Style/>
+                    <Style />
                 </Run.FocusVisualStyle>
             </Run>
 
@@ -129,13 +136,13 @@
         <Button x:Name="download" BorderBrush="{x:Null}" Foreground="{DynamicResource ForegroundColor}" Cursor="Hand"
                 IsDefault="True" Background="{DynamicResource BodyColorWith50Opacity}" FocusVisualStyle="{x:Null}"
                 Style="{StaticResource MaterialDesignOutlinedLightButton}" Content="下载客户端" HorizontalAlignment="Left"
-                Margin="527,296,0,0" VerticalAlignment="Top" Click="Button_Click_1" >
-            
+                Margin="527,296,0,0" VerticalAlignment="Top" Click="Button_Click_1">
+
             <Button.Effect>
-                <DropShadowEffect BlurRadius="10" ShadowDepth="13"  Direction="310" Color="White"/>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="13" Direction="310" Color="White" />
             </Button.Effect>
-            </Button>
-        
+        </Button>
+
 
     </Grid>
 </Page>

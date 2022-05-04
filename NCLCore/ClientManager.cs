@@ -1,5 +1,5 @@
-﻿namespace NCLCore
+﻿namespace NCLCore;
+
+public class ClientManager
 {
-    public class ClientManager
-    {}
 }

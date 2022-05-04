@@ -1,5 +1,5 @@
-﻿namespace NCLCore
+﻿namespace NCLCore;
+
+internal class Vars
 {
-    internal class Vars
-    {}
 }

@@ -2,23 +2,22 @@
 using System.Windows.Controls;
 using NchargeL.SettingUIs;
 
-namespace NchargeL
+namespace NchargeL;
+
+/// <summary>
+///     SettingUi.xaml 的交互逻辑
+/// </summary>
+public partial class SettingUi : Page
 {
-    /// <summary>
-    /// SettingUi.xaml 的交互逻辑
-    /// </summary>
-    public partial class SettingUi : Page
+    private readonly ColorUi colorUi = new();
+
+    public SettingUi()
     {
-        ColorUi colorUi = new ColorUi();
+        InitializeComponent();
+        FrameWork.Content = colorUi;
+    }
 
-        public SettingUi()
-        {
-            InitializeComponent();
-            FrameWork.Content = colorUi;
-        }
-
-        private void ListBoxItem_Selected(object sender, RoutedEventArgs e)
-        {
-        }
+    private void ListBoxItem_Selected(object sender, RoutedEventArgs e)
+    {
     }
 }

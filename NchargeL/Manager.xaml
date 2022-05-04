@@ -46,13 +46,14 @@
         <GroupBox Margin="0,5,0,0" hc:TitleElement.Background="{DynamicResource BodyColorWith80Opacity}"
                   Header="客户端列表" Width="250" HorizontalAlignment="Left" Padding="0,0,0,0"
                   Grid.IsSharedSizeScope="True" FontFamily="HarmonyOS Sans Medium" FontSize="20"
-                  HorizontalContentAlignment="Center" Foreground="{DynamicResource ForegroundColor}" BorderBrush="#FFB3DDF7">
+                  HorizontalContentAlignment="Center" Foreground="{DynamicResource ForegroundColor}"
+                  BorderBrush="#FFB3DDF7">
             <GroupBox.Effect>
-                <DropShadowEffect BlurRadius="10" ShadowDepth="13"  Direction="310" Color="White"/>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="13" Direction="310" Color="White" />
             </GroupBox.Effect>
             <GroupBox.Style>
                 <Style TargetType="GroupBox">
-                    <Setter Property="Background" Value="{DynamicResource BodyColorWith20Opacity}"></Setter>
+                    <Setter Property="Background" Value="{DynamicResource BodyColorWith20Opacity}" />
                 </Style>
 
             </GroupBox.Style>
@@ -69,27 +70,29 @@
         <TextBox IsReadOnly="True" HorizontalContentAlignment="Center" x:Name="info" Text="当前未选择客户端"
                  Margin="255,5,245,271" Foreground="{DynamicResource ForegroundColor}"
                  Background="{DynamicResource BodyColorWith50Opacity}" FontFamily="HarmonyOS Sans" FontSize="20"
-                 Cursor="IBeam" >
+                 Cursor="IBeam">
             <TextBox.Effect>
-                <DropShadowEffect BlurRadius="10" ShadowDepth="13"  Direction="310" Color="White"/>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="13" Direction="310" Color="White" />
             </TextBox.Effect>
         </TextBox>
-        <GroupBox x:Name="group" Visibility="Hidden" Margin="255,114,0,94"  hc:TitleElement.Background="{DynamicResource BodyColorWith80Opacity}"
+        <GroupBox x:Name="group" Visibility="Hidden" Margin="255,114,0,94"
+                  hc:TitleElement.Background="{DynamicResource BodyColorWith80Opacity}"
                   Header="客户端管理" Width="250" HorizontalAlignment="Left" Padding="0,0,0,0"
                   Grid.IsSharedSizeScope="True" FontFamily="HarmonyOS Sans Medium" FontSize="20"
-                  HorizontalContentAlignment="Center" Foreground="{DynamicResource ForegroundColor}" BorderBrush="#FFB3DDF7">
+                  HorizontalContentAlignment="Center" Foreground="{DynamicResource ForegroundColor}"
+                  BorderBrush="#FFB3DDF7">
             <GroupBox.Effect>
-                <DropShadowEffect BlurRadius="10" ShadowDepth="13"  Direction="310" Color="White"/>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="13" Direction="310" Color="White" />
             </GroupBox.Effect>
             <GroupBox.Style>
                 <Style TargetType="GroupBox">
-                    <Setter Property="Background" Value="{DynamicResource BodyColorWith20Opacity}"></Setter>
+                    <Setter Property="Background" Value="{DynamicResource BodyColorWith20Opacity}" />
                 </Style>
 
             </GroupBox.Style>
             <Grid>
                 <Grid.Effect>
-                    <DropShadowEffect BlurRadius="10" ShadowDepth="13"  Direction="310" Color="White"/>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="13" Direction="310" Color="White" />
                 </Grid.Effect>
                 <Button x:Name="del" BorderBrush="{x:Null}" Foreground="{DynamicResource NotificationError}"
                         Cursor="Hand" IsDefault="True" Background="{DynamicResource BodyColorWith50Opacity}"

@@ -1,12 +1,11 @@
-﻿namespace NCLCore
+﻿namespace NCLCore;
+
+public enum InfoType
 {
-    public enum InfoType
-    {
-        info,
-        error,
-        warn,
-        success,
-        errorDia,
-        successDia
-    }
+    info,
+    error,
+    warn,
+    success,
+    errorDia,
+    successDia
 }

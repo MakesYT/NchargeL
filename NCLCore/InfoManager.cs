@@ -1,21 +1,20 @@
-﻿namespace NCLCore
+﻿namespace NCLCore;
+
+public class InfoManager
 {
-    public class InfoManager
+    // public InfoType type{get;set;}
+    public Info info = new("1", InfoType.success);
+
+    public event EventHandler<Info>? PropertyChanged;
+
+    public void Info(Info info)
     {
-        // public InfoType type{get;set;}
-        public Info info = new("1", InfoType.success);
+        this.info = info;
+        PropertyChanged?.Invoke(this, info);
+    }
 
-        public event EventHandler<Info>? PropertyChanged;
-
-        public void Info(Info info)
-        {
-            this.info = info;
-            PropertyChanged?.Invoke(this, info);
-        }
-
-        public void clear()
-        {
-            PropertyChanged = null;
-        }
+    public void clear()
+    {
+        PropertyChanged = null;
     }
 }

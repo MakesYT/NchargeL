@@ -1,64 +1,64 @@
-﻿using System.Windows.Media;
+﻿using System.Windows;
+using System.Windows.Media;
 using Notification.Wpf;
 
-namespace NchargeL
+namespace NchargeL;
+
+public class NotificationContentSDK
 {
-    public class NotificationContentSDK
+    public static NotificationContent notificationSuccess(string title, string Msg)
     {
-        public static NotificationContent notificationSuccess(string title, string Msg)
+        var content = new NotificationContent
         {
-            var content = new NotificationContent
-            {
-                Title = title,
-                Message = Msg,
-                Type = NotificationType.Success,
+            Title = title,
+            Message = Msg,
+            Type = NotificationType.Success,
 
-                Background = (Brush) App.Current.FindResource("NotificationSuccess"),
-                Foreground = (Brush) App.Current.FindResource("ForegroundColor"),
-            };
-            return content;
-        }
+            Background = (Brush) Application.Current.FindResource("NotificationSuccess"),
+            Foreground = (Brush) Application.Current.FindResource("ForegroundColor")
+        };
+        return content;
+    }
 
-        public static NotificationContent notificationInformation(string title, string Msg)
+    public static NotificationContent notificationInformation(string title, string Msg)
+    {
+        var content = new NotificationContent
         {
-            var content = new NotificationContent
-            {
-                Title = title,
-                Message = Msg,
-                Type = NotificationType.Information,
+            Title = title,
+            Message = Msg,
+            Type = NotificationType.Information,
 
-                Background = (Brush) App.Current.FindResource("BodyColor"),
-                Foreground = (Brush) App.Current.FindResource("ForegroundColor"),
-            };
-            return content;
-        }
+            Background = (Brush) Application.Current.FindResource("BodyColor"),
+            Foreground = (Brush) Application.Current.FindResource("ForegroundColor")
+        };
+        return content;
+    }
 
-        public static NotificationContent notificationError(string title, string Msg)
+    public static NotificationContent notificationError(string title, string Msg)
+    {
+        var content = new NotificationContent
         {
-            var content = new NotificationContent
-            {
-                Title = title,
-                Message = Msg,
-                Type = NotificationType.Error,
+            Title = title,
+            Message = Msg,
+            Type = NotificationType.Error,
 
-                Background = (Brush) App.Current.FindResource("NotificationError"),
-                Foreground = (Brush) App.Current.FindResource("ForegroundColor"),
-            };
-            return content;
-        }
+            Background = (Brush) Application.Current.FindResource("NotificationError"),
+            Foreground = (Brush) Application.Current.FindResource("ForegroundColor")
+        };
+        return content;
+    }
 
-        public static NotificationContent notificationWarning(string title, string Msg)
+    public static NotificationContent notificationWarning(string title, string Msg)
+    {
+        var content = new NotificationContent
         {
-            var content = new NotificationContent
-            {
-                Title = title,
-                Message = Msg,
-                Type = NotificationType.Warning,
+            Title = title,
+            Message = Msg,
+            Type = NotificationType.Warning,
 
-                Background = (Brush) App.Current.FindResource("NotificationWarning"),
-                Foreground = (Brush) App.Current.FindResource("ForegroundColor"),
-            };
-            return content;
-        }
+            Background = (Brush) Application.Current.FindResource("NotificationWarning"),
+            Foreground = (Brush) Application.Current.FindResource("ForegroundColor")
+        };
+        return content;
     }
 }

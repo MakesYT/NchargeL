@@ -1,15 +1,14 @@
 ﻿using System.Windows;
 
-namespace NchargeL
+namespace NchargeL;
+
+/// <summary>
+///     TEST.xaml 的交互逻辑
+/// </summary>
+public partial class TEST : Window
 {
-    /// <summary>
-    /// TEST.xaml 的交互逻辑
-    /// </summary>
-    public partial class TEST : Window
+    public TEST()
     {
-        public TEST()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }
