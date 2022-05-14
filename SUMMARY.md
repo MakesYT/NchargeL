@@ -15,11 +15,9 @@
 
 ## 错误处理
 
-* [For Engineers](cuo-wu-chu-li/for-engineers/README.md)
-  * [GitHub Integration](cuo-wu-chu-li/for-engineers/github-integration.md)
-* [For Support](cuo-wu-chu-li/for-support/README.md)
-  * [Intercom Integration](cuo-wu-chu-li/for-support/intercom-integration.md)
+* [常见错误](cuo-wu-chu-li/chang-jian-cuo-wu.md)
 
 ## 关于
 
-* [Keyboard Shortcuts](guan-yu/keyboard-shortcuts.md)
+* [启动器](guan-yu/qi-dong-qi.md)
+* [服务器](guan-yu/fu-wu-qi.md)

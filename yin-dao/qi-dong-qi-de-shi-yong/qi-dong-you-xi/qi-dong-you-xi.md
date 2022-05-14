@@ -6,11 +6,11 @@
 
 * 单击启动客户端选项卡
 
-![](<../../../.gitbook/assets/image (5).png>)
+![](<../../../.gitbook/assets/image (5) (1).png>)
 
 * 在左侧选择需要启动的客户端
 
-![](<../../../.gitbook/assets/image (10).png>)
+![](<../../../.gitbook/assets/image (10) (1).png>)
 
 * 单击启动即可
 

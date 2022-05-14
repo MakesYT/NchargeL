@@ -11,7 +11,7 @@
 
 
 
-![](<../.gitbook/assets/image (5) (1).png>)
+![](<../.gitbook/assets/image (5) (1) (1).png>)
 
 {% hint style="info" %}
 如果出现此界面,请单击**打开**
