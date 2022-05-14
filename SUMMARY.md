@@ -6,12 +6,13 @@
 
 * [安装启动器](yin-dao/an-zhuang-qi-dong-qi.md)
 
-## Fundamentals
+## 启动器的使用
 
-* [Projects](fundamentals/projects.md)
-* [Members](fundamentals/members.md)
-* [Task Lists](fundamentals/task-lists.md)
-* [Tasks](fundamentals/tasks.md)
+* [下载客户端](qi-dong-qi-de-shi-yong/xia-zai-ke-hu-duan.md)
+* [Projects](qi-dong-qi-de-shi-yong/projects.md)
+* [Members](qi-dong-qi-de-shi-yong/members.md)
+* [Task Lists](qi-dong-qi-de-shi-yong/task-lists.md)
+* [Tasks](qi-dong-qi-de-shi-yong/tasks.md)
 
 ## Use Cases
 

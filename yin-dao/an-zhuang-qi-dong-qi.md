@@ -5,7 +5,7 @@
 ![](<../.gitbook/assets/image (1).png>)
 
 {% hint style="info" %}
-此操作的前提是你的电脑上安装了.NET 桌面运行时 6.0.4(x64)\
+此操作的前提是你的电脑上安装了.NET 桌面运行时 6.0.5(x64)\
 如果请先安装[https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-6.0.5-windows-x64-installer](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-6.0.5-windows-x64-installer)
 {% endhint %}
 
@@ -21,7 +21,7 @@
 
 ![](<../.gitbook/assets/image (6).png>)
 
-![](<../.gitbook/assets/image (4).png>)
+![](<../.gitbook/assets/image (4) (1).png>)
 
 {% hint style="info" %}
 此启动器只能安装到C:\Users\\%User%\AppData\Local\Apps\2.0\\....\NchargeL.exe\
