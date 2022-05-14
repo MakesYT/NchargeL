@@ -5,24 +5,21 @@
 ## 引导
 
 * [安装启动器](yin-dao/an-zhuang-qi-dong-qi.md)
+* [启动器的使用](yin-dao/qi-dong-qi-de-shi-yong/README.md)
+  * [下载客户端](yin-dao/qi-dong-qi-de-shi-yong/xia-zai-ke-hu-duan.md)
+  * [管理客户端](yin-dao/qi-dong-qi-de-shi-yong/guan-li-ke-hu-duan.md)
+  * [启动器设置](yin-dao/qi-dong-qi-de-shi-yong/qi-dong-qi-she-zhi.md)
+  * [启动游戏](yin-dao/qi-dong-qi-de-shi-yong/qi-dong-you-xi/README.md)
+    * [登录皮肤站账号](yin-dao/qi-dong-qi-de-shi-yong/qi-dong-you-xi/deng-lu-pi-fu-zhan-zhang-hao.md)
+    * [启动游戏](yin-dao/qi-dong-qi-de-shi-yong/qi-dong-you-xi/qi-dong-you-xi.md)
 
-## 启动器的使用
+## 错误处理
 
-* [下载客户端](qi-dong-qi-de-shi-yong/xia-zai-ke-hu-duan.md)
-* [Projects](qi-dong-qi-de-shi-yong/projects.md)
-* [Members](qi-dong-qi-de-shi-yong/members.md)
-* [Task Lists](qi-dong-qi-de-shi-yong/task-lists.md)
-* [Tasks](qi-dong-qi-de-shi-yong/tasks.md)
+* [For Engineers](cuo-wu-chu-li/for-engineers/README.md)
+  * [GitHub Integration](cuo-wu-chu-li/for-engineers/github-integration.md)
+* [For Support](cuo-wu-chu-li/for-support/README.md)
+  * [Intercom Integration](cuo-wu-chu-li/for-support/intercom-integration.md)
 
-## Use Cases
+## 关于
 
-* [For Designers](use-cases/for-designers/README.md)
-  * [Figma Integration](use-cases/for-designers/figma-integration.md)
-* [For Engineers](use-cases/for-engineers/README.md)
-  * [GitHub Integration](use-cases/for-engineers/github-integration.md)
-* [For Support](use-cases/for-support/README.md)
-  * [Intercom Integration](use-cases/for-support/intercom-integration.md)
-
-## Extras
-
-* [Keyboard Shortcuts](extras/keyboard-shortcuts.md)
+* [Keyboard Shortcuts](guan-yu/keyboard-shortcuts.md)
