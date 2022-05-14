@@ -2,11 +2,9 @@
 
 * [什么是NCL?](README.md)
 
-## Guides
+## 引导
 
-* [Creating your first project](guides/creating-your-first-project.md)
-* [Creating your first task](guides/creating-your-first-task.md)
-* [Advanced permissions](guides/advanced-permissions.md)
+* [安装启动器](yin-dao/an-zhuang-qi-dong-qi.md)
 
 ## Fundamentals
 
