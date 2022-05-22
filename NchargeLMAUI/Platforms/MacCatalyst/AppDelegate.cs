@@ -1,6 +1,6 @@
 ﻿using Foundation;
 
-namespace NchargeLMAUI
+namespace NchargeLMaui
 {
     [Register("AppDelegate")]
     public class AppDelegate : MauiUIApplicationDelegate

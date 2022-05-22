@@ -1,7 +1,7 @@
 ﻿using ObjCRuntime;
 using UIKit;
 
-namespace NchargeLMAUI
+namespace NchargeLMaui
 {
     public class Program
     {

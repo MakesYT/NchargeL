@@ -1,7 +1,7 @@
 ﻿using Android.App;
 using Android.Runtime;
 
-namespace NchargeLMAUI
+namespace NchargeLMaui
 {
     [Application]
     public class MainApplication : MauiApplication

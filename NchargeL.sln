@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NchargeL", "NchargeL\Ncharg
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NCLCore", "NCLCore\NCLCore.csproj", "{9D0E0F28-8D75-4778-AFBB-23C197D8F060}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NchargeLMAUI", "NchargeLMAUI\NchargeLMAUI.csproj", "{5FDA512F-1A67-40C0-8484-F4783BC10A1F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NchargeLMaui", "NchargeLMaui\NchargeLMaui.csproj", "{87BB11B5-FF6B-490E-A88F-23D602A2939D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,17 +23,17 @@ Global
 		{9D0E0F28-8D75-4778-AFBB-23C197D8F060}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9D0E0F28-8D75-4778-AFBB-23C197D8F060}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9D0E0F28-8D75-4778-AFBB-23C197D8F060}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5FDA512F-1A67-40C0-8484-F4783BC10A1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5FDA512F-1A67-40C0-8484-F4783BC10A1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5FDA512F-1A67-40C0-8484-F4783BC10A1F}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{5FDA512F-1A67-40C0-8484-F4783BC10A1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5FDA512F-1A67-40C0-8484-F4783BC10A1F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5FDA512F-1A67-40C0-8484-F4783BC10A1F}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{87BB11B5-FF6B-490E-A88F-23D602A2939D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87BB11B5-FF6B-490E-A88F-23D602A2939D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87BB11B5-FF6B-490E-A88F-23D602A2939D}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{87BB11B5-FF6B-490E-A88F-23D602A2939D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87BB11B5-FF6B-490E-A88F-23D602A2939D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87BB11B5-FF6B-490E-A88F-23D602A2939D}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {D6BC7001-B07A-40BD-BDDC-027CFDAD65BF}
+		SolutionGuid = {29CAD604-D244-4888-A8A1-F635C7EEFD1A}
 	EndGlobalSection
 EndGlobal

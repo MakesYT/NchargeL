@@ -1,4 +1,4 @@
-﻿namespace NchargeLMAUI
+﻿namespace NchargeLMaui
 {
     public partial class MainPage : ContentPage
     {

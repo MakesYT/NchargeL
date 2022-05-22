@@ -1,8 +1,8 @@
 ﻿<?xml version = "1.0" encoding = "UTF-8" ?>
 <Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:NchargeLMAUI"
-             x:Class="NchargeLMAUI.App">
+             xmlns:local="clr-namespace:NchargeLMaui"
+             x:Class="NchargeLMaui.App" >
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -11,4 +11,65 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
+    <Application.MainPage>
+        <Shell FlyoutBackgroundColor="Black" BackgroundColor="Black"
+            FlyoutWidth="68"
+            FlyoutBehavior="{OnIdiom Phone=Disabled, Default=Locked}">
+
+            <!--<Shell.FlyoutHeaderTemplate>
+                <DataTemplate>
+                    <BoxView HeightRequest="68"/>
+                </DataTemplate>
+
+            </Shell.FlyoutHeaderTemplate>-->
+
+
+
+
+            <!-- Desktop/Tablet-->
+            <FlyoutItem Title="Home" Icon="launch.png" >
+                <ShellContent ContentTemplate="{DataTemplate local:views.LoginUi}"/>
+            </FlyoutItem>
+            <FlyoutItem Title="Favorites" Icon="tab_favorites.png">
+                <ShellContent ContentTemplate="{DataTemplate local:views.LoginUi}"/>
+            </FlyoutItem>
+            <FlyoutItem Title="Map" Icon="tab_map.png">
+                <ShellContent ContentTemplate="{DataTemplate local:views.LoginUi}"/>
+            </FlyoutItem>
+            <FlyoutItem Route="settings" FlyoutItemIsVisible="False" >
+                <ShellContent ContentTemplate="{DataTemplate local:views.LoginUi}"/>
+            </FlyoutItem>
+
+            <!-- Phone -->
+            <TabBar x:Name="PhoneTabs">
+                <Tab Title="Home" Icon="tab_home.png">
+                    <ShellContent ContentTemplate="{DataTemplate local:views.LoginUi}"/>
+                </Tab>
+                <Tab Title="Favorites" Icon="tab_favorites.png">
+                    <ShellContent ContentTemplate="{DataTemplate local:views.LoginUi}"/>
+                </Tab>
+                <Tab Title="Map" Icon="tab_map.png">
+                    <ShellContent ContentTemplate="{DataTemplate local:views.LoginUi}"/>
+                </Tab>
+                <Tab Title="Settings" Icon="tab_settings.png">
+                    <ShellContent ContentTemplate="{DataTemplate local:views.LoginUi}"/>
+                </Tab>
+            </TabBar>
+
+
+
+            <Shell.ItemTemplate>
+                <DataTemplate>
+                    <Grid
+                        RowDefinitions="68" HeightRequest="68">
+                        <Image Source="{Binding FlyoutIcon}"
+                               VerticalOptions="Center"
+                               HorizontalOptions="Center"
+                               />
+                    </Grid>
+                </DataTemplate>
+
+            </Shell.ItemTemplate>
+        </Shell>
+    </Application.MainPage>
 </Application>
