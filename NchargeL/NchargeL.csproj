@@ -18,23 +18,24 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <None Remove="bg21.png" />
-        <None Remove="log4net.config" />
-        <None Remove="Resources\8ee20a6fa281ace6499d14210a46c8e3.png" />
-        <None Remove="Resources\authlib-injector.jar" />
-        <None Remove="Resources\f68fa724e01109bff5b69782fa0640db.jpg" />
-        <None Remove="Resources\f6c082b631bddb16edba7e0fe0b6d720.png" />
-        <None Remove="Resources\forge-install-bootstrapper.jar" />
-        <None Remove="Resources\HarmonyOS_Sans_Bold.ttf" />
-        <None Remove="Resources\HarmonyOS_Sans_Light.ttf" />
-        <None Remove="Resources\HarmonyOS_Sans_Medium.ttf" />
-        <None Remove="Resources\icon.ico" />
-        <None Remove="Resources\icon.png" />
-        <None Remove="Resources\Javacheck.jar" />
-        <None Remove="Resources\launcher_profiles.json" />
-        <None Remove="Resources\servers.dat" />
-        <None Remove="Resources\SSZhiZunShuFaTi.ttf" />
-        <None Remove="Resources\user.png" />
+        <None Remove="bg21.png"/>
+        <None Remove="log4net.config"/>
+        <None Remove="Resources\8ee20a6fa281ace6499d14210a46c8e3.png"/>
+        <None Remove="Resources\authlib-injector.jar"/>
+        <None Remove="Resources\f68fa724e01109bff5b69782fa0640db.jpg"/>
+        <None Remove="Resources\f6c082b631bddb16edba7e0fe0b6d720.png"/>
+        <None Remove="Resources\forge-install-bootstrapper.jar"/>
+        <None Remove="Resources\HarmonyOS_Sans_Bold.ttf"/>
+        <None Remove="Resources\HarmonyOS_Sans_Light.ttf"/>
+        <None Remove="Resources\HarmonyOS_Sans_Medium.ttf"/>
+        <None Remove="Resources\icon.ico"/>
+        <None Remove="Resources\icon.png"/>
+        <None Remove="Resources\Javacheck.jar"/>
+        <None Remove="Resources\launcher_profiles.json"/>
+        <None Remove="Resources\servers.dat"/>
+        <None Remove="Resources\SSZhiZunShuFaTi.ttf"/>
+        <None Remove="Resources\user.png"/>
+        <None Remove="Resources\wget.exe"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -53,6 +54,9 @@
         <Content Include="Resources\Javacheck.jar">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
+        <Content Include="Resources\wget.exe">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
         <Resource Include="Resources\8ee20a6fa281ace6499d14210a46c8e3.png">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Resource>
@@ -62,43 +66,43 @@
         <Resource Include="Resources\f6c082b631bddb16edba7e0fe0b6d720.png">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Resource>
-        <Resource Include="Resources\HarmonyOS_Sans_Light.ttf" />
+        <Resource Include="Resources\HarmonyOS_Sans_Light.ttf"/>
     </ItemGroup>
 
     <ItemGroup>
-        <None Include="Properties\PublishProfiles\ClickOnceProfile.pubxml.user" />
-        <None Include="Properties\PublishProfiles\FolderProfile.pubxml.user" />
+        <None Include="Properties\PublishProfiles\ClickOnceProfile.pubxml.user"/>
+        <None Include="Properties\PublishProfiles\FolderProfile.pubxml.user"/>
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Enterwell.Clients.Wpf.Notifications" Version="1.4.2" />
-        <PackageReference Include="HandyControl" Version="3.3.0" />
-        <PackageReference Include="log4net" Version="2.0.14" />
-        <PackageReference Include="MaterialDesignThemes" Version="4.3.0" />
-        <PackageReference Include="Microsoft-WindowsAPICodePack-Shell" Version="1.1.4" />
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-        <PackageReference Include="Notification.Wpf" Version="6.1.0.3" />
-        <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
-        <PackageReference Include="System.Management" Version="6.0.0" />
+        <PackageReference Include="Enterwell.Clients.Wpf.Notifications" Version="1.4.2"/>
+        <PackageReference Include="HandyControl" Version="3.3.0"/>
+        <PackageReference Include="log4net" Version="2.0.14"/>
+        <PackageReference Include="MaterialDesignThemes" Version="4.3.0"/>
+        <PackageReference Include="Microsoft-WindowsAPICodePack-Shell" Version="1.1.4"/>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1"/>
+        <PackageReference Include="Notification.Wpf" Version="6.1.0.3"/>
+        <PackageReference Include="System.Drawing.Common" Version="6.0.0"/>
+        <PackageReference Include="System.Management" Version="6.0.0"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\NCLCore\NCLCore.csproj" />
+        <ProjectReference Include="..\NCLCore\NCLCore.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-        <Resource Include="Resources\HarmonyOS_Sans_Bold.ttf" />
-        <Resource Include="Resources\HarmonyOS_Sans_Medium.ttf" />
-        <Resource Include="Resources\icon.ico" />
-        <Resource Include="Resources\icon.png" />
+        <Resource Include="Resources\HarmonyOS_Sans_Bold.ttf"/>
+        <Resource Include="Resources\HarmonyOS_Sans_Medium.ttf"/>
+        <Resource Include="Resources\icon.ico"/>
+        <Resource Include="Resources\icon.png"/>
         <Content Include="Resources\launcher_profiles.json">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
         <Content Include="Resources\servers.dat">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
-        <Resource Include="Resources\SSZhiZunShuFaTi.ttf" />
-        <Resource Include="Resources\user.png" />
+        <Resource Include="Resources\SSZhiZunShuFaTi.ttf"/>
+        <Resource Include="Resources\user.png"/>
     </ItemGroup>
 
     <ItemGroup>
