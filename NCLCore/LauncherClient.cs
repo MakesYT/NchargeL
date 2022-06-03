@@ -16,6 +16,7 @@ public class LauncherClient
     ///     正常启动 返回代码1
     ///     令牌无效 返回代码2
     ///     其他异常 返回代码-1
+    ///     是否切换为中文 返回代码3
     /// </summary>
     /// <param name="clt"></param>
     /// <param name="name"></param>
@@ -31,6 +32,9 @@ public class LauncherClient
         launcher_profiles.CopyTo(clt.rootdir + "\\launcher_profiles.json", true);
         var server_data = new FileInfo(Directory.GetCurrentDirectory() + "\\Resources\\servers.dat");
         server_data.CopyTo(clt.dir + "\\servers.dat", true);
+
+        
+
         var clientTools = new ClientTools(infoManager);
         log.Info(clt.Name + " " + clt.assets);
         infoManager.Info(new Info(1, "正在检测令牌是否失效"));
@@ -101,7 +105,7 @@ public class LauncherClient
         all = all.Replace("{api}", "\"https://www.ncserver.top:666/api/yggdrasil\"");
         if (clt.Forge)
         {
-            if (args.Length > 0)
+            if (args!=null&&args.Length > 0)
                 all = all + args;
             else
                 all = all + " --tweakClass net.minecraftforge.fml.common.launcher.FMLTweaker";
@@ -161,29 +165,31 @@ public class LauncherClient
             string allError = null;
             string lineError = null;
             string crashReport = null;
-            while ((line = process.StandardOutput.ReadLine()) != null ||
-                   (lineError = process.StandardError.ReadLine()) != null)
-                if (line != null)
+           
+            process.ErrorDataReceived += new DataReceivedEventHandler(delegate (object sender, DataReceivedEventArgs e)
+            {
+                log.Error(e.Data);
+                allError = allError + e.Data + "\n";
+            });
+            process.OutputDataReceived += new DataReceivedEventHandler(delegate (object sender, DataReceivedEventArgs e)
+            {
+                if(e.Data != null)
                 {
-                    if (line.Contains("Crash report saved to "))
-                        crashReport = line.Substring(line.IndexOf("Crash report saved to ") + 22);
-                    if (line.Contains("Stopping!"))
+                    if (e.Data.Contains("Crash report saved to "))
+                    crashReport = e.Data.Substring(e.Data.IndexOf("Crash report saved to ") + 22);
+                    if (e.Data.Contains("Stopping!"))
                     {
                         error = false;
                         log.Debug("游戏正常退出");
                         infoManager.Info(new Info("游戏正常退出", InfoType.info));
                     }
 
-                    log.Debug(line);
-                    line = null;
+                log.Debug(e.Data);
                 }
-                else if (lineError != null && !lineError.Contains("[authlib-injector]"))
-                {
-                    log.Error(lineError);
-                    allError = allError + lineError + "\n";
-                    lineError = null;
-                }
-
+               
+            });
+            process.BeginErrorReadLine();
+            process.BeginOutputReadLine();
             //获取cmd窗口的输出信息  
             // string output = process.StandardOutput.ReadToEnd();
             // process.StandardOutput.

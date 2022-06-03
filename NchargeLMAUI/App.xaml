@@ -12,8 +12,8 @@
         </ResourceDictionary>
     </Application.Resources>
     <Application.MainPage>
-        <Shell FlyoutBackgroundColor="Black" BackgroundColor="Black"
-            FlyoutWidth="68"
+        <Shell  
+           FlyoutHeight="20" FlyoutWidth="128" 
             FlyoutBehavior="{OnIdiom Phone=Disabled, Default=Locked}">
 
             <!--<Shell.FlyoutHeaderTemplate>
@@ -27,7 +27,7 @@
 
 
             <!-- Desktop/Tablet-->
-            <FlyoutItem Title="Home" Icon="launch.png" >
+            <FlyoutItem  Title="Home" Icon="launch.png" >
                 <ShellContent ContentTemplate="{DataTemplate local:views.LoginUi}"/>
             </FlyoutItem>
             <FlyoutItem Title="Favorites" Icon="tab_favorites.png">
@@ -55,21 +55,23 @@
                     <ShellContent ContentTemplate="{DataTemplate local:views.LoginUi}"/>
                 </Tab>
             </TabBar>
-
-
-
             <Shell.ItemTemplate>
                 <DataTemplate>
-                    <Grid
-                        RowDefinitions="68" HeightRequest="68">
-                        <Image Source="{Binding FlyoutIcon}"
-                               VerticalOptions="Center"
-                               HorizontalOptions="Center"
-                               />
-                    </Grid>
+                    <StackLayout Margin="5"
+                 Orientation="Horizontal"
+                 HorizontalOptions="Start" VerticalOptions="Center">
+                        <Image Source="{Binding FlyoutIcon}" 
+                      
+                       HeightRequest="45" >
+                       
+                    </Image>
+                        <Label FontSize="18" Text="2112312321" VerticalOptions="Center" TextColor="Chocolate" ></Label>
+                    </StackLayout>
                 </DataTemplate>
-
             </Shell.ItemTemplate>
+            
+
+
         </Shell>
     </Application.MainPage>
 </Application>

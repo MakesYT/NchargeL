@@ -24,7 +24,7 @@ public class HttpRequestHelper
 
             //request.Method = "POST";
             request.ContentType = "application/json";
-
+           // request.Headers.Add("x-api-key", System.Environment.GetEnvironmentVariable("CURSE_API_KEY"));
             //设置代理UserAgent和超时
             request.UserAgent =
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.74 Safari/537.36 Edg/99.0.1150.52";

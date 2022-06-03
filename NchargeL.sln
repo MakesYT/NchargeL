@@ -9,6 +9,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NCLCore", "NCLCore\NCLCore.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NchargeLMaui", "NchargeLMaui\NchargeLMaui.csproj", "{87BB11B5-FF6B-490E-A88F-23D602A2939D}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Test", "Test\Test.csproj", "{C070675E-9D4D-476E-B162-E463656CC681}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestUi", "TestUi\TestUi.csproj", "{57B7BB36-09FD-4ADF-A0CA-5650536D2588}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,12 +32,4 @@ Global
 		{87BB11B5-FF6B-490E-A88F-23D602A2939D}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{87BB11B5-FF6B-490E-A88F-23D602A2939D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{87BB11B5-FF6B-490E-A88F-23D602A2939D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{87BB11B5-FF6B-490E-A88F-23D602A2939D}.Release|Any CPU.Deploy.0 = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {29CAD604-D244-4888-A8A1-F635C7EEFD1A}
-	EndGlobalSection
-EndGlobal
+		{87BB11B5-FF6B-490E-A88F-23D602A2939D}.Release|Any CPU.Deploy.0 =
