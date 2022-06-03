@@ -1,20 +1,17 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using Microsoft.Web.WebView2.Wpf;
 using NCLCore;
+using System.Collections.Generic;
 
+InfoManager infoManager=new InfoManager();
+infoManager.PropertyChanged += (oo, ee) =>
+{
+    var logtmp = (oo as InfoManager).info;
+    Console.WriteLine(logtmp.msg);
+};
 
-Console.WriteLine(System.Environment.GetEnvironmentVariable("CURSE_API_KEY"));
-
-//var hwr = HttpRequestHelper.CreatePostHttpResponse(
-//               "https://files.xmdhs.com/curseforge/info?id=238222",
-//               new Dictionary<string, string>());
-
-//var re1 = HttpRequestHelper.GetResponseString(hwr);
-//Console.WriteLine(re1);
-//int begin = re1.IndexOf("https://www.curseforge.com/minecraft/mc-mods/");
-//Console.WriteLine(begin);
-//int end = re1.IndexOf("\"", begin);
-//Console.WriteLine(re1.Substring(begin, end - begin));
-//System.Diagnostics.Process.Start("explorer.exe", "https://www.curseforge.com/minecraft/mc-mods/jei/download/3681294/file");
-WebView2 webView = new WebView2();
-webView.Source = new Uri("https://www.curseforge.com/minecraft/mc-mods/jei/download/3681294/file");
+DownloadManagerV2 downloadManagerV2 = new DownloadManagerV2(infoManager);
+var downloadItems = new List<DownloadItem>();
+downloadItems.Add(new DownloadItem("http://download.ncserver.top:8000/NCL/clients/Ncharge/1.0.2.zip", "C:\\Users\\13540\\Downloads\\1.txt"));
+downloadItems.Add(new DownloadItem("http://download.ncserver.top:8000/NCL/2.txt", "C:\\Users\\13540\\Downloads\\2.txt"));
+downloadManagerV2.Start(downloadItems, 2);
