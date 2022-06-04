@@ -20,7 +20,7 @@ namespace Ncharge;
 public partial class MainWindow : Window
 {
     private static readonly ILog log = LogManager.GetLogger("Init");
-    private readonly string ver = "1.3.2-1";
+    private readonly string ver = "1.3.3";
 
 
     public MainWindow()
