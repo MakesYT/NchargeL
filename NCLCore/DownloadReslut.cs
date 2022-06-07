@@ -2,7 +2,7 @@
 
 public class DownloadReslut
 {
-    public bool allSuccess=false;
+    public bool allSuccess=true;
     public List<DownloadItem> downloadItems = new();
     public string error="";
     public DownloadReslut() 

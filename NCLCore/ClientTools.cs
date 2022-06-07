@@ -72,7 +72,15 @@ public class ClientTools
             }
         }
 
-        downloadManager.Start(assetsDownloadItems, 300);
+       var re= downloadManager.Start(assetsDownloadItems, 100);
+        if (!re.allSuccess)
+        {
+            {
+ infoManager.Info(new Info("有" + re.downloadItems.Count + "个文件下载失败\n错误信息"+re.error, InfoType.errorDia));
+                log.Info(re.error);
+            }
+        }
+       
     }
 
     /// <summary>

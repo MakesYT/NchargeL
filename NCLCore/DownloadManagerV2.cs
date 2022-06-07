@@ -86,7 +86,9 @@ public class DownloadManagerV2
         //log.Debug(hash.uri+" "+ hash.fullname);
        await downloading.StartAsync();
         Console.WriteLine("11");
+
         DownloadCount++;
+        infoManager.Info(new Info(0, DownloadCount + "/" + AllCount));
         nowthreadnum--;
         downloadReslut.addReslut(downloading.GetDownloadReslut());
         //AllCount--;
