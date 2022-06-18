@@ -15,6 +15,9 @@ namespace NCLCore
         private string error = "1";
         private HttpClient webClient = new HttpClient();
         private bool candownload = true;
+        private bool smallDownload = false;
+        private string uri;
+        private string fullname;
         private static DownloadConfiguration downloadOpt = new DownloadConfiguration()
         {
             ChunkCount = 8, // file parts to download, default value is 1
@@ -64,14 +67,9 @@ namespace NCLCore
                     }
                     else
                     {
-                        downloadItem = hash;
-
-                        download = DownloadBuilder.New()
-                            .WithUrl(hash.uri)
-                            .WithFileLocation(hash.fullname)
-                            .WithConfiguration(downloadOptSmell)
-                            .Build();
-                        download.DownloadFileCompleted += DownloadFileCompleted;
+                       smallDownload = true;
+                        uri = hash.uri;
+                        fullname=hash.fullname;
                     }
             }else
                 {
@@ -87,8 +85,24 @@ namespace NCLCore
         public async Task StartAsync()
         {
             if (candownload)
-           await download.StartAsync();
-            download.Clear();
+            {
+                if (!smallDownload)
+                {
+                    await download.StartAsync();
+                    download.Clear();
+                }
+                else
+                {
+                    var re = HttpRequestHelper.DownLoad(uri, fullname);
+                   if( re!="true")
+                    {
+                        error = error + re;
+                    }
+                }
+                
+                
+            }
+          
            
            
         }

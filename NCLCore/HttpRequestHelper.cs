@@ -1,13 +1,53 @@
-﻿using System.Net;
+﻿
+using System.Linq;
+using System.Net;
+using System.Net.Http.Headers;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using log4net;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace NCLCore;
 
 public class HttpRequestHelper
 {
+    private static HttpClient webClient = new HttpClient();
+    private static readonly ILog log = LogManager.GetLogger("HttpRequestHelper");
+    public static string DownLoad(string uri, string localFileName)
+    {
+        var server = new Uri(uri);
+        var p = Path.GetDirectoryName(localFileName);
+        if (!Directory.Exists(p)) Directory.CreateDirectory(p);
+
+        // 发起请求并异步等待结果
+        var httpClient = new HttpClient();
+        var responseMessage = httpClient.GetAsync(server).Result;
+        if (responseMessage.IsSuccessStatusCode)
+        {
+            using (var fs = File.Create(localFileName))
+            {
+                // 获取结果，并转成 stream 保存到本地。
+                var streamFromService = responseMessage.Content.ReadAsStreamAsync().Result;
+                streamFromService.CopyTo(fs);
+                return "true";
+            }
+        }
+        else
+            return responseMessage.Content.ToString();
+    }
+    public static  async Task<string> httpTool(string url, JObject keyValues)
+    {
+        HttpContent content = new StringContent(JsonConvert.SerializeObject(keyValues),Encoding.UTF8, "application/json");
+        var reponse = await webClient.PostAsync(url, content);
+        String result =  reponse.Content.ReadAsStringAsync().Result;
+        log.Debug(result);
+        return result;
+        
+        return null;
+    }
+    
     public static HttpWebResponse CreatePostHttpResponse(string url, IDictionary<string, string> parameters)
     {
         var cout = 0;

@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="NchargeLMaui.views.LoginUi"
              Title="登录">
+    
     <StackLayout>
         <Label Text="Welcome to .NET MAUI!"
                 VerticalOptions="Center" 

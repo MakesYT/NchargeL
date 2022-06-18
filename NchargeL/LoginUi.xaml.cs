@@ -58,7 +58,7 @@ public partial class LoginUi : Page
         //proc.Start();
     }
 
-    private void LoginThread()
+    private async void LoginThread()
     {
         Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart) delegate
         {
@@ -66,25 +66,28 @@ public partial class LoginUi : Page
             tempEmail = email.Text;
             tempPassword = pwd.Password;
         });
-        var pList = new Dictionary<string, string>();
+        var pList = new JObject();
         pList.Add("username", tempEmail);
         pList.Add("password", tempPassword);
 
 
         try
         {
-            var re = HttpRequestHelper.GetResponseString(
-                HttpRequestHelper.CreatePostHttpResponse(
-                    "https://www.ncserver.top:666/api/yggdrasil/authserver/authenticate", pList));
-            var jObject = JObject.Parse(re);
+
+            //var re = HttpRequestHelper.GetResponseString(
+            //    HttpRequestHelper.CreatePostHttpResponse(
+            //        "https://www.ncserver.top:666/api/yggdrasil/authserver/authenticate", pList));
+            var re1 =  HttpRequestHelper.httpTool("https://www.ncserver.top:666/api/yggdrasil/authserver/authenticate", pList);
+            
+            log.Debug(re1.Result);
+            var jObject = JObject.Parse(re1.Result);
             log.Debug(jObject.ToString());
             var f = false;
             if (jObject["selectedProfile"] == null)
             {
                 log.Debug(jObject["error"].ToString());
                 log.Debug(jObject["errorMessage"].ToString());
-                Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart) delegate
-
+                Application.Current.Dispatcher.BeginInvoke(new Action(delegate
                 {
                     if (jObject["error"].ToString() == "ForbiddenOperationException")
                     {
@@ -104,7 +107,7 @@ public partial class LoginUi : Page
                             Main.main.InfoDialogShow("登录失败", "账号或密码错误");
                         }
                     }
-                });
+                })).Wait();
             }
             else //登录成功
             {

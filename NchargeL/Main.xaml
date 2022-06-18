@@ -15,9 +15,20 @@
         <DropShadowEffect ShadowDepth="1" BlurRadius="6" Direction="270" Opacity="0.75" Color="#FF211613" />
     </Window.Effect>
     <Window.Resources>
+        <Storyboard x:Key="Storyboard1">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="line"
+                                           Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0.582" />
+                <EasingDoubleKeyFrame KeyTime="00:00:01" Value="0.991" />
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="line"
+                                           Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="-5.274" />
+                <EasingDoubleKeyFrame KeyTime="00:00:01" Value="-0.228" />
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
 
     </Window.Resources>
-
     <materialDesign:DialogHost Name="host">
 
         <materialDesign:DialogHost.DialogContent>

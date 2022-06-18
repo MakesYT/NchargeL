@@ -2,6 +2,7 @@
 <Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:NchargeLMaui"
+             xmlns:page="clr-namespace:NchargeLMaui.views"
              x:Class="NchargeLMaui.App" >
     <Application.Resources>
         <ResourceDictionary>
@@ -11,67 +12,83 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
+    
     <Application.MainPage>
-        <Shell  
-           FlyoutHeight="20" FlyoutWidth="128" 
+        <Shell Title="NCL"
+            FlyoutWidth="68" 
             FlyoutBehavior="{OnIdiom Phone=Disabled, Default=Locked}">
-
+            
             <!--<Shell.FlyoutHeaderTemplate>
                 <DataTemplate>
                     <BoxView HeightRequest="68"/>
                 </DataTemplate>
 
             </Shell.FlyoutHeaderTemplate>-->
+            <Shell.Triggers>
+                
+            </Shell.Triggers>
+            <Shell.FlyoutFooterTemplate>
+                <DataTemplate>
+                    <Grid RowDefinitions="68">
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+                        </Grid.GestureRecognizers>
+                        <Image Source="launch.png"
+                               VerticalOptions="Center"
+                               HorizontalOptions="Center"
+                               WidthRequest="40"
+                               HeightRequest="40"
+                        />
 
+                    </Grid>
+                </DataTemplate>
 
+            </Shell.FlyoutFooterTemplate>
+           
 
 
             <!-- Desktop/Tablet-->
-            <FlyoutItem  Title="Home" Icon="launch.png" >
-                <ShellContent ContentTemplate="{DataTemplate local:views.LoginUi}"/>
+            <FlyoutItem Title="Home" Icon="launch.png">
+                <ShellContent ContentTemplate="{DataTemplate page:LoginUi}"/>
             </FlyoutItem>
-            <FlyoutItem Title="Favorites" Icon="tab_favorites.png">
-                <ShellContent ContentTemplate="{DataTemplate local:views.LoginUi}"/>
+            <FlyoutItem Title="Favorites" Icon="launch.png">
+                <ShellContent ContentTemplate="{DataTemplate page:LoginUi}"/>
             </FlyoutItem>
-            <FlyoutItem Title="Map" Icon="tab_map.png">
-                <ShellContent ContentTemplate="{DataTemplate local:views.LoginUi}"/>
+            <FlyoutItem Title="Map" Icon="launch.png">
+                <ShellContent ContentTemplate="{DataTemplate page:LoginUi}"/>
             </FlyoutItem>
             <FlyoutItem Route="settings" FlyoutItemIsVisible="False" >
-                <ShellContent ContentTemplate="{DataTemplate local:views.LoginUi}"/>
+                <ShellContent ContentTemplate="{DataTemplate page:LoginUi}"/>
             </FlyoutItem>
 
             <!-- Phone -->
             <TabBar x:Name="PhoneTabs">
                 <Tab Title="Home" Icon="tab_home.png">
-                    <ShellContent ContentTemplate="{DataTemplate local:views.LoginUi}"/>
+                    <ShellContent ContentTemplate="{DataTemplate page:LoginUi}"/>
                 </Tab>
                 <Tab Title="Favorites" Icon="tab_favorites.png">
-                    <ShellContent ContentTemplate="{DataTemplate local:views.LoginUi}"/>
+                    <ShellContent ContentTemplate="{DataTemplate page:LoginUi}"/>
                 </Tab>
                 <Tab Title="Map" Icon="tab_map.png">
-                    <ShellContent ContentTemplate="{DataTemplate local:views.LoginUi}"/>
+                    <ShellContent ContentTemplate="{DataTemplate page:LoginUi}"/>
                 </Tab>
                 <Tab Title="Settings" Icon="tab_settings.png">
-                    <ShellContent ContentTemplate="{DataTemplate local:views.LoginUi}"/>
+                    <ShellContent ContentTemplate="{DataTemplate page:LoginUi}"/>
                 </Tab>
             </TabBar>
+
+
+
             <Shell.ItemTemplate>
                 <DataTemplate>
-                    <StackLayout Margin="5"
-                 Orientation="Horizontal"
-                 HorizontalOptions="Start" VerticalOptions="Center">
-                        <Image Source="{Binding FlyoutIcon}" 
-                      
-                       HeightRequest="45" >
-                       
-                    </Image>
-                        <Label FontSize="18" Text="2112312321" VerticalOptions="Center" TextColor="Chocolate" ></Label>
-                    </StackLayout>
+                    <HorizontalStackLayout HeightRequest="48" WidthRequest="48">
+                        <Image Source="{Binding FlyoutIcon}"
+                              
+                               />
+                    </HorizontalStackLayout>
                 </DataTemplate>
+
             </Shell.ItemTemplate>
-            
-
-
         </Shell>
     </Application.MainPage>
 </Application>
