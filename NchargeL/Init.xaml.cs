@@ -20,7 +20,7 @@ namespace Ncharge;
 public partial class MainWindow : Window
 {
     private static readonly ILog log = LogManager.GetLogger("Init");
-    private readonly string ver = "1.3.5";
+    private readonly string ver = "1.3.5-2";
 
 
     public MainWindow()
@@ -31,6 +31,11 @@ public partial class MainWindow : Window
         log.Info("初始化....");
         var ApplicationData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         //File.WriteAllText(ApplicationData + "\\config.json", jObject.ToString(Formatting.Indented));
+        if(!Directory.Exists(ApplicationData+ "\\NchargeL"))
+        {
+            Directory.CreateDirectory(ApplicationData + "\\NchargeL");
+            log.Info("AppData目录已创建");
+        }
         if (File.Exists(ApplicationData + "\\NchargeL\\config.json"))
             try
             {

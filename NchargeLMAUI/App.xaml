@@ -24,9 +24,7 @@
                 </DataTemplate>
 
             </Shell.FlyoutHeaderTemplate>-->
-            <Shell.Triggers>
-                
-            </Shell.Triggers>
+            
             <Shell.FlyoutFooterTemplate>
                 <DataTemplate>
                     <Grid RowDefinitions="68">

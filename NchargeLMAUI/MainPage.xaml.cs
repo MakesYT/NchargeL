@@ -3,9 +3,10 @@
     public partial class MainPage : ContentPage
     {
         int count = 0;
-
+        public static Page Page { get; set; }
         public MainPage()
         {
+            Page = this;
             InitializeComponent();
         }
 

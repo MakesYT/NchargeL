@@ -96,11 +96,23 @@ public partial class LoginUi : Page
                             "Your email isn't verified. Please verify it before logging in.")
                         {
                             Main.main.InfoDialogShow("登录失败", "请先验证邮箱");
-                            var proc = new Process();
+                            var process = new Process();
 
-                            proc.StartInfo.FileName = "https://www.ncserver.top:666/user";
+                            process.StartInfo.FileName = "cmd.exe";
+                            //process.StartInfo.FileName = "cmd.exe";
+                            process.StartInfo.UseShellExecute = false;
+                            process.StartInfo.RedirectStandardInput = true;
+                            process.StartInfo.RedirectStandardOutput = true;
+                            process.StartInfo.RedirectStandardError = false;
+                            // process.StartInfo.
+                            process.StartInfo.CreateNoWindow = true;
 
-                            proc.Start();
+                            process.Start();
+                            process.StandardInput.WriteLine("start https://www.ncserver.top:666/user" + "&exit");
+                            process.StandardInput.Close();
+                            process.WaitForExit();
+                            process.Close();
+                            
                         }
                         else
                         {
