@@ -12,4 +12,4 @@
 
 感谢Jetbrains提供的软件许可证
 
-![](<../.gitbook/assets/image (10).png>)
+![](<../.gitbook/assets/image (10) (1).png>)

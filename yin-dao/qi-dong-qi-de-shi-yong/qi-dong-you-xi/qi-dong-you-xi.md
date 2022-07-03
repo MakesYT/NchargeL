@@ -10,7 +10,7 @@
 
 * 在左侧选择需要启动的客户端
 
-![](<../../../.gitbook/assets/image (10) (1).png>)
+![](<../../../.gitbook/assets/image (10) (1) (1).png>)
 
 * 单击启动即可
 
