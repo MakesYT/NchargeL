@@ -19,7 +19,7 @@
 
 * 选择安装
 
-![](<../.gitbook/assets/image (6) (1).png>)
+![](<../.gitbook/assets/image (6) (1) (1).png>)
 
 ![](<../.gitbook/assets/image (4) (1) (1).png>)
 

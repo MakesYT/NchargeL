@@ -2,7 +2,7 @@
 
 * 单击管理客户端按钮
 
-![](<../../.gitbook/assets/image (6).png>)
+![](<../../.gitbook/assets/image (6) (1).png>)
 
 * 在左侧选择需要进行管理的客户端
 

@@ -4,6 +4,7 @@
 
 ## 引导
 
+* [注册Ncahrge皮肤站账号](yin-dao/zhu-ce-ncahrge-pi-fu-zhan-zhang-hao.md)
 * [安装启动器](yin-dao/an-zhuang-qi-dong-qi.md)
 * [启动器的使用](yin-dao/qi-dong-qi-de-shi-yong/README.md)
   * [下载客户端](yin-dao/qi-dong-qi-de-shi-yong/xia-zai-ke-hu-duan.md)
