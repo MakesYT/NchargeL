@@ -41,7 +41,14 @@ public class ClientTools
                         jObject["assetIndex"]["url"].ToString()
                             .Replace("https://launchermeta.mojang.com/", DownloadSoureURL),
                         assetsIndexInfo.FullName));
-                    downloadManagerV2.Start(downloadItems, 1);
+                   var re1= downloadManagerV2.Start(downloadItems, 1);
+                    if (!re1.allSuccess)
+                    {
+                        {
+                            infoManager.Info(new Info("有" + re1.downloadItems.Count + "个文件下载失败\n错误信息" + re1.error, InfoType.errorDia));
+                            log.Info(re1.error);
+                        }
+                    }
                 }
             }
         }
@@ -131,18 +138,19 @@ public class ClientTools
             if (line2 == "false") return -1;
 
             if (line2 == "true")
-                switch (client.McVer)
+                switch (line)
                 {
-                    case "1.16.5":
+                    case "11":
                     {
-                        if (line == "11") return 0;
-                        return 11;
+                        if (client.McVer=="1.16.5") return 0;
+                            return 1;
                     }
-                    default:
+                    case "1.8":
                     {
-                        if (line == "1.8") return 0;
-                        return 1;
+                            if (client.McVer == "1.16.5") return 11;
+                            return 0;
                     }
+                   default: return 1;
                 }
 
             return -2;
@@ -280,7 +288,7 @@ public class ClientTools
         }
     }
 
-    public void installForge(Client clt, string DownloadSoureURL, Lib forgelib, string java)
+    public bool installForge(Client clt, string DownloadSoureURL, Lib forgelib, string java)
     {
         log.Debug("forge安装");
         forgelib.url = DownloadSoureURL + "maven/" + forgelib.path.Replace(".jar", "-installer.jar");
@@ -297,9 +305,10 @@ public class ClientTools
         forge_bootstrapper.CopyTo(clt.rootdir + "\\forge-install-bootstrapper.jar", true);
         log.Debug(java + " -cp \"forge-install-bootstrapper.jar;" + jardir + "\" com.bangbang93.ForgeInstaller " +
                   "\"" + clt.rootdir + "\"");
-        ExecuteInCmd(
+        return ExecuteInCmd(
             "\"" + java + "\"" + " -cp \"forge-install-bootstrapper.jar;" + jardir +
             "\" com.bangbang93.ForgeInstaller " + "\"" + clt.rootdir + "\"", clt.rootdir);
+       
     }
 
     public Libs GetLibs(Client client, string DownloadSoureURL)
@@ -539,7 +548,7 @@ public class ClientTools
     }
 
 
-    public string ExecuteInCmd(string cmdline, string dir)
+    public bool ExecuteInCmd(string cmdline, string dir)
     {
         using (var process = new Process())
         {
@@ -561,6 +570,7 @@ public class ClientTools
             {
                 infoManager.Info(new Info(0, line));
                 log.Debug(line);
+                if (line == "false") return false;
             }
 
             //获取cmd窗口的输出信息  
@@ -569,7 +579,7 @@ public class ClientTools
             process.WaitForExit();
             process.Close();
 
-            return "";
+            return true;
         }
     }
 }

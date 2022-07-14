@@ -74,23 +74,35 @@ public class DownloadManagerV2
 
     private async Task ExecuteInCmd(DownloadItem hash)
     {
-        var finnsh = false;
+        Downloading downloading = new Downloading(hash);
+        try
+        {
+            var finnsh = false;
        
             
-            // process.StandardInput.AutoFlush = true;
-            var directoryInfo =
-                new DirectoryInfo(hash.fullname.Substring(0, hash.fullname.LastIndexOf("\\") + 1));
-            if (!directoryInfo.Exists) directoryInfo.Create();
-             Downloading downloading = new Downloading(hash);
-        //log.Info("\"" + Directory.GetCurrentDirectory() + "\\Resources\\wget.exe\" \"" + hash.uri + "\" -O \"" + hash.fullname + "\"" + "&exit");
-        //log.Debug(hash.uri+" "+ hash.fullname);
-       await downloading.StartAsync();
-        Console.WriteLine("11");
+                // process.StandardInput.AutoFlush = true;
+                var directoryInfo =
+                    new DirectoryInfo(hash.fullname.Substring(0, hash.fullname.LastIndexOf("\\") + 1));
+                if (!directoryInfo.Exists) directoryInfo.Create();
+                 
+            //log.Info("\"" + Directory.GetCurrentDirectory() + "\\Resources\\wget.exe\" \"" + hash.uri + "\" -O \"" + hash.fullname + "\"" + "&exit");
+            //log.Debug(hash.uri+" "+ hash.fullname);
+           await downloading.StartAsync();
+            Console.WriteLine("11");
 
-        DownloadCount++;
-        infoManager.Info(new Info(0, DownloadCount + "/" + AllCount));
-        nowthreadnum--;
-        downloadReslut.addReslut(downloading.GetDownloadReslut());
+            DownloadCount++;
+            infoManager.Info(new Info(0, DownloadCount + "/" + AllCount));
+            nowthreadnum--;
+            downloadReslut.addReslut(downloading.GetDownloadReslut());
+        }catch(Exception e)
+        {
+            DownloadCount++;
+            infoManager.Info(new Info(0, DownloadCount + "/" + AllCount));
+            nowthreadnum--;
+            downloadReslut.addReslut(downloading.GetDownloadReslut());
+        }
+        
+        
         //AllCount--;
 
 

@@ -119,7 +119,7 @@
                 <notifications:NotificationArea x:Name="WindowArea" Position="TopLeft" MaxItems="3" Panel.ZIndex="10"
                                                 HorizontalAlignment="Right" HorizontalContentAlignment="Left"
                                                 Margin="0,15,8,8" />
-                <controls:NotificationMessageContainer Margin="0,10,0,0" Panel.ZIndex="10" Manager="{Binding Manager}" />
+                <controls:NotificationMessageContainer Margin="430,197,0,0" Panel.ZIndex="10" Manager="{Binding Manager}" />
                 <Canvas>
                     <Frame Focusable="false" NavigationUIVisibility="Hidden" x:Name="FrameWork" Margin="50,0,0,0"
                            Panel.ZIndex="0" Height="400" Width="750" BorderBrush="{x:Null}" />

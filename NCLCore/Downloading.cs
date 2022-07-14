@@ -13,7 +13,10 @@ namespace NCLCore
     {
         private static readonly ILog log = LogManager.GetLogger("Downloading");
         private string error = "1";
-        private HttpClient webClient = new HttpClient();
+        private HttpClient webClient = new HttpClient()
+        {
+            Timeout = TimeSpan.FromSeconds(10)
+        };
         private bool candownload = true;
         private bool smallDownload = false;
         private string uri;
@@ -50,33 +53,44 @@ namespace NCLCore
         private DownloadItem downloadItem;
         public Downloading(DownloadItem hash)
         {
-
-            var result = webClient.Send(new HttpRequestMessage(HttpMethod.Head, hash.uri));
-            if (result.IsSuccessStatusCode)
+            downloadItem = hash;
+            try
             {
-                if(result.Content.Headers.ContentLength>= 10485760)
-                    {
-                        downloadItem = hash;
-            
-                        download = DownloadBuilder.New()
-                        .WithUrl(hash.uri)
-                        .WithFileLocation(hash.fullname)
-                        .WithConfiguration(downloadOpt)
-                        .Build();
-                        download.DownloadFileCompleted += DownloadFileCompleted;
-                    }
-                    else
-                    {
-                       smallDownload = true;
-                        uri = hash.uri;
-                        fullname=hash.fullname;
-                    }
-            }else
+                var result = webClient.Send(new HttpRequestMessage(HttpMethod.Head, hash.uri));
+                if (result.IsSuccessStatusCode)
                 {
-                error = result.RequestMessage.Content.ToString();
+                    if(result.Content.Headers.ContentLength>= 10485760)
+                        {
+                            
+            
+                            download = DownloadBuilder.New()
+                            .WithUrl(hash.uri)
+                            .WithFileLocation(hash.fullname)
+                            .WithConfiguration(downloadOpt)
+                            .Build();
+                            download.DownloadFileCompleted += DownloadFileCompleted;
+                        }
+                        else
+                        {
+                           smallDownload = true;
+                            uri = hash.uri;
+                            fullname=hash.fullname;
+                        }
+                }else
+                    {
+                    error = result.RequestMessage.Content.ToString();
+                    log.Error(error);
+                    candownload = false;
+                    }
+            }
+            catch(Exception ex)
+            {
+                
+                error = ex.Message;
                 log.Error(error);
                 candownload = false;
-                }
+            }
+            
             
             
 
@@ -93,11 +107,19 @@ namespace NCLCore
                 }
                 else
                 {
-                    var re = HttpRequestHelper.DownLoad(uri, fullname);
-                   if( re!="true")
+                    try
                     {
-                        error = error + re;
+                        var re = HttpRequestHelper.DownLoad(uri, fullname);
+                       if( re!="true")
+                        {
+                            error = error + re;
+                        }
                     }
+                    catch(Exception e)
+                    {
+                        error = error + e.Message;
+                    }
+                    
                 }
                 
                 

@@ -479,6 +479,7 @@ public partial class Manager : Page
             using var reader = new JsonTextReader(jsonfile);
             var jObject = (JObject) JToken.ReadFrom(reader);
             var installed = false;
+            var finnish = false;
             foreach (JObject libsjosn in jObject["libraries"])
                 if (libsjosn["name"].ToString().Contains("net.minecraftforge:forge"))
                 {
@@ -491,7 +492,7 @@ public partial class Manager : Page
                         name = libsjosn["name"].ToString()
                     };
                     var clientTools = new ClientTools(Main.main.infoManager);
-                    clientTools.installForge(client, Settings.Default.DownloadSource, lib, Settings.Default.Java);
+                    finnish = clientTools.installForge(client, Settings.Default.DownloadSource, lib, Settings.Default.Java);
                     installed = true;
                     break;
                 }
@@ -500,6 +501,12 @@ public partial class Manager : Page
                 Application.Current.Dispatcher.BeginInvoke(new Action(delegate
                 {
                     var warn = new InfoDialog("", "未找到需要的Forge,该客户端未安装Forge");
+                    warn.ShowDialog();
+                })).Wait();
+            if(!finnish)
+                Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+                {
+                    var warn = new ErrorDialog("", "Forge安装失败,详情查看logs");
                     warn.ShowDialog();
                 })).Wait();
 

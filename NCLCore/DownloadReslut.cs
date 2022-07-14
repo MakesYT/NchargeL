@@ -21,7 +21,7 @@ public class DownloadReslut
         {
             allSuccess = false;
             downloadItems = downloadItems.Concat(download.downloadItems).ToList();
-            error = error + download.error;
+            error = error +"\n"+ download.error;
         }
 
     }
