@@ -22,3 +22,4 @@
 
 * [启动器](guan-yu/qi-dong-qi.md)
 * [服务器](guan-yu/fu-wu-qi.md)
+* [启动器更新日志](guan-yu/qi-dong-qi-geng-xin-ri-zhi.md)
