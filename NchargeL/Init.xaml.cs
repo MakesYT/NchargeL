@@ -20,7 +20,7 @@ namespace Ncharge;
 public partial class MainWindow : Window
 {
     private static readonly ILog log = LogManager.GetLogger("Init");
-    private readonly string ver = "1.4.0";
+    private readonly string ver = "1.4.3";
 
 
     public MainWindow()
@@ -39,6 +39,7 @@ public partial class MainWindow : Window
         if (File.Exists(ApplicationData + "\\NchargeL\\config.json"))
             try
             {
+                log.Debug("读取配置信息");
                 using var jsonfile = File.OpenText(ApplicationData + "\\NchargeL\\config.json");
 
                 using var reader = new JsonTextReader(jsonfile);
@@ -123,10 +124,11 @@ public partial class MainWindow : Window
 
     private void checkUpdate()
     {
-        var re1 = HttpRequestHelper.GetResponseString(
-            HttpRequestHelper.CreatePostHttpResponse("http://download.ncserver.top:8000/NCL/config.json",
-                new Dictionary<string, string>()));
-        var jObject = JObject.Parse(re1);
+      //  var re1 = HttpRequestHelper.GetResponseString(
+       //   HttpRequestHelper.CreatePostHttpResponse("https://download.ncserver.top:8000/NCL/config.json", new Dictionary<string, string>()));
+       var re1= HttpRequestHelper.getHttpTool("https://download.ncserver.top:8000/NCL/config.json");
+       
+        var jObject = JObject.Parse(re1.Result);
         if (jObject["ver"].ToString() == ver)
         {
             Application.Current.Dispatcher.BeginInvoke(new Action(delegate

@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using ICSharpCode.SharpZipLib.Zip;
 using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -67,13 +68,14 @@ public class ClientUpdate
         else //Mods对比
         {
             var info = new StringBuilder();
+            info.AppendLine("客户端更新完成");
             JArray oldLists;
             JArray newLists;
             {
                 //删除无法对比Mods
                 infoManager.Info(new Info(0, "开始对比Mods"));
                 var re1 = HttpRequestHelper.GetResponseString(HttpRequestHelper.CreatePostHttpResponse(
-                    "http://download.ncserver.top:8000/NCL/clients/" + nchargeClient.name + "/" +
+                    "https://download.ncserver.top:8000/NCL/clients/" + nchargeClient.name + "/" +
                     clt.NchargeVer + ".json", new Dictionary<string, string>()));
                 var oldJArray = JArray.Parse(re1);
                 var modsdownload = new NchargeModsDownload(infoManager, true);
@@ -83,7 +85,8 @@ public class ClientUpdate
                 oldLists = oldJArray;
                 var existsmods = new StringBuilder();
                 foreach (var mod in modsdownload.getAllmods()) existsmods.Append(mod.fullname);
-
+                modsdownload = null;
+                System.GC.Collect();
                 var oldDirectoryInfo =
                     new DirectoryInfo(clt.rootdir + "\\versions\\" + nchargeClient.name + "\\mods\\");
                 var existsmodsStr = existsmods.ToString();
@@ -104,7 +107,7 @@ public class ClientUpdate
             {
                 //获取新版本mods
                 var re1 = HttpRequestHelper.GetResponseString(HttpRequestHelper.CreatePostHttpResponse(
-                    "http://download.ncserver.top:8000/NCL/clients/" + nchargeClient.name + "/" +
+                    "https://download.ncserver.top:8000/NCL/clients/" + nchargeClient.name + "/" +
                     nchargeClient.NchargeVersion + ".json", new Dictionary<string, string>()));
                 var newJArray = JArray.Parse(re1);
 
@@ -121,7 +124,7 @@ public class ClientUpdate
                 //((JArray)oldLists).Select(x => new string(x.ToString())).ToList();
                 var tempoldLists = oldLists.Select(x => new string(x.ToString())).ToList();
                 var tempnewLists = newLists.Select(x => new string(x.ToString())).ToList();
-                log.Debug(tempoldLists[0]);
+               // log.Debug(tempoldLists[0]);
                 foreach (var mod in newLists.Select(x => new string(x.ToString())).ToList())
                 {
                     tempoldLists.Remove(mod);
@@ -164,6 +167,21 @@ public class ClientUpdate
 
                 var mod1 = new DownloadManagerV2(infoManager, true);
                 mod1.Start(needsdownload.getAllmods(), 50);
+
+                //下载游戏覆盖包
+                infoManager.Info(new Info(0, "下载新版本覆盖包中"));
+                var downloadManager = new DownloadManagerV2(infoManager,true);
+                var downloadItems = new List<DownloadItem>();
+                downloadItems.Add(new DownloadItem(
+                "https://download.ncserver.top:8000/NCL/clients/" + nchargeClient.name + "/" +
+                nchargeClient.NchargeVersion + ".zip", clt.rootdir + "\\temp\\" + nchargeClient.name + ".zip"));
+                downloadManager.Start(downloadItems, 1);
+
+                infoManager.Info(new Info(0, "解压新版本覆盖包中"));
+                new FastZip().ExtractZip(clt.rootdir + "\\temp\\" + nchargeClient.name + ".zip",
+                    clt.rootdir + "\\versions\\" + nchargeClient.name, "");
+
+
                 var jObject1 = new JObject();
                 jObject1.Add("ver", nchargeClient.NchargeVersion);
                 var output = JsonConvert.SerializeObject(jObject1, Formatting.Indented);
@@ -172,6 +190,10 @@ public class ClientUpdate
                     output);
                 infoManager.Info(new Info(info.ToString(), InfoType.successDia));
                 infoManager.Info(new Info(100, "InfoType.successDia"));
+                downloadManager = null;
+                delsdownload = null;
+                needsdownload = null;
+                System.GC.Collect();
             }
         }
     }

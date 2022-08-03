@@ -6,6 +6,7 @@ using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using log4net;
+using Microsoft.VisualBasic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -13,10 +14,15 @@ namespace NCLCore;
 
 public class HttpRequestHelper
 {
-    private static HttpClient webClient = new HttpClient();
+   static HttpClientHandler httpClientHandler = new HttpClientHandler
+    {
+        ServerCertificateCustomValidationCallback = (message, certificate2, arg3, arg4) => true
+    };
+    private static HttpClient webClient = new HttpClient(httpClientHandler);
     private static readonly ILog log = LogManager.GetLogger("HttpRequestHelper");
     public static string DownLoad(string uri, string localFileName)
     {
+        log.Debug("开始请求:Url:"+uri);
         var server = new Uri(uri);
         var p = Path.GetDirectoryName(localFileName);
         if (!Directory.Exists(p)) Directory.CreateDirectory(p);
@@ -47,7 +53,18 @@ public class HttpRequestHelper
         
         return null;
     }
-    
+    public static async Task<string> getHttpTool(string url)
+    {
+        HttpContent content = new StringContent("", Encoding.UTF8, "application/json");
+        var reponse =  webClient.GetAsync(url);
+        webClient.DefaultRequestHeaders.Add("Accept", "application/json");
+        webClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Authorization");
+        String result = reponse.Result.Content.ReadAsStringAsync().Result;
+        log.Debug(result);
+        return result;
+
+        return null;
+    }
     public static HttpWebResponse CreatePostHttpResponse(string url, IDictionary<string, string> parameters)
     {
         var cout = 0;
@@ -56,9 +73,12 @@ public class HttpRequestHelper
             HttpWebRequest request = null;
             //如果是发送HTTPS请求 
             if (url.StartsWith("https", StringComparison.OrdinalIgnoreCase))
-                //ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(CheckValidationResult);
+            {
+                ServicePointManager.ServerCertificateValidationCallback = new RemoteCertificateValidationCallback(CheckValidationResult);
                 request = WebRequest.Create(url) as HttpWebRequest;
-            //request.ProtocolVersion = HttpVersion.Version10;
+                request.ProtocolVersion = HttpVersion.Version11;
+            }
+                
             else
                 request = WebRequest.Create(url) as HttpWebRequest;
 

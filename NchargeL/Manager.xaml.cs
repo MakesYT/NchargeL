@@ -222,7 +222,7 @@ public partial class Manager : Page
         if (flag)
         {
             var re1 = HttpRequestHelper.GetResponseString(
-                HttpRequestHelper.CreatePostHttpResponse("http://download.ncserver.top:8000/NCL/clients.json",
+                HttpRequestHelper.CreatePostHttpResponse("https://download.ncserver.top:8000/NCL/clients.json",
                     new Dictionary<string, string>()));
             var jObject = JArray.Parse(re1);
             var f = false;

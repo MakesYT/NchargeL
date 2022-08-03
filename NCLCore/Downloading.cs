@@ -31,13 +31,6 @@ namespace NCLCore
             Timeout=3000
             
         };
-        private static DownloadConfiguration downloadOptSmell = new DownloadConfiguration()
-        {
-            ChunkCount = 1, // file parts to download, default value is 1
-            OnTheFlyDownload = true, // caching in-memory or not? default values is true
-            MaxTryAgainOnFailover = 10,
-            Timeout = 3000
-        };
         private void DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
         {
 
@@ -48,6 +41,7 @@ namespace NCLCore
                 error = error + e.Error.Message;
                 //cancellationsOccurrenceLists.Add(sender.);
             }
+            download = null;
         }
         private IDownload download;
         private DownloadItem downloadItem;
@@ -103,7 +97,7 @@ namespace NCLCore
                 if (!smallDownload)
                 {
                     await download.StartAsync();
-                    download.Clear();
+                    //download.Clear();
                 }
                 else
                 {

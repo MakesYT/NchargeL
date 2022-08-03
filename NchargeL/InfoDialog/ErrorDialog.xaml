@@ -49,7 +49,7 @@
             </Line>
             <ScrollViewer MaxWidth="680" MaxHeight="300" VerticalScrollBarVisibility="Auto"
                           HorizontalScrollBarVisibility="Auto">
-                <TextBox IsReadOnly="True" x:Name="text" FontSize="20" Margin="0,8,0,0"
+                <TextBox IsReadOnly="True" x:Name="text" FontSize="15" Margin="0,8,0,0"
                          FontFamily="/NchargeL;component/Resources/#HarmonyOS Sans" FontWeight="Bold"
                          Foreground="{DynamicResource TextColor}" Cursor="IBeam">
                     11111

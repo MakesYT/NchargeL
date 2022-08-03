@@ -12,5 +12,5 @@ infoManager.PropertyChanged += (oo, ee) =>
 
 
 HttpClient webClient = new HttpClient();
-var result = webClient.Send(new HttpRequestMessage(HttpMethod.Head, "http://download.ncserver.top:8000/NCL/clients/Ncharge/1.0.2.zip"));
+var result = webClient.Send(new HttpRequestMessage(HttpMethod.Head, "https://download.ncserver.top:8000/NCL/clients/Ncharge/1.0.2.zip"));
 Console.WriteLine(result.Content.Headers.ContentLength);

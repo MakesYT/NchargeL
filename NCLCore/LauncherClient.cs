@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Net;
+using System.Text.RegularExpressions;
 using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -32,7 +33,24 @@ public class LauncherClient
         launcher_profiles.CopyTo(clt.rootdir + "\\launcher_profiles.json", true);
         var server_data = new FileInfo(Directory.GetCurrentDirectory() + "\\Resources\\servers.dat");
         server_data.CopyTo(clt.dir + "\\servers.dat", true);
-
+        if(!File.Exists(clt.dir + "\\options.txt"))//初始中文
+        {
+            var options = new FileInfo(Directory.GetCurrentDirectory() + "\\Resources\\options.txt");
+            options.CopyTo(clt.dir + "\\options.txt", true);
+            infoManager.Info(new Info("游戏已初始化为中文",InfoType.info));
+        }
+        else
+        {
+            string str = File.ReadAllText(clt.dir + "\\options.txt");
+            if (str.Contains("lang:")&&!str.Contains("lang:zh_cn"))
+            {
+                var index = str.IndexOf("lang:") ;
+                var endindex = str.IndexOf("\n", index);
+                str = Regex.Replace(str, str.Substring(index, endindex - index), "lang:zh_cn");  
+                File.WriteAllText(clt.dir + "\\options.txt", str);
+                infoManager.Info(new Info("已更改其它游戏语言为中文", InfoType.warn));
+            }
+        }
         
 
         var clientTools = new ClientTools(infoManager);
@@ -168,16 +186,26 @@ public class LauncherClient
            
             process.ErrorDataReceived += new DataReceivedEventHandler(delegate (object sender, DataReceivedEventArgs e)
             {
-                log.Error(e.Data);
-                allError = allError + e.Data + "\n";
+                if (e.Data != null)
+                if (!e.Data.Contains("authlib-injector")&& !e.Data.Contains("WARNING"))
+                {
+                     log.Error(e.Data);
+                    allError = allError + e.Data + "\n";
+                }
+               
             });
             process.OutputDataReceived += new DataReceivedEventHandler(delegate (object sender, DataReceivedEventArgs e)
             {
                 if(e.Data != null)
                 {
+                    if (e.Data.Contains("Exception")|| e.Data.Contains("FATAL"))
+                    {
+                        log.Error(e.Data);
+                        allError = allError + e.Data + "\n";
+                    }else
                     if (e.Data.Contains("Crash report saved to "))
                     crashReport = e.Data.Substring(e.Data.IndexOf("Crash report saved to ") + 22);
-                    if (e.Data.Contains("Stopping!"))
+                    else if (e.Data.Contains("Stopping!"))
                     {
                         error = false;
                         log.Debug("游戏正常退出");
@@ -279,6 +307,19 @@ public class LauncherClient
                     {
                         infoManager.Info(new Info("启动失败原因:Forge未正确安装,\n请尝试在管理客户端页面选择客户端后选择重新安装Forge",
                             InfoType.errorDia));
+                        errorAnalysisFinnish = true;
+                    }
+                    else if(allError.Contains("Failed to find Minecraft resource"))
+                    {
+                        
+                        var index = allError.IndexOf("Failed to find Minecraft resource") + 33;
+                        var endindex = allError.IndexOf("\n", index);
+                        string info = allError.Substring(index, endindex - index);
+                        if(info.Contains("forge"))
+                        infoManager.Info(new Info("启动失败原因:疑似Forge未正确安装,\n请尝试在管理客户端页面选择客户端后选择重新安装Forge,以下是错误信息\n" + allError, InfoType.errorDia));
+                        else
+                            infoManager.Info(new Info("启动失败原因:我的世界资源文件缺失,\n请尝试再次启动,以下是错误信息\n" + allError, InfoType.errorDia));
+
                         errorAnalysisFinnish = true;
                     }
                     else

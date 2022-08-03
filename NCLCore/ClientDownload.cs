@@ -57,7 +57,7 @@ public class ClientDownload
         infoManager.Info(new Info("开始下载" + nchargeClient.name + "覆盖包", InfoType.info));
         downloadItems.Clear();
         downloadItems.Add(new DownloadItem(
-            "http://download.ncserver.top:8000/NCL/clients/" + nchargeClient.name + "/" +
+            "https://download.ncserver.top:8000/NCL/clients/" + nchargeClient.name + "/" +
             nchargeClient.NchargeVersion + ".zip", rootdir + "\\temp\\" + nchargeClient.name + ".zip"));
         downloadManager.Start(downloadItems, 1);
         new FastZip().ExtractZip(rootdir + "\\temp\\" + nchargeClient.name + ".zip",
@@ -73,7 +73,7 @@ public class ClientDownload
         infoManager.Info(new Info("下载" + nchargeClient.name + "覆盖包完成", InfoType.info));
 
         var re1 = HttpRequestHelper.GetResponseString(HttpRequestHelper.CreatePostHttpResponse(
-            "http://download.ncserver.top:8000/NCL/clients/" + nchargeClient.name + "/" +
+            "https://download.ncserver.top:8000/NCL/clients/" + nchargeClient.name + "/" +
             nchargeClient.NchargeVersion + ".json", new Dictionary<string, string>()));
         var jObject = JArray.Parse(re1);
         var modsdownload = new NchargeModsDownload(infoManager);
@@ -91,11 +91,13 @@ public class ClientDownload
 
             string uri = null;
 
-            var forge_bootstrapper = new FileInfo(Directory.GetCurrentDirectory() + "\\Resources\\wget.exe");
-            forge_bootstrapper.CopyTo(rootdir + "\\wget.exe", true);
+          
             var downloads = modsdownload.getMODs();
+
             var mod = new DownloadManagerV2(infoManager);
             mod.Start(downloads, 50);
+            mod = null;
+            
             infoManager.Info(new Info("下载" + nchargeClient.name + "客户端完成", InfoType.info));
         }
         else
@@ -103,5 +105,8 @@ public class ClientDownload
         {
             infoManager.Info(new Info("下载" + nchargeClient.name + "客户端完成", InfoType.info));
         }
+        modsdownload = null;
+        downloadManager = null;
+        System.GC.Collect();
     }
 }

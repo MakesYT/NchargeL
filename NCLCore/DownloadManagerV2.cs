@@ -59,6 +59,7 @@ public class DownloadManagerV2
             }
         }
 
+
         //infoManager.Info( new Info("下载" + "客户端完成",InfoType.success));
         if (downloadReslut.allSuccess ==false)
         {
@@ -94,12 +95,16 @@ public class DownloadManagerV2
             infoManager.Info(new Info(0, DownloadCount + "/" + AllCount));
             nowthreadnum--;
             downloadReslut.addReslut(downloading.GetDownloadReslut());
+
         }catch(Exception e)
         {
             DownloadCount++;
             infoManager.Info(new Info(0, DownloadCount + "/" + AllCount));
             nowthreadnum--;
             downloadReslut.addReslut(downloading.GetDownloadReslut());
+        }finally
+        {
+            downloading = null;
         }
         
         
