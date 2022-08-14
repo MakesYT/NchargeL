@@ -9,16 +9,16 @@ internal class NchargeModsDownload
 {
     private static readonly ILog log = LogManager.GetLogger("NchargeModsDownload");
     private readonly List<DownloadItem> allmods = new();
-    private readonly int cancellationsOccurrenceCount = 0;
-    private readonly string error = "";
+    private  int cancellationsOccurrenceCount = 0;
+    private  string error = "";
     private readonly InfoManager infoManager;
     private readonly List<DownloadItem> listmods = new();
     private readonly List<JObject> modJsons = new();
     private readonly bool process;
     public int AllCount;
-    public int DownloadCount;
     private int nowthreadnum;
     public string toDir;
+    private int DownloadCount;
 
     public NchargeModsDownload(InfoManager infoManager)
     {
@@ -45,13 +45,14 @@ internal class NchargeModsDownload
 
     public void Start(int thread, JArray jArray)
     {
+        DownloadCount = 0;
         infoManager.Info(new Info("开始解析MODS列表", InfoType.info));
         foreach (JObject mod in jArray) modJsons.Add(mod);
 
         log.Debug(jArray.Count);
         AllCount = jArray.Count;
-        while (modJsons.Count != 0 || nowthreadnum != 0)
-        {
+        while (modJsons.Count != 0 || nowthreadnum != 0 || DownloadCount < AllCount)
+            {
             Thread.Sleep(500);
             while (nowthreadnum < thread)
             {
@@ -74,7 +75,7 @@ internal class NchargeModsDownload
         }
 
         if (cancellationsOccurrenceCount != 0)
-            infoManager.Info(new Info("有" + cancellationsOccurrenceCount + "个文件下载失败\n错误信息" + error,
+            infoManager.Info(new Info("有" + cancellationsOccurrenceCount + "个Mod获取失败\n错误信息" + error,
                 InfoType.errorDia));
     }
 
@@ -107,58 +108,134 @@ internal class NchargeModsDownload
     {
         try
         {
-            var hwr = HttpRequestHelper.CreatePostHttpResponse(
-                "https://addons-ecs.forgesvc.net/api/v2/addon/" + hash["projectID"] + "/file/" + hash["fileID"],
-                new Dictionary<string, string>());
-
-            var re1 = HttpRequestHelper.GetResponseString(hwr);
-            var jObject = JObject.Parse(re1);
-            var uri = jObject["downloadUrl"].ToString();
-            var dir = toDir + jObject["fileName"];
-            //string sha1 = jObject["hashes"][0]["value"].ToString();
-            if (uri != null && uri != "")
+            var re1 = HttpRequestHelper.getHttpTool("https://cursemaven.com/test/" + hash["projectID"] + "/" + hash["fileID"]);
+            if (re1 != null)
             {
-                // log.Debug(uri);
-                var flag = false;
-                //log.Debug(Path.GetDirectoryName(hash.dir));
-                if (File.Exists(dir) && jObject["hashes"] != null && ((JArray) jObject["hashes"]).Count > 0)
-                    if (GetSHA1(dir) == jObject["hashes"][0]["value"].ToString())
-                    {
-                        flag = true;
-                        DownloadCount++;
-                        if (process)
-                            infoManager.Info(new Info(0,
-                                DownloadCount + "/" + AllCount + "文件" + dir.Substring(dir.LastIndexOf("\\") + 1) +
-                                "无需下载,sha1校验通过"));
-                        else
-                            infoManager.Info(new Info(
-                                DownloadCount + "/" + AllCount + "文件" + dir.Substring(dir.LastIndexOf("\\") + 1) +
-                                "无需下载,sha1校验通过", InfoType.info));
-                        var downloadItem = new DownloadItem(uri, dir);
-                        allmods.Add(downloadItem);
-                        nowthreadnum--;
-                    }
-
-                if (!flag)
+                string re = re1.Result;
+                if (re.Contains("Response: 200"))
                 {
-                    if (!process) infoManager.Info(new Info("需要下载" + jObject["fileName"], InfoType.info));
+                    var uri = re.Substring(re.IndexOf("Found: ") + 7);
+                    var dir = toDir + uri.Substring(uri.LastIndexOf("/") + 1);
+
+                    if (!process) infoManager.Info(new Info("需要下载" + uri.Substring(uri.LastIndexOf("/") + 1), InfoType.info));
 
 
-                    log.Debug("需要下载:" + jObject["downloadUrl"]);
+                    log.Debug("需要下载:" + uri.Substring(uri.LastIndexOf("/") + 1));
                     var downloadItem = new DownloadItem(uri, dir);
                     listmods.Add(downloadItem);
                     allmods.Add(downloadItem);
                     nowthreadnum--;
+                    DownloadCount++;
+                    log.Info(DownloadCount);
+                }
+                else
+                {
+                    nowthreadnum--;
+                    if (hash.ContainsKey("times"))
+                    {
+                        if ((int)(hash["times"]) <= 5)
+                        {
+                            hash["times"] = ((int)(hash["times"])) + 1;
+                            log.Debug("获取File失败重新获取," + hash["projectID"] + "/" + hash["fileID"]);
+                            infoManager.Info(new Info("获取File失败重新获取," + hash["projectID"] + "/" + hash["fileID"],
+                            InfoType.error));
+                            nowthreadnum++;
+                            Task.Factory.StartNew(() => DownloadTool(hash));
+                        }
+                        else
+                        {
+                            log.Debug("获取File失败超过重试次数," + hash["projectID"] + "/" + hash["fileID"]);
+                            infoManager.Info(new Info("获取File失败超过重试次数," + hash["projectID"] + "/" + hash["fileID"],
+                                InfoType.error));
+                            DownloadCount++;
+                            cancellationsOccurrenceCount++;
+                            error = error + "\nmod下载链接获取失败" + hash["projectID"] + "/" + hash["fileID"];
+                        }
+                        
+                    }
+                        
+                    else 
+                    {
+                        hash.Add("times", 1);
+                        nowthreadnum++;
+                        Task.Factory.StartNew(() => DownloadTool(hash));
+                    }
+                }
+
+            }
+            else
+            {
+                nowthreadnum--;
+                if (hash.ContainsKey("times"))
+                {
+                    if ((int)(hash["times"]) <= 5)
+                    {
+                        hash["times"] = ((int)(hash["times"])) + 1;
+                        log.Debug("获取File失败重新获取," + hash["projectID"] + "/" + hash["fileID"]);
+                        infoManager.Info(new Info("获取File失败重新获取," + hash["projectID"] + "/" + hash["fileID"],
+                        InfoType.error));
+                        nowthreadnum++;
+                        Task.Factory.StartNew(() => DownloadTool(hash));
+                    }
+                    else
+                    {
+                        log.Debug("获取File失败超过重试次数," + hash["projectID"] + "/" + hash["fileID"]);
+                        infoManager.Info(new Info("获取File失败超过重试次数," + hash["projectID"] + "/" + hash["fileID"],
+                            InfoType.error));
+                        DownloadCount++;
+                        cancellationsOccurrenceCount++;
+                        error = error + "\nmod下载链接获取失败" + hash["projectID"] + "/" + hash["fileID"];
+                    }
+
+                }
+
+                else
+                {
+                    hash.Add("times", 1);
+                    nowthreadnum++;
+                    Task.Factory.StartNew(() => DownloadTool(hash));
                 }
             }
+            
+           
+            //string sha1 = jObject["hashes"][0]["value"].ToString();
+            
+                // log.Debug(uri);
+                
+            
         }
         catch (Exception e)
         {
-            log.Debug("获取File失败重新获取," + hash["projectID"] + "/file/" + hash["fileID"]);
-            infoManager.Info(new Info("获取File失败重新获取," + hash["projectID"] + "/file/" + hash["fileID"],
-                InfoType.error));
+            nowthreadnum--;
+            if (hash.ContainsKey("times"))
+            {
+                if ((int)(hash["times"]) <= 5)
+                {
+                    hash["times"] = ((int)(hash["times"])) + 1;
+                    log.Debug("获取File失败重新获取," + hash["projectID"] + "/" + hash["fileID"]);
+                    infoManager.Info(new Info("获取File失败重新获取," + hash["projectID"] + "/" + hash["fileID"],
+                    InfoType.error));
+                    nowthreadnum++;
+                    Task.Factory.StartNew(() => DownloadTool(hash));
+                }
+                else
+                {
+                    log.Debug("获取File失败超过重试次数," + hash["projectID"] + "/" + hash["fileID"]);
+                    infoManager.Info(new Info("获取File失败超过重试次数," + hash["projectID"] + "/" + hash["fileID"],
+                        InfoType.error));
+                    DownloadCount++;
+                    cancellationsOccurrenceCount++;
+                    error = error + "\nmod下载链接获取失败" + hash["projectID"] + "/" + hash["fileID"];
+                }
 
-            Task.Factory.StartNew(() => DownloadTool(hash));
+            }
+
+            else
+            {
+                hash.Add("times", 1);
+                nowthreadnum++;
+                Task.Factory.StartNew(() => DownloadTool(hash));
+            }
         }
     }
 }

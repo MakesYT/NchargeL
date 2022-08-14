@@ -31,12 +31,20 @@ public class DownloadManagerV2
         returnProcess = a;
     }
     //private InfoManager infoManager = null;
-    
-    public  DownloadReslut Start(List<DownloadItem> list, int thread)
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="list"></param>
+    /// <param name="thread"></param>
+    /// <param name="flag">如果为True强制使用WebClient直接请求文件,默认false自动选择</param>
+    /// <returns></returns>
+    public  DownloadReslut Start(List<DownloadItem> list, int thread,bool flag=false)
     {
+        cancellationsOccurrenceCount = 0;
+        downloadReslut = new DownloadReslut();
         Hashs = list;
         infoManager.Info(new Info("共需下载" + Hashs.Count, InfoType.info));
-        
+        DownloadCount = 0;
         log.Debug(Hashs.Count);
         AllCount = Hashs.Count;
         while (Hashs.Count != 0 || nowthreadnum != 0||DownloadCount<AllCount)
@@ -51,7 +59,7 @@ public class DownloadManagerV2
                 var hash = Hashs.First();
                 Hashs.Remove(hash);
                     //infoManager.Info(new Info(hash.uri, InfoType.info));
-                Task.Factory.StartNew(() => ExecuteInCmd(hash));
+                Task.Factory.StartNew(() => ExecuteInCmd(hash,flag));
             }
             else if (nowthreadnum == 0)
             {
@@ -65,7 +73,7 @@ public class DownloadManagerV2
         {
             //infoManager.Info(new Info("有" + cancellationsOccurrenceCount + "个文件下载失败\n错误信息" + error, InfoType.errorDia));
             //infoManager.log = "有" + cancellationsOccurrenceCount + "个文件下载失败\n错误信息" + error;
-            log.Debug("有" + cancellationsOccurrenceCount + "个文件下载失败\n错误信息" + downloadReslut.error);
+            log.Debug("有" + downloadReslut.downloadItems.Count + "个文件下载失败\n错误信息" + downloadReslut.error);
             return downloadReslut;
         }
 
@@ -73,9 +81,10 @@ public class DownloadManagerV2
     }
    
 
-    private async Task ExecuteInCmd(DownloadItem hash)
+    private async Task ExecuteInCmd(DownloadItem hash,bool flag,int times=0)
     {
-        Downloading downloading = new Downloading(hash);
+        times++;
+        Downloading downloading = new Downloading(hash,flag);
         try
         {
             var finnsh = false;
@@ -90,18 +99,45 @@ public class DownloadManagerV2
             //log.Debug(hash.uri+" "+ hash.fullname);
            await downloading.StartAsync();
             Console.WriteLine("11");
+            if (downloading.GetDownloadReslut().allSuccess)
+            {
+                DownloadCount++;
+                infoManager.Info(new Info(0, DownloadCount + "/" + AllCount));
+                nowthreadnum--;
+                downloadReslut.addReslut(downloading.GetDownloadReslut());
+            }
+            else
+            {
+                if (times < 5)
+                {
+                    await Task.Factory.StartNew(() => ExecuteInCmd(hash, flag, times));
+                }
+                else
+                {
+                    DownloadCount++;
+                    infoManager.Info(new Info(0, DownloadCount + "/" + AllCount));
+                    nowthreadnum--;
 
-            DownloadCount++;
-            infoManager.Info(new Info(0, DownloadCount + "/" + AllCount));
-            nowthreadnum--;
-            downloadReslut.addReslut(downloading.GetDownloadReslut());
+                    downloadReslut.addReslut(downloading.GetDownloadReslut());
+                }
+            }
+            
 
         }catch(Exception e)
         {
-            DownloadCount++;
-            infoManager.Info(new Info(0, DownloadCount + "/" + AllCount));
-            nowthreadnum--;
-            downloadReslut.addReslut(downloading.GetDownloadReslut());
+            if (times < 5)
+            {
+               await Task.Factory.StartNew(() => ExecuteInCmd(hash, flag,times));
+            }
+            else
+            {
+                DownloadCount++;
+                infoManager.Info(new Info(0, DownloadCount + "/" + AllCount));
+                nowthreadnum--;
+
+                downloadReslut.addReslut(downloading.GetDownloadReslut());
+            }
+           
         }finally
         {
             downloading = null;

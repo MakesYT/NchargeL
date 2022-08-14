@@ -80,7 +80,8 @@ public class ClientDownload
         // modsdownload.ClientDownload = this;
         modsdownload.toDir = rootdir + "\\versions\\" + nchargeClient.name + "\\mods\\";
         modsdownload.Start(250, jObject);
-
+        loger.Info("1");
+        loger.Info(modsdownload.getMODs().Count);
         infoManager.Info(new Info("解析MODS完成,共需下载" + modsdownload.getMODs().Count + "个文件", InfoType.info));
         if (modsdownload.getMODs().Count != 0)
         {
@@ -95,9 +96,13 @@ public class ClientDownload
             var downloads = modsdownload.getMODs();
 
             var mod = new DownloadManagerV2(infoManager);
-            mod.Start(downloads, 50);
-            mod = null;
-            
+            DownloadReslut re2= mod.Start(downloads, 50);
+            infoManager.Info(new Info("有文件下载失败,再次尝试下载", InfoType.info));
+            DownloadReslut downloadReslut = mod.Start(re2.downloadItems, 20,true);
+            if(!downloadReslut.downloadItems.Count==0)
+            infoManager.Info(new Info("下载" + nchargeClient.name + "客户端完成\n但有"+downloadReslut.downloadItems.Count+
+                "个文件下载失败,以下为具体消息:\n"+downloadReslut.error, InfoType.errorDia));
+
             infoManager.Info(new Info("下载" + nchargeClient.name + "客户端完成", InfoType.info));
         }
         else

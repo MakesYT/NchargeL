@@ -45,37 +45,47 @@ namespace NCLCore
         }
         private IDownload download;
         private DownloadItem downloadItem;
-        public Downloading(DownloadItem hash)
+        public Downloading(DownloadItem hash,bool flag)
         {
             downloadItem = hash;
             try
             {
-                var result = webClient.Send(new HttpRequestMessage(HttpMethod.Head, hash.uri));
-                if (result.IsSuccessStatusCode)
+                if (!flag)
                 {
-                    if(result.Content.Headers.ContentLength>= 10485760)
-                        {
+                    var result = webClient.Send(new HttpRequestMessage(HttpMethod.Head, hash.uri));
+                    if (result.IsSuccessStatusCode)
+                    {
+                        if(result.Content.Headers.ContentLength>= 10485760)
+                            {
                             
             
-                            download = DownloadBuilder.New()
-                            .WithUrl(hash.uri)
-                            .WithFileLocation(hash.fullname)
-                            .WithConfiguration(downloadOpt)
-                            .Build();
-                            download.DownloadFileCompleted += DownloadFileCompleted;
-                        }
-                        else
+                                download = DownloadBuilder.New()
+                                .WithUrl(hash.uri)
+                                .WithFileLocation(hash.fullname)
+                                .WithConfiguration(downloadOpt)
+                                .Build();
+                                download.DownloadFileCompleted += DownloadFileCompleted;
+                            }
+                            else
+                            {
+                               smallDownload = true;
+                                uri = hash.uri;
+                                fullname=hash.fullname;
+                            }
+                    }else
                         {
-                           smallDownload = true;
-                            uri = hash.uri;
-                            fullname=hash.fullname;
+                        error = result.RequestMessage.Content.ToString();
+                        log.Error(error);
+                        candownload = false;
                         }
-                }else
-                    {
-                    error = result.RequestMessage.Content.ToString();
-                    log.Error(error);
-                    candownload = false;
-                    }
+                }
+                else
+                {
+                    smallDownload = true;
+                    uri = hash.uri;
+                    fullname = hash.fullname;
+                }
+                
             }
             catch(Exception ex)
             {
@@ -126,6 +136,8 @@ namespace NCLCore
         {
             if (error != "1")
             {
+                error = "文件名" + downloadItem.fullname + "\n下载地址:" + downloadItem.uri
+                   + "\n目标位置:" + downloadItem.fullname+"\n原因:"+error;
                 log.Error("文件"+downloadItem.fullname+"下载失败");
                 return new DownloadReslut(false, new List<DownloadItem> { downloadItem }, error);
             }

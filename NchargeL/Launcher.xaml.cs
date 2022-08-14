@@ -364,8 +364,26 @@ public partial class Launcher : Page
             }
             else
             {
-                var info = new InfoDialog("选择游戏目录", "您需要选择以.minecraft命名的文件夹");
-                info.ShowDialog();
+                var warn = new InfoDialog("", "您选择的目录不是以\".minecraft\"结尾的\n是否在此目录下自动创建\".minecraft\"文件夹",
+                             false);
+                warn.ShowDialog();
+                if (!(warn.cancelfg))
+                {
+                    DirectoryInfo directoryInfo = new DirectoryInfo(dlg.FileName + "\\.minecraft");
+                    if (!directoryInfo.Exists)
+                        directoryInfo.Create();
+                    Settings.Default.GameDir = dlg.FileName + "\\.minecraft";
+
+                   
+                    //NCLcore nCLCore = Main.main.newNCLcore(Properties.Settings.Default.DownloadSource, );
+                    Data.clients = ClientTools.GetALLClient(dlg.FileName + "\\.minecraft");
+                    notificationManager.Show(NotificationContentSDK.notificationSuccess("客户端列表已更新", ""), "WindowArea");
+                    Main.main.launcher = new Launcher();
+                    //Main.main.launcher.NCLCore = nCLCore;
+                    Main.main.FrameWork.Content = Main.main.launcher;
+                    break;
+                }
+                    
             }
     }
 
