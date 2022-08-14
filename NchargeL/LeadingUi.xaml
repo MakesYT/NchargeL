@@ -1,0 +1,126 @@
+﻿<Window x:Class="NchargeL.LeadingUi"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:Properties="clr-namespace:NchargeL.Properties"
+        xmlns:hc="https://handyorg.github.io/handycontrol"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="设置引导" WindowStyle="None" Width="700" Height="400">
+    <Window.Resources>
+        <Storyboard x:Key="Storyboard1">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="line"
+                                           Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0.582" />
+                <EasingDoubleKeyFrame KeyTime="00:00:01" Value="0.991" />
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetName="line"
+                                           Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="-5.274" />
+                <EasingDoubleKeyFrame KeyTime="00:00:01" Value="-0.228" />
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+
+    </Window.Resources>
+
+    <Grid>
+        <StackPanel Margin="16">
+            <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                <materialDesign:PackIcon Kind="AlertCircleOutline" Width="32" Height="32"
+                                         Foreground="{DynamicResource BodyColor}" Margin="5,0,0,0" />
+                <TextBlock FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi" FontSize="30"
+                           Foreground="{DynamicResource BodyColor}">
+                    启动器设置
+                </TextBlock>
+                
+            </StackPanel>
+            <Line x:Name="line" Stretch="Fill" Stroke="{DynamicResource BodyColor}" X2="1" Width="666" Height="2">
+                <Line.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform />
+                        <SkewTransform />
+                        <RotateTransform />
+                        <TranslateTransform />
+                    </TransformGroup>
+                </Line.RenderTransform>
+            </Line>
+            <StackPanel ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.CanContentScroll="False" Height="195" Width="666">
+                <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" VerticalAlignment="Top">
+                    <TextBox x:Name="gamedir" InputMethod.IsInputMethodEnabled="False" IsReadOnly="True"
+                             Style="{StaticResource TextBoxExtend}"
+                             hc:TitleElement.Title="游戏路径:" hc:TitleElement.TitlePlacement="Left"
+                             hc:TitleElement.HorizontalAlignment="Center"
+                             hc:TitleElement.VerticalAlignment="Center" hc:TitleElement.TitleWidth="90"
+                             Text="{Binding GameDir, Source={x:Static Properties:Settings.Default}}"
+                             HorizontalContentAlignment="Left"
+                             FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi" FontSize="18"
+                             BorderBrush="{DynamicResource BodyColorWith20Opacity}" SelectionTextBrush="{x:Null}"
+                             CaretBrush="{x:Null}" Foreground="{DynamicResource TextColor}" Cursor="IBeam"
+                             SelectionBrush="{DynamicResource BodyColor}" Height="61" Width="587">
+                        <TextBox.Background>
+                            <SolidColorBrush Color="#FFAEC4E2" Opacity="0.45" />
+                        </TextBox.Background>
+                    </TextBox>
+                    <Button Style="{StaticResource MaterialDesignPaperLightButton}" ToolTip="选择java路径"
+                            Panel.ZIndex="1" Cursor="Hand" Width="52" Height="61"
+                            Background="{DynamicResource BodyColorWith50Opacity}" BorderBrush="{x:Null}"
+                            Foreground="{DynamicResource ForegroundColor}" Click="GameDir" Padding="0,0,0,0">
+                        <materialDesign:PackIcon Kind="FolderEditOutline" Cursor="Hand" Width="28" Height="28" />
+                    </Button>
+                </StackPanel>
+                <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" VerticalAlignment="Top">
+                    <TextBox x:Name="java" InputMethod.IsInputMethodEnabled="False" IsReadOnly="True"
+                             Style="{StaticResource TextBoxExtend}"
+                             hc:TitleElement.Title="Java路径:" hc:TitleElement.TitlePlacement="Left"
+                             hc:TitleElement.HorizontalAlignment="Center"
+                             hc:TitleElement.VerticalAlignment="Center" hc:TitleElement.TitleWidth="90"
+                             Text="{Binding Java, Source={x:Static Properties:Settings.Default}}"
+                             HorizontalContentAlignment="Left"
+                             FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi" FontSize="18"
+                             BorderBrush="{DynamicResource BodyColorWith20Opacity}" SelectionTextBrush="{x:Null}"
+                             CaretBrush="{x:Null}" Foreground="{DynamicResource TextColor}" Cursor="IBeam"
+                             SelectionBrush="{DynamicResource BodyColor}" Height="61" Width="408">
+                        <TextBox.Background>
+                            <SolidColorBrush Color="#FFAEC4E2" Opacity="0.45" />
+                        </TextBox.Background>
+                    </TextBox>
+                    <Button Style="{StaticResource MaterialDesignPaperLightButton}" ToolTip="选择java路径"
+                            Panel.ZIndex="1" Cursor="Hand" Width="52" Height="61"
+                            Background="{DynamicResource BodyColorWith50Opacity}" BorderBrush="{x:Null}"
+                            Foreground="{DynamicResource ForegroundColor}" Click="JavaDir" Padding="0,0,0,0">
+                        <materialDesign:PackIcon Kind="FolderEditOutline" Cursor="Hand" Width="28" Height="28" />
+                    </Button>
+                    <Label  FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi" FontSize="18"
+                             BorderBrush="{DynamicResource BodyColorWith20Opacity}" 
+                             Foreground="{DynamicResource TextColor}" Cursor="IBeam"
+                             Name="Java">当前Java版本:未获取</Label>
+                </StackPanel>
+                <TextBox InputMethod.IsInputMethodEnabled="False"
+                         Style="{StaticResource TextBoxExtend}"
+                         hc:TitleElement.Title="  内存&#xA;(单位MB)" hc:TitleElement.TitlePlacement="Left"
+                         hc:TitleElement.HorizontalAlignment="Center"
+                         hc:TitleElement.VerticalAlignment="Center" hc:TitleElement.TitleWidth="90"
+                         Text="{Binding RAM, Source={x:Static Properties:Settings.Default}}"
+                         HorizontalContentAlignment="Left"
+                         FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi" FontSize="18"
+                         BorderBrush="{DynamicResource BodyColorWith20Opacity}" SelectionTextBrush="{x:Null}"
+                         CaretBrush="{x:Null}" Foreground="{DynamicResource TextColor}" Cursor="IBeam"
+                         SelectionBrush="{DynamicResource BodyColor}" Height="63" Width="175"
+                         PreviewTextInput="limitnumber" HorizontalAlignment="Left">
+                    <TextBox.Background>
+                        <SolidColorBrush Color="#FFAEC4E2" Opacity="0.45" />
+                    </TextBox.Background>
+                </TextBox>
+            </StackPanel>
+
+
+        </StackPanel>
+        <Button x:Name="close" FocusVisualStyle="{x:Null}" Style="{StaticResource MaterialDesignFlatButton}"
+                IsCancel="True" HorizontalAlignment="Right" VerticalAlignment="Bottom" Cursor="Hand"
+                FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi" FontSize="20" Content="确定"
+                Margin="0,0,16,16" Foreground="{DynamicResource BodyColor}" Click="Button_Click" />
+        
+    </Grid>
+</Window>

@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Management;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using log4net;
+using Microsoft.VisualBasic.Logging;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using NchargeL.Properties;
 using NCLCore;
@@ -68,17 +70,26 @@ public partial class DownloadUI : Page
 
                 Application.Current.Dispatcher.BeginInvoke(new Action(delegate
                 {
-                    line++;
-                    if (line > 5)
+                    if (logtmp.TYPE == InfoType.errorDia)
                     {
-                        line = 0;
-                        logs.Text = "";
+                        Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+                        {
+                            var warn = new ErrorDialog("", logtmp.msg);
+                            warn.Show();
+                        })).Wait();
                     }
+                    else
+                    {
+                        line++;
+                        if (line > 5)
+                        {
+                            line = 0;
+                            logs.Text = "";
+                        }
 
-                    log.Info("消息通知记录:" + logtmp.msg);
-                    logs.Text += logtmp.msg + "\n";
-                    //logs.Select(logs.Text.Length, 0);
-                    // logs.ScrollToEnd();
+                        log.Info("消息通知记录:" + logtmp.msg);
+                        logs.Text += logtmp.msg + "\n";
+                    }
                 })).Wait();
             };
             if (list.SelectedItem != null)
@@ -114,15 +125,27 @@ public partial class DownloadUI : Page
                         var logtmp = (oo as InfoManager).info;
                         Application.Current.Dispatcher.BeginInvoke(new Action(delegate
                         {
-                            line++;
-                            if (line > 5)
+                            if (logtmp.TYPE == InfoType.errorDia)
                             {
-                                line = 0;
-                                logs.Text = "";
+                                Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+                                {
+                                    var warn = new ErrorDialog("", logtmp.msg);
+                                    warn.Show();
+                                })).Wait();
                             }
+                            else
+                            {
+                                line++;
+                                if (line > 5)
+                                {
+                                    line = 0;
+                                    logs.Text = "";
+                                }
 
-                            log.Info("消息通知记录:" + logtmp.msg);
-                            logs.Text += logtmp.msg + "\n";
+                                log.Info("消息通知记录:" + logtmp.msg);
+                                logs.Text += logtmp.msg + "\n";
+                            }
+                            
                             //logs.Select(logs.Text.Length, 0);
                             // logs.ScrollToEnd();
                         })).Wait();
@@ -147,8 +170,64 @@ public partial class DownloadUI : Page
                 }
                 else
                 {
-                    var info = new InfoDialog("选择游戏目录", "您需要选择以.minecraft命名的文件夹");
-                    info.ShowDialog();
+                    var warn = new InfoDialog("", "您选择的目录不是以\".minecraft\"结尾的\n是否在此目录下自动创建\".minecraft\"文件夹",
+                             false);
+                    warn.ShowDialog();
+                    if (!(warn.cancelfg))
+                    {
+                        DirectoryInfo directoryInfo = new DirectoryInfo(dlg.FileName + "\\.minecraft");
+                        if (!directoryInfo.Exists)
+                            directoryInfo.Create();
+                        Settings.Default.GameDir = dlg.FileName + "\\.minecraft";
+                        var clientDownload = new ClientDownload(Main.main.infoManager);
+                        //clientDownload.init();
+                        //int line = 0;
+                        Main.main.infoManager.clear();
+                        Main.main.infoManager.PropertyChanged += (oo, ee) =>
+                        {
+                            var logtmp = (oo as InfoManager).info;
+                            Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+                            {
+                                if (logtmp.TYPE == InfoType.errorDia)
+                                {
+                                    Application.Current.Dispatcher.BeginInvoke(new Action(delegate
+                                    {
+                                        var warn = new ErrorDialog("", logtmp.msg);
+                                        warn.Show();
+                                    })).Wait();
+                                }
+                                else
+                                {
+                                    line++;
+                                    if (line > 5)
+                                    {
+                                        line = 0;
+                                        logs.Text = "";
+                                    }
+
+                                    log.Info("消息通知记录:" + logtmp.msg);
+                                    logs.Text += logtmp.msg + "\n";
+                                }
+                            })).Wait();
+                        };
+                        if (list.SelectedItem != null)
+                        {
+                            var nchargeClient = (NchargeClient)list.SelectedItem;
+
+                            Task.Factory.StartNew(() =>
+                                clientDownload.DownloadNchargeClient(nchargeClient, Settings.Default.DownloadSource,
+                                    Settings.Default.GameDir));
+                        }
+                        else
+                        {
+                            notificationManager.Show(NotificationContentSDK.notificationError("请先选择客户端", ""),
+                                "WindowArea");
+                        }
+
+                        //ForgeInstaller.installForge(Properties.Settings.Default.DownloadSource, "forge", Properties.Settings.Default.GameDir, "1.12.2-14.23.5.2860")
+
+                        break;
+                    }
                 }
         }
     }

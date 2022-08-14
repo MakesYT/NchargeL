@@ -156,6 +156,51 @@ public class ClientTools
             return -2;
         }
     }
+    public static string JavaVer(string java)
+    {
+        using (var process = new Process())
+        {
+            process.StartInfo.FileName = "cmd.exe";
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.RedirectStandardInput = true;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.RedirectStandardError = false;
+            // process.StartInfo.
+            process.StartInfo.CreateNoWindow = true;
+
+            process.Start();
+            // process.StandardInput.AutoFlush = true;
+            process.StandardInput.WriteLine("\"" + java + "\" -jar \"" + Directory.GetCurrentDirectory() +
+                                            "\\Resources\\Javacheck.jar\"" + "&exit");
+            process.StandardInput.Close();
+            var line = "";
+            var line2 = "";
+            string linetemp;
+
+            while (true)
+                if ((linetemp = process.StandardOutput.ReadLine()) != null)
+                {
+                    line2 = line;
+                    line = linetemp;
+                }
+
+                else
+                {
+                    break;
+                }
+
+            process.WaitForExit();
+            process.Close();
+            if (line2 == "false") return "Java为32位请修改";
+
+            if (line2 == "true") return "Java版本为"+line;
+               
+                }
+
+            return "Java不存在";
+        }
+        
+    
 
     public static ObservableCollection<Client> GetALLClient(string dir)
     {
