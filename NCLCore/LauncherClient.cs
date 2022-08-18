@@ -25,7 +25,7 @@ public class LauncherClient
     /// <param name="token"></param>
     /// <returns></returns>
     public int StartClient(InfoManager infoManager, Client clt, string DownloadSoureURL, string name, string uuid,
-        string token, string java, int RAM)
+        string token, string java, int RAM,int width,int height)
     {
         //infostr = new Info("有" + 1 + "个资源文件下载失败,但仍将尝试启动\n错误信息" , "error");
         var launcher_profiles =
@@ -116,7 +116,7 @@ public class LauncherClient
                   " --username " + name + " --version " + clt.Name + " --gameDir \"" + clt.dir +
                   "\" --assetsDir \"" + clt.rootdir + "\\assets\" --assetIndex " + clt.assets +
                   " --versionType NCL" +
-                  " --uuid " + uuid + " --accessToken " + token + " --userType mojang --width 854 --height 480";
+                  " --uuid " + uuid + " --accessToken " + token + " --userType mojang --width "+width+" --height "+height;
         // info.msg = all;
         all = all.Replace("//", "/");
         all = all.Replace("/", "\\");

@@ -20,7 +20,7 @@ namespace Ncharge;
 public partial class MainWindow : Window
 {
     private static readonly ILog log = LogManager.GetLogger("Init");
-    private readonly string ver = "1.4.5";
+    private readonly string ver = "1.4.5-3";
 
 
     public MainWindow()
@@ -76,10 +76,14 @@ public partial class MainWindow : Window
                 Settings.Default.Java = jObject["Java"].ToString();
                 Settings.Default.RAM = jObject["RAM"].ToObject<int>();
                 Settings.Default.First = false;
+                Settings.Default.width = jObject["width"].ToObject<int>();
+                Settings.Default.height = jObject["height"].ToObject<int>();
             }
             catch (Exception e)
             {
                 log.Debug("读取旧配置文件失败" + e);
+                var info = new InfoDialog("", "加载配置文件时出现异常,配置文件版本疑似损坏,请尝试重新打开启动器,检查问题是否解决");
+                info.ShowDialog();
             }
         check64();
         checkUpdate();

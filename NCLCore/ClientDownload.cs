@@ -96,7 +96,7 @@ public class ClientDownload
             var downloads = modsdownload.getMODs();
 
             var mod = new DownloadManagerV2(infoManager);
-            DownloadReslut re2= mod.Start(downloads, 50);
+            DownloadReslut re2= mod.Start(downloads, 50,true);
             infoManager.Info(new Info("有文件下载失败,再次尝试下载", InfoType.info));
             DownloadReslut downloadReslut = mod.Start(re2.downloadItems, 20,true);
             if(!(downloadReslut.downloadItems.Count==0))

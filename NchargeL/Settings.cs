@@ -44,6 +44,8 @@ internal sealed partial class Settings
         jObject.Add("User", User);
         jObject.Add("Java", Java);
         jObject.Add("RAM", RAM);
+        jObject.Add("width", width);
+        jObject.Add("height", height);
         // 在此处添加用于处理 SettingsSaving 事件的代码。
         var ApplicationData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
         File.WriteAllText(ApplicationData + "\\NchargeL\\config.json", jObject.ToString(Formatting.Indented));

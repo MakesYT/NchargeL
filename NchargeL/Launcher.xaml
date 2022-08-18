@@ -129,7 +129,8 @@
                         <materialDesign:PackIcon Kind="FolderEditOutline" Cursor="Hand" Width="28" Height="28" />
                     </Button>
                 </StackPanel>
-                <TextBox InputMethod.IsInputMethodEnabled="False"
+                <StackPanel HorizontalAlignment="Left" Orientation="Horizontal" VerticalAlignment="Top">
+                    <TextBox InputMethod.IsInputMethodEnabled="False"
                          Style="{StaticResource TextBoxExtend}"
                          hc:InfoElement.Title="  内存&#13;(单位MB)" hc:InfoElement.TitlePlacement="Left"
                          hc:InfoElement.HorizontalAlignment="Center"
@@ -141,10 +142,45 @@
                          CaretBrush="{x:Null}" Foreground="{DynamicResource TextColor}" Cursor="IBeam"
                          SelectionBrush="{DynamicResource BodyColor}" Height="63" Width="175"
                          PreviewTextInput="limitnumber" HorizontalAlignment="Left">
-                    <TextBox.Background>
-                        <SolidColorBrush Color="#FFAEC4E2" Opacity="0.45" />
-                    </TextBox.Background>
-                </TextBox>
+                        <TextBox.Background>
+                            <SolidColorBrush Color="#FFAEC4E2" Opacity="0.45" />
+                        </TextBox.Background>
+                    </TextBox>
+
+                    <TextBox InputMethod.IsInputMethodEnabled="False"
+                         Style="{StaticResource TextBoxExtend}"
+                         hc:InfoElement.Title="窗口&#13;高度" hc:InfoElement.TitlePlacement="Left"
+                         hc:InfoElement.HorizontalAlignment="Center"
+                         hc:InfoElement.VerticalAlignment="Center" hc:TitleElement.TitleWidth="55"
+                         Text="{Binding Path=height,Source={x:Static Properties:Settings.Default}}"
+                         HorizontalContentAlignment="Left"
+                         FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi" FontSize="18"
+                         BorderBrush="{DynamicResource BodyColorWith20Opacity}" SelectionTextBrush="{x:Null}"
+                         CaretBrush="{x:Null}" Foreground="{DynamicResource TextColor}" Cursor="IBeam"
+                         SelectionBrush="{DynamicResource BodyColor}" Height="63" Width="142"
+                         PreviewTextInput="limitnumber">
+                        <TextBox.Background>
+                            <SolidColorBrush Color="#FFAEC4E2" Opacity="0.45" />
+                        </TextBox.Background>
+                    </TextBox>
+                    <TextBox InputMethod.IsInputMethodEnabled="False"
+                         Style="{StaticResource TextBoxExtend}"
+                         hc:InfoElement.Title="窗口&#13;宽度" hc:InfoElement.TitlePlacement="Left"
+                         hc:InfoElement.HorizontalAlignment="Center"
+                         hc:InfoElement.VerticalAlignment="Center" hc:TitleElement.TitleWidth="55"
+                         Text="{Binding Path=width,Source={x:Static Properties:Settings.Default}}"
+                         HorizontalContentAlignment="Left"
+                         FontFamily="/NchargeL;component/Resources/#SSZhiZunShuFaTi" FontSize="18"
+                         BorderBrush="{DynamicResource BodyColorWith20Opacity}" SelectionTextBrush="{x:Null}"
+                         CaretBrush="{x:Null}" Foreground="{DynamicResource TextColor}" Cursor="IBeam"
+                         SelectionBrush="{DynamicResource BodyColor}" Height="63" Width="142"
+                         PreviewTextInput="limitnumber">
+                        <TextBox.Background>
+                            <SolidColorBrush Color="#FFAEC4E2" Opacity="0.45" />
+                        </TextBox.Background>
+                    </TextBox>
+
+                </StackPanel>
             </StackPanel>
         </GroupBox>
         <TextBox IsReadOnly="True" HorizontalContentAlignment="Center" x:Name="info" Text="当前未选择客户端"

@@ -221,7 +221,7 @@ public partial class Launcher : Page
         {
             var re = launchc.StartClient(Main.main.infoManager, (Client) clt, Settings.Default.DownloadSource,
                 Data.users[0]._name, Data.users[0]._useruuid, Data.users[0]._token, Settings.Default.Java,
-                Settings.Default.RAM);
+                Settings.Default.RAM, Settings.Default.width, Settings.Default.height);
             log.Debug(re);
 
             //StartClient(clt).GetAwaiter().GetResult().GetAwaiter().GetResult();
