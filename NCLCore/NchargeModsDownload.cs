@@ -121,7 +121,7 @@ internal class NchargeModsDownload
 
 
                     log.Debug("需要下载:" + uri.Substring(uri.LastIndexOf("/") + 1));
-                    var downloadItem = new DownloadItem(uri, dir);
+                    var downloadItem = new DownloadItem(uri.Replace("https://edge.forgecdn.net", "https://mediafilez.forgecdn.net"), dir);
                     listmods.Add(downloadItem);
                     allmods.Add(downloadItem);
                     nowthreadnum--;

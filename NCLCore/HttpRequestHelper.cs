@@ -45,7 +45,7 @@ public class HttpRequestHelper
     }
     public static  async Task<string> httpTool(string url, JObject keyValues)
     {
-        HttpContent content = new StringContent(JsonConvert.SerializeObject(keyValues),Encoding.UTF8, "application/json");
+        HttpContent content = new StringContent(JsonConvert.SerializeObject(keyValues),Encoding.ASCII, "application/json");
         var reponse = await webClient.PostAsync(url, content);
         String result =  reponse.Content.ReadAsStringAsync().Result;
         log.Debug(result);
@@ -55,7 +55,7 @@ public class HttpRequestHelper
     }
     public static async Task<string> getHttpTool(string url)
     {
-        HttpContent content = new StringContent("", Encoding.UTF8, "application/json");
+        
         var reponse =  webClient.GetAsync(url);
         webClient.DefaultRequestHeaders.Add("Accept", "application/json");
         webClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Authorization");

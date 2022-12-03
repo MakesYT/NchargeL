@@ -82,9 +82,10 @@ public class ClientDownload
         modsdownload.Start(250, jObject);
         loger.Info("1");
         loger.Info(modsdownload.getMODs().Count);
-        infoManager.Info(new Info("解析MODS完成,共需下载" + modsdownload.getMODs().Count + "个文件", InfoType.info));
+       
         if (modsdownload.getMODs().Count != 0)
-        {
+        { 
+            infoManager.Info(new Info("解析MODS完成,共需下载" + modsdownload.getMODs().Count + "个文件", InfoType.info));
             AllCount = modsdownload.getMODs().Count;
 
             var directory = new DirectoryInfo(modsdownload.toDir);

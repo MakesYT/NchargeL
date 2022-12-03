@@ -79,7 +79,7 @@ public class ClientTools
             }
         }
 
-       var re= downloadManager.Start(assetsDownloadItems, 100);
+       var re= downloadManager.Start(assetsDownloadItems, 100,true);
         if (!re.allSuccess)
         {
             {

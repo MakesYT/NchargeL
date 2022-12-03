@@ -84,7 +84,7 @@ public class DownloadManagerV2
     private async Task ExecuteInCmd(DownloadItem hash,bool flag,int times=0)
     {
         times++;
-        Downloading downloading = new Downloading(hash,flag);
+        Downloading downloading = new(hash,flag);
         try
         {
             var finnsh = false;
@@ -98,7 +98,7 @@ public class DownloadManagerV2
             //log.Info("\"" + Directory.GetCurrentDirectory() + "\\Resources\\wget.exe\" \"" + hash.uri + "\" -O \"" + hash.fullname + "\"" + "&exit");
             //log.Debug(hash.uri+" "+ hash.fullname);
            await downloading.StartAsync();
-            Console.WriteLine("11");
+           
             if (downloading.GetDownloadReslut().allSuccess)
             {
                 DownloadCount++;

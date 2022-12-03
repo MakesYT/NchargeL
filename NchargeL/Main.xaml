@@ -81,7 +81,7 @@
                 <DockPanel Margin="0,3,3,3">
                     <Button FocusVisualStyle="{x:Null}" DockPanel.Dock="Right" Height="Auto" Margin="0"
                             HorizontalAlignment="Right" VerticalAlignment="Center" Padding="0" BorderBrush="{x:Null}"
-                            Background="{x:Null}" Foreground="{x:Null}" RenderTransformOrigin="1.553,-0.3"
+                            Background="{DynamicResource BodyColor}" Foreground="{x:Null}" RenderTransformOrigin="1.553,-0.3"
                             Click="Close" Width="36" HorizontalContentAlignment="Right" Cursor="Hand">
                         <materialDesign:PackIcon Kind="Close" Height="36" Width="36"
                                                  Foreground="{DynamicResource ForegroundColor}"
@@ -98,7 +98,7 @@
                     </Button>
 
                     <Button DockPanel.Dock="Right" Padding="0,0,0,0" Foreground="{DynamicResource ForegroundColor}"
-                            Cursor="Hand" Background="{x:Null}" BorderBrush="{x:Null}" Margin="0,0,5,0" Click="Minimze">
+                            Cursor="Hand" Background="{DynamicResource BodyColor}" BorderBrush="{x:Null}" Margin="0,0,5,0" Click="Minimze">
                         <materialDesign:PackIcon Kind="Minus" Height="36" Width="36"
                                                  Foreground="{DynamicResource ForegroundColor}"
                                                  HorizontalAlignment="Right" RenderTransformOrigin="0.839,0.064"
