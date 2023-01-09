@@ -2,11 +2,13 @@
 
 * 安装程序[NCL (ncserver.top)](http://download.ncserver.top:9000/)（单击访问）,单击启动
 
-![](<../.gitbook/assets/image (1) (1).png>)
+<figure><img src="../.gitbook/assets/image (1).png" alt=""><figcaption></figcaption></figure>
 
 {% hint style="info" %}
-此操作的前提是你的电脑上安装了.NET 桌面运行时 6.0.5(x64)\
-如果请先安装[https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-6.0.5-windows-x64-installer](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-6.0.5-windows-x64-installer)
+现在你可以直接点击启动按钮而无需单独安装任何依赖
+
+~~此操作的前提是你的电脑上安装了.NET 桌面运行时 6.0.5(x64)~~\
+~~如果请先安装~~[~~https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-6.0.5-windows-x64-installer~~](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-6.0.5-windows-x64-installer)~~~~
 {% endhint %}
 
 
